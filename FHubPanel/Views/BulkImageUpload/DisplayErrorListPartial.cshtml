@@ -1,0 +1,62 @@
+﻿@using FHubPanel.Models;
+@model List<ImageUplodError>
+
+<div class="row">
+    <div class=" col-md-12">
+        <div class="box box-danger">
+            <div class="box-header">
+                <div class="box-header with-border" style="cursor: move;">
+                    <i class="fa fa-dashboard"></i>
+                    <h3 class="box-title"><b>Error List</b></h3>
+                    @*<div class="box-tools pull-right">
+                            <button id="btnCreateNew" name="btnCreateNew" class="btn btn-block btn-primary btn-flat" onclick="window.location.href = '/VendorSlider/Manage'; "> Create New</button>
+                        </div>*@
+                </div>
+
+                <div class="box-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <table class="table table-bordered table-responsive table-striped" id="ErrorTable">
+                                <thead>
+                                    <tr>
+                                        <th>File Name</th>
+                                        <th>Reason</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @for (int i = 0; i < @Model.Count; i++)
+                                    {
+                                        <tr>
+                                            <td>@Model[i].FileName</td>
+                                            <td>@Model[i].Reason</td>
+                                        </tr>
+                                    }
+
+                                </tbody>
+
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            //$("#ErrorTable").dataTable.fnDestroy();
+            @*if ('@ViewBag.SuccessCounter' != '0')
+                toastr["success"]('@ViewBag.SuccessCounter' + ' Products Image successfully uploaded.');*@
+
+            var otable = $("#ErrorTable").dataTable({
+                "bServerside": false,
+                "bProcessing": true,
+                "searching": true,
+                "paging": true,
+                "ordering": true,
+                "responsive": true,
+                "autoWidth": true,
+            });
+        });
+    </script>

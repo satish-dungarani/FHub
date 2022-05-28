@@ -1,0 +1,175 @@
+﻿@model FHubPanel.Models.MasterValueModels
+
+@{
+    //ViewBag.Title = "Manage";
+}
+
+
+<div class="content-wrapper" style="min-height: 946px;">
+    @*<section class="content-header">
+            <h1>
+                <b>@ViewBag.MasterType</b>
+                <small></small>
+            </h1>
+            <ol class="breadcrumb">
+                <li><a href="/Home/Index"><i class="fa fa-dashboard"></i>Home</a></li>
+                <li><a href="/Setup/Index">Setup</a></li>
+                <li class="active">Manage</li>
+            </ol>
+        </section>*@
+
+
+    <section class="content">
+        @using (Html.BeginForm("Save", "Setup", FormMethod.Post, new { id = "myform", @class = "", enctype = "multipart/form-data" }))
+        {
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="box box-primary">
+                        <div class="box-header with-border box-info">
+                            <i class="@ViewBag.Icon "></i>
+                            <h3 class="box-title"><b>@ViewBag.MasterType</b> </h3>
+                        </div>
+                        <div class="box-body">
+
+
+                            @Html.HiddenFor(Model => Model.Id)
+                            @Html.HiddenFor(Model => Model.RefMasterId)
+                            @Html.HiddenFor(Model => Model.RefVendorId)
+                            @Html.HiddenFor(Model => Model.IsActive)
+                            @Html.HiddenFor(Model => Model.InsUser)
+                            @Html.HiddenFor(Model => Model.InsTerminal)
+                            @Html.HiddenFor(Model => Model.InsDate)
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="col-md-8">
+                                        <div class="form-group">
+                                            <label>Name <span style="color:red">*</span></label>
+                                            @Html.TextBoxFor(Model => Model.ValueName, new { @class = "form-control", @maxlength = 50 })
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label>Ord No </label>
+                                            @Html.TextBoxFor(Model => Model.OrdNo, new { @class = "form-control", @maxlength = 5 })
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label for="Desc">Description </label>
+                                            @if (@ViewBag.MasterType == "Color Setup")
+                                            {
+                                                <div class="input-group my-colorpicker2 colorpicker-element" id="colorpicker">
+                                                    <div class="input-group-addon" id="">
+                                                        <i style="background-color: rgb(0, 0, 0);"></i>
+                                                    </div>
+                                                    @Html.TextBoxFor(Model => Model.ValueDesc, new { @class = "form-control", @maxlength = 200 })
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <div id="Description">
+                                                    @Html.TextBoxFor(Model => Model.ValueDesc, new { @class = "form-control", @maxlength = 200 })
+                                                </div>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="box-footer">
+                            <input id="btnSubmit" type="submit" value="Submit" class="btn btn-primary btnSubmit btn-flat" onclick="return Validation();" />
+                            @*<button class="btn btn-primary" onclick="@("window.location.href='" + @Url.Action("index", "setup") + "'");">Cancel</button>*@
+                            @*@Html.ActionLink("cancel", "index", new { @class = "btn btn-primary" })*@
+                            <button id="btnCancel" name="btnCancle" class="btn bg-orange margin btn-flat" onclick="window.location.href = '/Setup/Index'; return false;">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        }
+    </section>
+</div>
+
+<script type="text/javascript">
+    jQuery(document).ready(function () {
+        $("#ValueName").focus();
+        //color picker with addon
+        $(".my-colorpicker2").colorpicker();
+        
+        if ('@ViewBag.MasterType' == 'Color Setup') {
+            $("label[for='Desc']").html("Pick Color <span style=\"color:red\">*</span>");
+            $("#ValueDesc").prop('readonly', true);
+            $("#colorpicker").show();
+            $("#Description").hide();
+
+        }
+        else {
+            $("label[for='Desc']").html("Description <span style=\"color:red\">*</span>");
+            $("#ValueDesc").prop('readonly', false);
+            $("#colorpicker").hide();
+            $("#Description").show();
+        }
+    });
+
+    function Validation() {
+
+        
+
+        var _ValueName = $("#ValueName");
+        var _ValueDesc = $("#ValueDesc");
+
+        if (_ValueName.val() == '' || _ValueName == undefined) {
+            _ValueName.focus();
+            toastr["warning"]('Name can not left blank!');
+            return false;
+        }
+        else if (_ValueDesc.val() == '' || _ValueDesc == undefined) {
+            _ValueDesc.focus();
+            toastr["warning"]('Value Description can not left blank!');
+            return false;
+        }
+
+        if ($("#Id").val() == 0) {
+            var _flg = "true";
+            
+            $.ajax({
+                type: "POST",
+                async: false,
+                dataType: 'json',
+                //contentType: "application/json; charset=utf-8",
+                url: '@Url.Action("isValueExists", "Setup")',
+                data: { pValueName: _ValueName.val() },
+                dataType: "json",
+                beforeSend: function () {
+                    
+                    $("#ajaxLoader").show();
+                },
+                success: function (data) {
+                    
+
+                    if (data) {
+                        toastr["warning"]('Duplicate Value!');
+                        _flg = "false";
+                    }
+                    $("#ajaxLoader").hide();
+                },
+                error: function (result, st, er) {
+                    
+                    toastr["error"](result);
+                    $("#ajaxLoader").hide();
+                },
+            });
+            if (_flg == "true") {
+                
+                return true;
+            }
+            else {
+                
+                return false;
+            }
+        }
+    }
+
+</script>

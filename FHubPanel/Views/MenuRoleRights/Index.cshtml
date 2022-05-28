@@ -1,0 +1,99 @@
+﻿<div class="content-wrapper" style="min-height: 946px;">
+
+    <section class="content manageGrid">
+
+        <div class="box box-primary">
+            <div class="box-header">
+                <div class="box-header with-border" style="cursor: move;">
+                    <i class="@ViewBag.Icon"></i>
+                    <h3 class="box-title"><b>@ViewBag.MasterType</b></h3>
+                    <div class="box-tools pull-right">
+
+                    </div>
+                </div>
+                @using (Ajax.BeginForm("Save", "MenuRoleRights", new AjaxOptions {  HttpMethod = "POST", OnBegin = "BeginFun", OnSuccess = "SuccessFun", OnFailure = "FailureFun" }, new { @class = "", id = "myrolerights", endtype = "maultipart/form-data" }))
+                {
+
+                    <div class="box-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>Role</label>
+                                        @Html.DropDownList("Role", new SelectList((IEnumerable<SelectListItem>)ViewData["RoleList"], "Value", "Text"), "----Select Role----", new { @class = "form-control" })
+                                    </div>
+                                </div>
+
+                                <div class="col-md-2" style="margin-top: 25px;">
+                                    <button type="submit" id="btnSave" name="btnSave" class="btn btn-block btn-primary btn-flat"> Save</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div id="divRoleRights">
+                        @Html.Partial("_LoadRoleRightsPartial")
+                    </div>
+                }
+            </div>
+        </div>
+
+        <div class="box-body" id="productcontainer">
+
+        </div>
+        <div class="col-lg-12 text-center">
+            <div id="progress" style="display:none">
+                <img src="~/Content/dist/img/ajax-loader.gif" width="50" height="50" />
+            </div>
+        </div>
+
+    </section>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#Role").on('change', function () {
+            
+            $.ajax({
+                type: 'get',
+                dataType: 'html',
+                cache: false,
+                url: '@Url.Action("LoadRoleRights", "MenuRoleRights")',
+                data: { RoleId: $(this).val() },
+                beforeSend: function () {
+                    $("ajaxLoader").show();
+                },
+                complete: function () {
+                    $("ajaxLoader").hide();
+                },
+                success: function (response) {
+                    
+                    if (response != '' && response != null) {
+                        $("#divRoleRights").html("");
+                        $("#divRoleRights").html(response);
+                    }
+                },
+                error: function (ex, th, st) {
+                    
+                    toastr["error"](th);
+                }
+            })
+        });
+    });
+
+    function BeginFun()
+    {
+
+    }
+
+    function SuccessFun(response) {
+        if(response.Result)
+            toastr["success"](response.Message);
+        else
+            toastr["error"](response.Message);
+    }
+
+    function FailureFun(ex, th, st) {
+        toastr["error"](th);
+    }
+</script>

@@ -1,0 +1,118 @@
+﻿@using FHubPanel.Models;
+@model GroupMa
+
+
+<div class="content-wrapper" style="min-height: 946px;">
+
+    <section class="content manageGrid">
+
+        <div class="box box-primary">
+            <div class="box-header">
+                <div class=" box-header with-border" style="cursor: move;">
+                    <i class="@ViewBag.Icon"></i>
+                    <h3 class="box-title"><b>@ViewBag.MasterType</b></h3>
+                </div>
+            </div>
+            <div class="box-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <!-- Custom Tabs -->
+                        <div class="nav-tabs-custom">
+                            <ul class="nav nav-tabs">
+                                <li class="active"><a href="#tabPending" data-toggle="tab" aria-expanded="false" onclick="GetEnquiryList('P', 'tabPending');">Pending</a></li>
+                                <li class=""><a href="#tabReplied" data-toggle="tab" aria-expanded="true" onclick="GetEnquiryList('R', 'tabReplied');">Replied</a></li>
+                                <li><a href="#tabCanceled" data-toggle="tab" onclick="GetEnquiryList('C', 'tabCanceled');">Canceled</a></li>
+                            </ul>
+                            <div class="tab-content">
+                                <div class="tab-pane active" id="tabPending">
+                                    @Html.Partial("_EnquiryListPartial", new List<sp_EnquiryList_SelectWhere_Result>())
+                                </div><!-- /.tab-pane -->
+                                <div class="tab-pane" id="tabReplied">
+                                    @Html.Partial("_EnquiryListPartial", new List<sp_EnquiryList_SelectWhere_Result>())
+                                </div><!-- /.tab-pane -->
+                                <div class="tab-pane" id="tabCanceled">
+                                    @Html.Partial("_EnquiryListPartial", new List<sp_EnquiryList_SelectWhere_Result>())
+                                </div><!-- /.tab-pane -->
+                            </div><!-- /.tab-content -->
+                        </div><!-- nav-tabs-custom -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<script type="text/javascript">
+    //var pageSize = 6;
+    //var pageIndex = 0;
+    var _Table;
+    jQuery(document).ready(function () {
+
+        @*if ('@TempData["Success"]' != '')
+            toastr["success"]('@TempData["Success"]');*@
+        if ('@TempData["Error"]' != '')
+            toastr["error"]('@TempData["Error"]');
+
+        GetEnquiryList('P', 'tabPending');
+
+    });
+
+    function GetEnquiryList(_Type, _TabId) {
+        $.ajax({
+            type: 'get',
+            dataType: 'html',
+            cache: false,
+            url: '@Url.Action("GetenquiryList", "Enquiry")',
+            data: { _Type: _Type },
+            beforeSend: function () {
+
+            },
+            success: function (response) {
+                if (response != null) {
+                    $("#" + _TabId).html('');
+                    $("#" + _TabId).html(response);
+                    
+                    //var _Position = 0;
+                    //if (_Type == 'P')
+                    //    _Position = 5;
+                    //else if (_Type == 'C')
+                    //    _Position = 6;
+                    //jQuery('.tblEnquiry').dataTable().fnDestroy();
+                    //$(".tblEnquiry").dataTable().fnDestroy();
+                    //_Table.destroy();
+                    $(".tblEnquiry").dataTable({
+                        destroy: true,
+                        //"ordering": false
+                        responsive : true,
+                        order: [[0, 'desc']],
+                        //columnDefs: [
+                        //{ targets: [_Position], orderable: false },
+                        //]
+                    }
+                    );
+                }
+            },
+            error: function (ex, st, th) {
+                toastr["error"](th);
+            },
+            statusCode: {
+                403: function () {
+                    window.location.href = "/Account/Login";
+                },
+                401: function () {
+                    window.location.href = "/Account/Login";
+                }
+            }
+
+        })
+    }
+
+
+</script>
+
+<style>
+    h3.widget-user-username {
+        margin-left: 0px !important;
+        text-align: center;
+    }
+</style>

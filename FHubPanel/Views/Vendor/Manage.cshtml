@@ -1,0 +1,502 @@
+﻿@model FHubPanel.Models.VendorModel
+
+@{
+    //ViewBag.Title = "Manage";
+}
+
+<link href="~/Content/bootstrap_Profile_Cover.css" rel="stylesheet" />
+<div class="content-wrapper" style="min-height: 946px;">
+    @*<section class="content-header">
+            <h1>
+                <b>@ViewBag.MasterType</b>
+                <small></small>
+            </h1>
+            <ol class="breadcrumb">
+                <li><a href="/Home/Index"><i class="fa fa-dashboard"></i>Home</a></li>
+                <li><a href="/Setup/Index">Setup</a></li>
+                <li class="active">Manage</li>
+            </ol>
+        </section>*@
+
+
+    <section class="content">
+        @using (Html.BeginForm("Save", "Vendor", FormMethod.Post, new { id = "myform", @class = "", enctype = "multipart/form-data" }))
+        {
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="box box-primary">
+                        <div class="box-body">
+
+                            <div class="col-md-12">
+                                <div class="box-header with-border box-info">
+                                    <i class="@ViewBag.Icon"></i>
+                                    <h3 class="box-title"><b>@ViewBag.MasterType</b> </h3>
+                                </div>
+                                @Html.HiddenFor(Model => Model.VendorId)
+                                @Html.HiddenFor(Model => Model.LogoImg)
+                                @Html.HiddenFor(Model => Model.BGImage)
+                                @Html.HiddenFor(Model => Model.InsUser)
+                                @Html.HiddenFor(Model => Model.InsTerminal)
+                                @Html.HiddenFor(Model => Model.InsDate)
+
+
+                                <div class="col-md-12">
+                                    <div class="col-md-3">
+                                        <div class="row" style="margin-top:10px !important">
+                                            @*<img id="imgLogo" src="@Html.DisplayFor(Model => Model.LogoFullPath)" class="center-block" style="max-width:50%" />*@
+                                            <div class="twPc-div">
+                                                <a id="imgLogo" class="twPc-bg twPc-block" style="background-image: Url(@Html.DisplayFor(Model => Model.LogoFullPath))"></a>
+                                            </div>
+                                            <div class="form-group">
+                                                @*<label>Logo</label>*@
+                                                @*~/Content/dist/img/default-50x50.gif*@
+                                                <input type="file" name="fileLogo" id="fleLogo" class="center-block" value="" style="margin-top: 10px; display:none;" accept="image/*" />
+                                                <input type="button" name="btnUpload" id="btnUpload" value="Choose Image" class="btn btn-primary btn-flat btn-xs center-block" style="margin-top: 15px;" />
+                                            </div>
+                                        </div>
+
+                                        <div class="row" style="margin-top:10px !important" id="divResetVendorCode">
+                                            <div class="input-group margin">
+                                                <div class="input-group-btn">
+                                                    <input type="button" name="btnResetCode" value="Reset Vendor Code" id="btnResetCode" class="btn btn-primary btn-flat" onclick="ResetVendorCode();" />
+                                                </div><!-- /btn-group -->
+                                                @Html.TextBoxFor(Model => Model.VendorCode, new { @class = "form-control", @readonly = true, style = "height: 34px; font-size: x-large;" })
+                                            </div>
+                                        </div>
+
+                                        <div class="row" style="margin-top:10px !important">
+                                            @*<img id="imgLogo" src="@Html.DisplayFor(Model => Model.LogoFullPath)" class="center-block" style="max-width:50%" />*@
+                                            <div class="bg-div">
+                                                <a id="imgBGImg" class="bg-img" style="height:100%; background-image: Url(@Html.DisplayFor(Model => Model.BGImageFullPath))"></a>
+                                            </div>
+                                            <div class="form-group">
+                                                @*<label>Logo</label>*@
+                                                @*~/Content/dist/img/default-50x50.gif*@
+                                                <input type="file" name="fileBGImg" id="fileBGImg" class="center-block" value="" style="margin-top: 10px; display:none;" accept="image/*" />
+                                                <input type="button" name="btnBGIUpload" id="btnBGIUpload" value="Choose BackGround Image" class="btn btn-primary btn-flat btn-xs center-block" style="margin-top: 15px;" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <div class="row" style="margin-top:10px !important">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label>Vendor Name <span style="color:red"><b> *</b></span></label>
+                                                    @Html.TextBoxFor(Model => Model.VendorName, new { @class = "form-control", @maxlength = 100 })
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label>User Name <span style="color:red"><b> *</b></span></label>
+                                                    @Html.TextBoxFor(Model => Model.UserName, new { @class = "form-control", @maxlength = 50 })
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label>Address<span style="color:red"><b> *</b></span></label>
+                                                    @Html.TextAreaFor(Model => Model.Address, new { @class = "form-control", @maxlength = 100 })
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label>Landmark</label>
+                                                    @Html.TextBoxFor(Model => Model.Landmark, new { @class = "form-control", @maxlength = 100 })
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label>Country</label>
+                                                    @Html.TextBoxFor(Model => Model.Country, new { @class = "form-control", @maxlength = 30 })
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label>State<span style="color:red"><b> *</b></span></label>
+                                                    @Html.TextBoxFor(Model => Model.State, new { @class = "form-control", @maxlength = 30 })
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label>City<span style="color:red"><b> *</b></span></label>
+                                                    @Html.TextBoxFor(Model => Model.City, new { @class = "form-control", @maxlength = 30 })
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label>Pincode<span style="color:red"><b> *</b></span></label>
+                                                    @Html.TextBoxFor(Model => Model.Pincode, new { @class = "form-control", @maxlength = 10 })
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label>Contact Name</label>
+                                                    @Html.TextBoxFor(Model => Model.ContactName, new { @class = "form-control", @maxlength = 50 })
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label>Contact No 1</label>
+                                                    @Html.TextBoxFor(Model => Model.ContactNo1, new { @class = "form-control", @maxlength = 20 })
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label>Contact No 2</label>
+                                                    @Html.TextBoxFor(Model => Model.ContactNo2, new { @class = "form-control", @maxlength = 20 })
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label>Mobile No 1<span style="color:red"><b> *</b></span></label>
+                                                    @Html.TextBoxFor(Model => Model.MobileNo1, new { @class = "form-control", @maxlength = 20 })
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label>Mobile No 2</label>
+                                                    @Html.TextBoxFor(Model => Model.MobileNo2, new { @class = "form-control", @maxlength = 20 })
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label>Fax No</label>
+                                                    @Html.TextBoxFor(Model => Model.FaxNo, new { @class = "form-control", @maxlength = 20 })
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label>Email Id<span style="color:red"><b> *</b></span></label>
+                                                    @Html.TextBoxFor(Model => Model.EmailId, new { @class = "form-control", @maxlength = 100 })
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label>Web Site</label>
+                                                    @Html.TextBoxFor(Model => Model.WebSite, new { @class = "form-control", @maxlength = 100 })
+                                                </div>
+                                            </div>
+
+                                            @if (ViewBag.Role != "Vendor" && ViewBag.Role != "")
+                                            {
+                                                <div class="col-md-4" id="divPassword">
+                                                    <div class="form-group">
+                                                        <label>Password<span style="color:red"><b> *</b></span></label>
+                                                        @Html.PasswordFor(Model => Model.Password, new { @class = "form-control", @maxlength = 50 })
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4" id="divConfPassword">
+                                                    <div class="form-group">
+                                                        <label>Confirm Password<span style="color:red"><b> *</b></span></label>
+                                                        @Html.PasswordFor(Model => Model.ConfirmPassword, new { @class = "form-control", @maxlength = 50 })
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-4" id="divIsActive">
+                                                    <div class="form-group">
+                                                        @Html.CheckBoxFor(Model => Model.IsActive, new { @class = "minimal" })
+                                                        <label> Is Active</label>
+                                                    </div>
+                                                </div>
+                                            }
+
+                                            <div class="col-md-12" id="divAboutUs">
+                                                <div class="form-group">
+                                                    <label> About Us</label>
+                                                    @Html.TextAreaFor(Model => Model.AboutUs, new { @class = "form-control" })
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-6" id="divProdDispName">
+                                                <div class="form-group">
+                                                    <label>Product Display Name</label>
+                                                    @Html.DropDownListFor(Model => Model.ProdDispName, new List<SelectListItem>{
+                                                        new SelectListItem { Selected = true,Text = "ProductCode",Value = "Code" },
+                                                        new SelectListItem { Selected = false,Text = "ProductName",Value = "Name" },
+                                                        new SelectListItem { Selected = false,Text = "ProductCode + ProductName",Value = "CodeName" },
+                                                        new SelectListItem { Selected = false,Text = "ProductName + ProductCode",Value = "NameCode" }
+                                                    }, new { @class = "form-control" })
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-6" id="divCatDispName">
+                                                <div class="form-group">
+                                                    <label>Catalogue Display Name</label>
+                                                    @Html.DropDownListFor(Model => Model.CatDispName, new List<SelectListItem>{
+                                                        new SelectListItem { Selected = true,Text = "CatalogueCode",Value = "Code" },
+                                                        new SelectListItem { Selected = false,Text = "CatalogueName",Value = "Name" },
+                                                        new SelectListItem { Selected = false,Text = "CatalogueCode + CatalogueName",Value = "CodeName" },
+                                                        new SelectListItem { Selected = false,Text = "CatalogueName + CatalogueCode",Value = "NameCode" }
+                                                    }, new { @class = "form-control" })
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                                @*<div class="row">
+                                        <div class="col-xs-12">
+                                            <div class="form-group">
+                                                <label>Address</label>
+                                                @Html.TextAreaFor(Model => Model.Address, new { @class = "form-control", @maxlength = 100 })
+                                            </div>
+                                        </div>
+                                    </div>*@
+
+                            </div>
+                        </div>
+                        <div class="box-footer">
+                            <input id="btnSubmit" type="submit" value="Submit" class="btn btn-primary btn-flat" onclick="return Validation();" />
+                            @*<button class="btn btn-primary" onclick="@("window.location.href='" + @Url.Action("index", "setup") + "'");">Cancel</button>*@
+                            @*@Html.ActionLink("cancel", "index", new { @class = "btn btn-primary" })*@
+
+                            <button id="btnCancel" name="btnCancle" class="btn bg-orange margin btn-flat" onclick="window.location.href = '@ViewBag.RedirectLink'; return false;">Cancel</button>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        }
+    </section>
+</div>
+
+<script type="text/javascript">
+    jQuery(document).ready(function () {
+
+        $("#btnUpload").on('click', function (e) {
+            $("#fleLogo").click();
+            e.preventDefault();
+        })
+        $("#btnBGIUpload").on('click', function (e) {
+
+            $("#fileBGImg").click();
+            e.preventDefault();
+        });
+
+        if ('@ViewBag.Role' != '' && '@ViewBag.Role' == 'Vendor') {
+            $("#UserName").prop('readonly', true);
+        }
+
+        if ($("#VendorId").val() > 0 && $("#VendorId").val() != '') {
+            $("#UserName").prop('readonly', true);
+        }
+        if ($("#VendorId").val() == 0) {
+            $("#divResetVendorCode").hide();
+        }
+
+        if ('@TempData["Warning"]' != '') {
+            toastr["warning"]('@TempData["Warning"]');
+        }
+
+        //$(".minimal").on('ifClicked',function () {
+        //    console.log($(this));
+        //    $("#IsActive")
+        //});
+
+        $("#fleLogo").change(function () {
+            //
+            imgDisplay(this, 'imgLogo', 'fleLogo');
+        });
+
+        $("#fileBGImg").change(function () {
+
+            imgDisplay(this, 'imgBGImg', 'fileBGImg');
+        });
+
+        if ($("#VendorId").val() != 0) {
+            $("#Password").prop('readonly', true);
+            $("#ConfirmPassword").prop('readonly', true);
+        }
+    });
+
+    function imgDisplay(input, ImgId, _FileULId) {
+
+        if (input.files && input.files[0]) {
+            if ((input.files[0].size / 1024) <= 1024) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    //$("#imgLogo").attr('src', e.target.result);
+                    $("#" + ImgId).css('background-image', 'url(' + e.target.result + ') ')
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+            else {
+                $("#" + _FileULId).val('');
+                toastr["warning"]('Image size must be lessthan 1 MB.');
+            }
+        }
+
+    }
+
+    function Validation() {
+
+
+
+        var _VendorName = $("#VendorName");
+        if (_VendorName.val() == '' || _VendorName == undefined) {
+            _VendorName.focus();
+            toastr["warning"]('Vendor Name can not left blank!');
+            return false;
+        }
+
+        var _UserName = $("#UserName");
+        if (_UserName.val() == '' || _UserName == undefined) {
+            _UserName.focus();
+            toastr["warning"]('User Name can not left blank!');
+            return false;
+        }
+        if (_UserName.val().indexOf(' ') >= 0) {
+            _UserName.focus();
+            toastr["warning"]('User Name can not allow space!');
+            return false;
+        }
+
+        var _Address = $("#Address");
+        if (_Address.val() == '' || _Address == undefined) {
+            _Address.focus();
+            toastr["warning"]('Address can not left blank!');
+            return false;
+        }
+        var _State = $("#State");
+        if (_State.val() == '' || _State == undefined) {
+            _State.focus();
+            toastr["warning"]('State can not left blank!');
+            return false;
+        }
+        var _City = $("#City");
+        if (_City.val() == '' || _City == undefined) {
+            _City.focus();
+            toastr["warning"]('City can not left blank!');
+            return false;
+        }
+        var _Pincode = $("#Pincode");
+        if (_Pincode.val() == '' || _Pincode == undefined) {
+            _Pincode.focus();
+            toastr["warning"]('Pincode can not left blank!');
+            return false;
+        }
+        var _MobileNo1 = $("#MobileNo1");
+        if (_MobileNo1.val() == '' || _MobileNo1 == undefined) {
+            _MobileNo1.focus();
+            toastr["warning"]('Mobile No 1 can not left blank!');
+            return false;
+        }
+        var _EmailId = $("#EmailId");
+        if (_EmailId.val() == '' || _EmailId == undefined) {
+            _EmailId.focus();
+            toastr["warning"]('Email Id can not left blank!');
+            return false;
+        }
+
+        if ($("#VendorId").val() == 0) {
+
+            var _Password = $("#Password");
+            if (_Password.val() == '' || _Password == undefined) {
+                _Password.focus();
+                toastr["warning"]('Password can not left blank!');
+                return false;
+            }
+            if (_Password.val().length < 6) {
+                _Password.focus();
+                toastr["warning"]('Password must greater than 6 charactor!');
+                return false;
+            }
+
+            var _ConfPassword = $("#ConfirmPassword");
+            if (_ConfPassword.val() == '' || _ConfPassword == undefined) {
+                _ConfPassword.focus();
+                toastr["warning"]('Confirm Password can not left blank!');
+                return false;
+            }
+
+            if (_Password.val() != _ConfPassword.val()) {
+                _ConfPassword.focus();
+                toastr["warning"]('Password and Confirm Password not equal!');
+                return false;
+            }
+        }
+
+        if ($("#Id").val() == 0) {
+            var _flg = "true";
+
+            $.ajax({
+                type: "POST",
+                async: false,
+                dataType: 'json',
+                //contentType: "application/json; charset=utf-8",
+                url: '@Url.Action("isValueExists", "Vendor")',
+                data: { pUserName: _UserName.val() },
+                dataType: "json",
+                beforeSend: function () {
+                    $("#ajaxLoader").show();
+                },
+                success: function (data) {
+                    if (data) {
+                        toastr["warning"]('Duplicate Value!');
+                        _flg = "false";
+                    }
+                    $("#ajaxLoader").hide();
+                },
+                error: function (result, st, er) {
+                    toastr["error"](result);
+                    $("#ajaxLoader").hide();
+                },
+            });
+            if (_flg == "true") {
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+    }
+
+    function ResetVendorCode() {
+        $.ajax({
+            type: 'get',
+            dataType: 'json',
+            cache: false,
+            url: '@Url.Action("ResetVendorCode","Vendor")',
+            data: {},
+            beforeSend: function () {
+
+            },
+            success: function (response) {
+                if (response.Result)
+                    $("#VendorCode").val(response.VendorCode);
+                else
+                    toastr["warning"]('Server Error. Vendor Code get null!');
+            },
+            error: function (ex, st, th) {
+                toastr["error"](th);
+            }
+        })
+    }
+
+</script>
+<style>
+    .bg-div {
+        background: #fff none repeat scroll 0 0;
+        border: 1px solid #e1e8ed;
+        border-radius: 6px;
+        height: 300px;
+        max-width: 340px;
+    }
+
+    .bg-img {
+        background-position: 0 50%;
+        background: no-repeat;
+        background-size: 100% 100%;
+        border-bottom: 1px solid #e1e8ed;
+        border-radius: 4px 4px 0 0;
+        height: 100%;
+        display: block;
+    }
+    /*.bg-block*/
+</style>

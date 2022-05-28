@@ -1,0 +1,202 @@
+﻿@model FHubPanel.Models.CatalogModel
+
+@{
+    //ViewBag.Title = "Manage";
+}
+
+
+<div class="content-wrapper" style="min-height: 946px;">
+
+    <section class="content">
+        @using (Html.BeginForm("Save", "Catalog", FormMethod.Post, new { id = "myform", @class = "", enctype = "multipart/form-data" }))
+        {
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="box box-primary">
+                        <div class="box-body">
+
+                            <div class="col-md-12">
+                                <div class="box-header with-border box-info">
+                                    <i class="@ViewBag.Icon"></i>
+                                    <h3 class="box-title"><b>@ViewBag.MasterType</b> </h3>
+                                </div>
+                                @Html.HiddenFor(Model => Model.CatId)
+                                @Html.HiddenFor(Model => Model.CatImg)
+                                @Html.HiddenFor(Model => Model.RefVendorId)
+                                @Html.HiddenFor(Model => Model.InsUser)
+                                @Html.HiddenFor(Model => Model.InsTerminal)
+                                @Html.HiddenFor(Model => Model.InsDate)
+                                @Html.HiddenFor(Model => Model.UpdUser)
+                                @Html.HiddenFor(Model => Model.UpdTerminal)
+                                @Html.HiddenFor(Model => Model.UpdDate)
+
+                                <div class="col-md-12">
+                                    <div class="col-md-3 ">
+                                        <div class="row" style="margin-top:10px !important">
+                                            @*<div class="col-md-3">*@
+                                            <img id="imgLogo" src="@Html.DisplayFor(Model => Model.FullImgPath)" class="center-block" style="max-width:100%" />
+                                            <div class="form-group">
+                                                @*<label>Logo</label>*@
+                                                @*~/Content/dist/img/default-50x50.gif*@
+
+                                                <input type="file" name="fileLogo" id="fleLogo" class="center-block" value="" style="margin-top: 10px;" />
+                                            </div>
+                                            @*</div>*@
+                                        </div>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <div class="row" style="margin-top:10px !important">
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label>Catalogue Code <span style="color:red">*</span></label>
+                                                    @Html.TextBoxFor(Model => Model.CatCode, new { @class = "form-control", @maxlength = 100 })
+                                                </div>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <div class="form-group">
+                                                    <label>Catalogue Name <span style="color:red">*</span></label>
+                                                    @Html.TextBoxFor(Model => Model.CatName, new { @class = "form-control", @maxlength = 200 })
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label>Catalogue Description</label>
+                                                    @Html.TextAreaFor(Model => Model.CatDescription, new { @class = "form-control", @maxlength = 200 })
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label>Catalogue Launch Date</label>
+                                                    @Html.TextBoxFor(Model => Model.CatLaunchDate, "{0:dd/MMM/yyyy}", new { @class = "form-control" })
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+
+                                                    @Html.CheckBoxFor(Model => Model.IsFullset, new { @class = "minimal" })
+                                                    <label>Is Fullset</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+
+                                                    @Html.CheckBoxFor(Model => Model.IsActive, new { @class = "minimal" })
+                                                    <label>Is Active</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="box-footer">
+                            <input id="btnSubmit" type="submit" value="Submit" class="btn btn-primary btn-flat" onclick="return Validation();" />
+                            @*<button class="btn btn-primary" onclick="@("window.location.href='" + @Url.Action("index", "setup") + "'");">Cancel</button>*@
+                            @*@Html.ActionLink("cancel", "index", new { @class = "btn btn-primary" })*@
+                            <button id="btnCancel" name="btnCancle" class="btn bg-orange margin btn-flat" onclick="window.location.href = '/Catalog/Index'; return false;">Cancel</button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        }
+    </section>
+</div>
+
+<script type="text/javascript">
+    jQuery(document).ready(function () {
+
+        if ('@TempData["Warning"]' != '') {
+            toastr["warning"]('@TempData["Warning"]');
+        }
+        else if ('@TempData["Error"]' != '') {
+            toastr["error"]('@TempData["Error"]');
+        }
+
+        $("#CatLaunchDate").datepicker({
+                format: 'dd/M/yyyy',
+                autoclose: true,
+                clearBtn: true,
+                setStartDate: moment().format('DD/MMM/YYYY')
+            });
+
+        $("#fleLogo").change(function () {
+            imgDisplay(this);
+        });
+    });
+
+    function imgDisplay(input) {
+        if (input.files && input.files[0]) {
+            if ((input.files[0].size / 1024) <= 1024) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $("#imgLogo").attr('src', e.target.result);
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+            else
+            {
+                $("#fleLogo").val('');
+                toastr["warning"]('Image size must be less than 1 MB!');
+            }
+        }
+    }
+
+    function Validation() {
+        var _CatName = $("#CatName");
+
+        if (_CatName.val() == '' || _CatName == undefined) {
+            _CatName.focus();
+            toastr["warning"]('Name can not left blank!');
+            return false;
+        }
+
+        var _CatCode = $("#CatCode");
+
+        if (_CatCode.val() == '' || _CatCode == undefined) {
+            _CatCode.focus();
+            toastr["warning"]('Code can not left blank!');
+            return false;
+        }
+
+        if ($("#CatId").val() == 0) {
+            var _flg = "true";
+
+            $.ajax({
+                type: "POST",
+                async: false,
+                dataType: 'json',
+                //contentType: "application/json; charset=utf-8",
+                url: '@Url.Action("isValueExists", "Catalog")',
+                data: { pCatalogCode: _CatCode.val() },
+                dataType: "json",
+                beforeSend: function () {
+                    $("#ajaxLoader").show();
+                },
+                success: function (data) {
+                    if (data) {
+                        toastr["warning"]('Duplicate Value!');
+                        _flg = "false";
+                    }
+                    $("#ajaxLoader").hide();
+                },
+                error: function (result, st, er) {
+                    toastr["error"](result);
+                    $("#ajaxLoader").hide();
+                },
+            });
+            if (_flg == "true") {
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+    }
+
+</script>

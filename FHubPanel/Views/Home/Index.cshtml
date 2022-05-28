@@ -1,0 +1,471 @@
+﻿@using FHubPanel.Models;
+@model DashboardModel
+
+@{
+    var _bgColor = "";
+}
+
+<div class="content-wrapper" style="min-height: 901px;">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>
+            Dashboard
+            <small>Control panel</small>
+        </h1>
+        <ol class="breadcrumb">
+            <li><a href="#"><i class="@ViewBag.Icon"></i> Home</a></li>
+            <li class="active">Dashboard</li>
+        </ol>
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        <!-- Small boxes (Stat box) -->
+        <div class="row">
+            <div class="col-lg-3 col-xs-6">
+                <!-- small box -->
+                <div class="small-box bg-aqua">
+                    <div class="inner">
+                        <table class="table" style="margin-bottom: 0px;">
+                            <tr>
+                                <th class="removeborder">Active</th>
+                                <td class="removeborder">@Model.ActiveMember</td>
+                            </tr>
+                            <tr>
+                                <th class="removeborder">In Active</th>
+                                <td class="removeborder">@Model.InActiveMember</td>
+                            </tr>
+                            <tr>
+                                <th class="removeborder">Rejected</th>
+                                <td class="removeborder">@Model.RejectedMember</td>
+                            </tr>
+                            <tr>
+                                <th class="removeborder">Total Member</th>
+                                <td class="removeborder">@Model.TotalMember</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="icon">
+                        <i class="ion ion-person"></i>
+                    </div>
+                    <a href="/Contact/Index" class="small-box-footer">Customer </a>
+                </div>
+            </div><!-- ./col -->
+
+            <div class="col-lg-3 col-xs-6">
+                <!-- small box -->
+                <div class="small-box bg-green">
+                    <div class="inner">
+                        <table class="table" style="margin-bottom: 52px;">
+                            <tr>
+                                <th class="removeborder">Total Catalogues</th>
+                                <td class="removeborder">@Model.TotalCatalogs</td>
+                            </tr>
+                            <tr>
+                                <th class="removeborder">Total Products</th>
+                                <td class="removeborder">@Model.TotalProducts</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="icon">
+                        <i class="ion ion-bag"></i>
+                    </div>
+                    <a href="#" class="small-box-footer">Catalogues/Products </a>
+                </div>
+            </div><!-- ./col -->
+
+            <div class="col-lg-3 col-xs-6">
+                <!-- small box -->
+                <div class="small-box bg-blue">
+                    <div class="inner">
+                        <table class="table" style="margin-bottom: 26px;">
+                            <tr>
+                                <th class="removeborder">Response Given</th>
+                                <td class="removeborder">@Model.ResponseGiven</td>
+                            </tr>
+                            <tr>
+                                <th class="removeborder">Response Pending</th>
+                                <td class="removeborder">@Model.ResponsePending</td>
+                            </tr>
+                            <tr>
+                                <th class="removeborder">Total Inquiry</th>
+                                <td class="removeborder">@Model.TotalInquiry</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="icon">
+                        <i class="ion ion-email"></i>
+                    </div>
+                    <a href="/Enquiry/Index" class="small-box-footer">Enquiry </a>
+                </div>
+            </div><!-- ./col -->
+
+            <div class="col-lg-3 col-xs-6">
+                <!-- small box -->
+                <div class="small-box bg-red">
+                    <div class="inner">
+                        <h3></h3>
+                        <p style=" padding-bottom: 84px;"></p>
+                    </div>
+                    <div class="icon">
+                        <i class="ion ion-pie-graph"></i>
+                    </div>
+                    <a href="#" class="small-box-footer" style=" padding: 13px;"></a>
+                </div>
+            </div><!-- ./col -->
+        </div><!-- /.row -->
+        <!-- Main row -->
+        <div class="row">
+
+            <div class="col-md-4">
+                <!-- Widget: user widget style 1 -->
+                <div class="box box-widget widget-user-2">
+                    <!-- Add the bg color to the header using any of the bg-* classes -->
+                    <div class="widget-user-header bg-yellow">
+                        @*<div class="widget-user-image">
+                                <img class="img-circle" src="../dist/img/user7-128x128.jpg" alt="User Avatar">
+                            </div>*@
+                        <!-- /.widget-user-image -->
+                        <h3 class="widget-user-username" style="margin-left: 0px; ">Category Wise Products</h3>
+                        @*<h5 class="widget-user-desc">Lead Developer</h5>*@
+                    </div>
+
+
+                    <div class="box-footer no-padding" id="categoryList">
+
+                        <ul class="nav nav-stacked">
+                            @{
+                                var _CateCnt = 0;
+                            }
+                            @if (@Model.CateWiseProd.Count < 10)
+                            {
+                                _CateCnt = 10;
+                            }
+                            else
+                            {
+                                _CateCnt = Model.CateWiseProd.Count;
+                            }
+
+                            @for (int i = 0; i < _CateCnt; i++)
+                            {
+                                if (@Model.CateWiseProd.Count > i)
+                                {
+                                    <li class="item">
+                                        <a href="javascript:void(0);" onclick="displaybaseoncategory('@Model.CateWiseProd[i].CategoryName');">
+                                            @Model.CateWiseProd[i].CategoryName
+                                            @if (@Model.CateWiseProd[i].NoofProducts == 0)
+                                            {
+                                                _bgColor = "bg-red";
+                                            }
+                                            else
+                                            {
+                                                _bgColor = "bg-blue";
+                                            }
+                                            <span class="pull-right badge @_bgColor">
+                                                @Model.CateWiseProd[i].NoofProducts
+                                            </span>
+                                        </a>
+                                    </li>
+                                }
+                                else
+                                {
+                                    <li><a href="javascript:void(0);" style="height:40px;"> <span class="pull-right "> </span></a></li>
+                                }
+                            }
+                        </ul>
+                    </div>
+                </div><!-- /.widget-user -->
+            </div><!-- /.col -->
+
+            <div class="col-md-4">
+                <!-- Widget: user widget style 1 -->
+                <div class="box box-widget widget-user-2">
+                    <!-- Add the bg color to the header using any of the bg-* classes -->
+                    <div class="widget-user-header bg-yellow">
+                        @*<div class="widget-user-image">
+                                <img class="img-circle" src="../dist/img/user7-128x128.jpg" alt="User Avatar">
+                            </div>*@
+                        <!-- /.widget-user-image -->
+                        <h3 class="widget-user-username" style="margin-left: 0px; ">Most Active Users</h3>
+                        @*<h5 class="widget-user-desc">Lead Developer</h5>*@
+                    </div>
+                    <div class="box-footer no-padding">
+                        <ul class="nav nav-stacked">
+                            @for (int i = 0; i < 10; i++)
+                            {
+                                if (@Model.MostActive.Count > i)
+                                {
+                                    <li>
+                                        <a href="javascript:void(0);">
+                                            @Model.MostActive[i].AppUserName
+                                            <span class="pull-right badge bg-blue">
+                                                @Model.MostActive[i].AssDate.Value.ToString("dd/MMM/yyyy")
+                                            </span>
+                                        </a>
+                                    </li>
+                                }
+                                else
+                                {
+                                    <li><a href="javascript:void(0);" style="height:40px;"> <span class="pull-right "> </span></a></li>
+                                }
+                            }
+                        </ul>
+                    </div>
+                </div><!-- /.widget-user -->
+            </div><!-- /.col -->
+
+            <div class="col-md-4">
+                <!-- Widget: user widget style 1 -->
+                <div class="box box-widget widget-user-2">
+                    <!-- Add the bg color to the header using any of the bg-* classes -->
+                    <div class="widget-user-header bg-yellow">
+                        @*<div class="widget-user-image">
+                                <img class="img-circle" src="../dist/img/user7-128x128.jpg" alt="User Avatar">
+                            </div>*@
+                        <!-- /.widget-user-image -->
+                        <h3 class="widget-user-username" style="margin-left: 0px; ">Top View Catalogue</h3>
+                        @*<h5 class="widget-user-desc">Lead Developer</h5>*@
+                    </div>
+                    <div class="box-footer no-padding">
+                        <ul class="nav nav-stacked">
+                            @for (int i = 0; i < 10; i++)
+                            {
+                                if (@Model.MostCat.Count > i)
+                                {
+                                    <li>
+                                        <a href="javascript:void(0);" onclick="displaybaseoncatalogue('@Model.MostCat[i].CatCode')">
+                                            @Model.MostCat[i].CatName - @Model.MostCat[i].CatCode
+                                            @if (@Model.MostCat[i].TotalProduct == 0)
+                                            {
+                                                _bgColor = "bg-red";
+                                            }
+                                            else
+                                            {
+                                                _bgColor = "bg-blue";
+                                            }
+                                            <span class="pull-right badge @_bgColor">
+                                                @Model.MostCat[i].TotalProduct
+                                            </span>
+                                        </a>
+                                    </li>
+                                }
+                                else
+                                {
+                                    <li><a href="javascript:void(0);" style="height:40px;"> <span class="pull-right "> </span></a></li>
+                                }
+                            }
+                        </ul>
+                    </div>
+                </div><!-- /.widget-user -->
+            </div><!-- /.col -->
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="box box-primary">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Daily App Visitor</h3>
+                    </div><!-- /.box-header -->
+                    <div class="box-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                @*<p class="text-center">
+                                        <strong>Sales: 1 Jan, 2014 - 30 Jul, 2014</strong>
+                                    </p>*@
+                                <div class="chart" id="container">
+                                    <!-- Sales Chart Canvas -->
+
+                                </div><!-- /.chart-responsive -->
+                            </div><!-- /.col -->
+                            @*<div class="col-md-4">
+                                    <p class="text-center">
+                                        <strong>Goal Completion</strong>
+                                    </p>
+                                    <div class="progress-group">
+                                        <span class="progress-text">Add Products to Cart</span>
+                                        <span class="progress-number"><b>160</b>/200</span>
+                                        <div class="progress sm">
+                                            <div class="progress-bar progress-bar-aqua" style="width: 80%"></div>
+                                        </div>
+                                    </div><!-- /.progress-group -->
+                                    <div class="progress-group">
+                                        <span class="progress-text">Complete Purchase</span>
+                                        <span class="progress-number"><b>310</b>/400</span>
+                                        <div class="progress sm">
+                                            <div class="progress-bar progress-bar-red" style="width: 80%"></div>
+                                        </div>
+                                    </div><!-- /.progress-group -->
+                                    <div class="progress-group">
+                                        <span class="progress-text">Visit Premium Page</span>
+                                        <span class="progress-number"><b>480</b>/800</span>
+                                        <div class="progress sm">
+                                            <div class="progress-bar progress-bar-green" style="width: 80%"></div>
+                                        </div>
+                                    </div><!-- /.progress-group -->
+                                    <div class="progress-group">
+                                        <span class="progress-text">Send Inquiries</span>
+                                        <span class="progress-number"><b>250</b>/500</span>
+                                        <div class="progress sm">
+                                            <div class="progress-bar progress-bar-yellow" style="width: 80%"></div>
+                                        </div>
+                                    </div><!-- /.progress-group -->
+                                </div>*@<!-- /.col -->
+                        </div><!-- /.row -->
+                    </div><!-- ./box-body -->
+                    @*<div class="box-footer">
+                            <div class="row">
+                                <div class="col-sm-3 col-xs-6">
+                                    <div class="description-block border-right">
+                                        <span class="description-percentage text-green"><i class="fa fa-caret-up"></i> 17%</span>
+                                        <h5 class="description-header">$35,210.43</h5>
+                                        <span class="description-text">TOTAL REVENUE</span>
+                                    </div><!-- /.description-block -->
+                                </div><!-- /.col -->
+                                <div class="col-sm-3 col-xs-6">
+                                    <div class="description-block border-right">
+                                        <span class="description-percentage text-yellow"><i class="fa fa-caret-left"></i> 0%</span>
+                                        <h5 class="description-header">$10,390.90</h5>
+                                        <span class="description-text">TOTAL COST</span>
+                                    </div><!-- /.description-block -->
+                                </div><!-- /.col -->
+                                <div class="col-sm-3 col-xs-6">
+                                    <div class="description-block border-right">
+                                        <span class="description-percentage text-green"><i class="fa fa-caret-up"></i> 20%</span>
+                                        <h5 class="description-header">$24,813.53</h5>
+                                        <span class="description-text">TOTAL PROFIT</span>
+                                    </div><!-- /.description-block -->
+                                </div><!-- /.col -->
+                                <div class="col-sm-3 col-xs-6">
+                                    <div class="description-block">
+                                        <span class="description-percentage text-red"><i class="fa fa-caret-down"></i> 18%</span>
+                                        <h5 class="description-header">1200</h5>
+                                        <span class="description-text">GOAL COMPLETIONS</span>
+                                    </div><!-- /.description-block -->
+                                </div>
+                            </div><!-- /.row -->
+                        </div>*@<!-- /.box-footer -->
+                </div><!-- /.box -->
+            </div><!-- /.col -->
+        </div>
+
+    </section><!-- /.content -->
+
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('#categoryList').slimScroll({
+            height: '410px'
+        });
+
+        DailyAppVisitor();
+    })
+
+    function displaybaseoncategory(_Category) {
+        
+        localStorage.setItem("CategoryName", _Category);
+        window.location.href = '/Product/Index'
+    }
+
+    function displaybaseoncatalogue(_Catalogue) {
+        
+        localStorage.setItem("Catalogue", _Catalogue);
+        window.location.href = '/Product/Index'
+    }
+
+    function DailyAppVisitor() {
+
+        $.ajax({
+            type: 'get',
+            datType: 'json',
+            cache: false,
+            url: '@Url.Action("DailyAppVisitorData","Home")',
+            data: {},
+            beforeSend: function () { },
+            success: function (response) {
+                
+                if (response.WeeklyVisitors.length > 0) {
+                    $(function () {
+                        Highcharts.setOptions({
+                            lang: {
+                                drillUpText: '<< Back to Weekly Visitor'
+                            }
+                        });
+                        // Create the chart
+                        $('#container').highcharts({
+                            chart: {
+                                type: 'column'
+                            },
+                            title: {
+                                text: 'Visitor Ratio'
+                            },
+                            subtitle: {
+                                text: ''
+                            },
+                            xAxis: {
+                                type: 'category'
+                            },
+                            yAxis: {
+                                title: {
+                                    text: 'Total Visitor'
+                                }
+
+                            },
+                            legend: {
+                                enabled: false
+                            },
+                            plotOptions: {
+                                series: {
+                                    borderWidth: 0,
+                                    dataLabels: {
+                                        enabled: true,
+                                        //format: '{point.y:.1f}'
+                                    }
+                                }
+                            },
+
+                            tooltip: {
+                                headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
+                                pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:f}</b> of total<br/>'
+                            },
+
+                            series: [{
+                                name: 'Daily Visitor',
+                                colorByPoint: true,
+                                data: response.WeeklyVisitors
+                            }],
+                            drilldown: {
+                                drillUpButton: {
+                                    relativeTo: 'spacingBox',
+                                    position: {
+                                        y: 0,
+                                        x: 0
+                                    },
+                                },
+                                series: response.DailyVisitor
+                            }
+                        });
+                    });
+                }
+            },
+            error: function () {
+            }
+        });
+    }
+</script>
+
+<style>
+    .removeborder {
+        border-top: 0px solid #f4f4f4 !important;
+        padding: 3px !important;
+    }
+
+    .widget-user-2 .widget-user-header {
+        padding: 5px;
+        padding-left: 18px;
+    }
+
+    .widget-user-2 .widget-user-username {
+        font-size: 20px;
+    }
+</style>

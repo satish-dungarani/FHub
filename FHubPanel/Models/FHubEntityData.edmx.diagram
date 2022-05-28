@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="680d740c429e468f87c7c35cb126aaaf" Name="Diagram1" ZoomLevel="98" >
+        <EntityTypeShape EntityType="FHubDBModel.MasterValue" Width="1.5" PointX="0.75" PointY="0.75" />
+        <EntityTypeShape EntityType="FHubDBModel.CatalogMa" Width="1.5" PointX="5.625" PointY="9.75" />
+        <EntityTypeShape EntityType="FHubDBModel.ProductMa" Width="1.625" PointX="5.625" PointY="15" />
+        <EntityTypeShape EntityType="FHubDBModel.VendorSlider" Width="1.5" PointX="5.625" PointY="21.875" />
+        <EntityTypeShape EntityType="FHubDBModel.AppLog" Width="1.5" PointX="11" PointY="4.25" />
+        <EntityTypeShape EntityType="FHubDBModel.AppUser" Width="1.5" PointX="8.75" PointY="4.125" />
+        <EntityTypeShape EntityType="FHubDBModel.ErrLog" Width="1.5" PointX="0.75" PointY="5.75" />
+        <EntityTypeShape EntityType="FHubDBModel.VendorAssociation" Width="1.5" PointX="14" PointY="3.875" />
+        <EntityTypeShape EntityType="FHubDBModel.WriteToU" Width="1.5" PointX="11" PointY="16" />
+        <AssociationConnector Association="FHubDBModel.FK_AppLog_AppUsers" />
+        <AssociationConnector Association="FHubDBModel.FK_VendorAssociation_VendorAssociation" />
+        <AssociationConnector Association="FHubDBModel.FK_WriteToUs_AppUsers" />
+        <EntityTypeShape EntityType="FHubDBModel.ProductImgDet" Width="1.5" PointX="8" PointY="16.5" />
+        <AssociationConnector Association="FHubDBModel.FK_ProductImgDet_ProductMas" />
+        <EntityTypeShape EntityType="FHubDBModel.ProductCategory" Width="1.5" PointX="5.625" PointY="2.375" />
+        <EntityTypeShape EntityType="FHubDBModel.MenuRoleRight" Width="1.5" PointX="3" PointY="8.875" />
+        <AssociationConnector Association="FHubDBModel.FK_MenuRoleRights_MasterValue" />
+        <EntityTypeShape EntityType="FHubDBModel.GroupContactList" Width="2.125" PointX="14" PointY="15.75" />
+        <AssociationConnector Association="FHubDBModel.FK_GroupContactList_AppUsers" />
+        <EntityTypeShape EntityType="FHubDBModel.GroupMa" Width="1.5" PointX="5.625" PointY="27.75" />
+        <AssociationConnector Association="FHubDBModel.FK_GroupContactList_GroupMas" />
+        <EntityTypeShape EntityType="FHubDBModel.NotificationMa" Width="1.5" PointX="0.75" PointY="13.75" />
+        <EntityTypeShape EntityType="FHubDBModel.EnquiryList" Width="1.5" PointX="11.375" PointY="9.75" />
+        <EntityTypeShape EntityType="FHubDBModel.Vendor" Width="1.5" PointX="3.375" PointY="13.75" />
+        <AssociationConnector Association="FHubDBModel.FK_AppLog_Vendor" />
+        <AssociationConnector Association="FHubDBModel.FK_CatalogMas_Vendor" />
+        <AssociationConnector Association="FHubDBModel.FK_ContactGroup_Vendor" />
+        <AssociationConnector Association="FHubDBModel.FK_ProductCategory_Vendor" />
+        <AssociationConnector Association="FHubDBModel.FK_ProductMas_Vendor" />
+        <AssociationConnector Association="FHubDBModel.FK_VendorAssociation_Vendor" />
+        <AssociationConnector Association="FHubDBModel.FK_VendorSlider_Vendor" />
+        <EntityTypeShape EntityType="FHubDBModel.CompanyProfile" Width="1.5" PointX="0.5" PointY="8.875" />
+        <EntityTypeShape EntityType="FHubDBModel.StoreAssociation" Width="1.5" PointX="13.375" PointY="9.75" />
+        <AssociationConnector Association="FHubDBModel.FK_StoreAssociation__StoreAssociation_" />
+        <EntityTypeShape EntityType="FHubDBModel.MastersList" Width="1.5" PointX="0.75" PointY="18.75" />
+        <AssociationConnector Association="FHubDBModel.FK_MasterValue_MastersList" />
+        <EntityTypeShape EntityType="FHubDBModel.ParameterMapping" Width="1.5" PointX="15.625" PointY="10.25" />
+        <AssociationConnector Association="FHubDBModel.FK_ParameterMapping_MastersList" />
+        <AssociationConnector Association="FHubDBModel.FK_ParameterMapping_MasterValue" />
+        <AssociationConnector Association="FHubDBModel.FK_ParameterMapping_MasterValue1" />
+        <AssociationConnector Association="FHubDBModel.FK_ParameterMapping_Vendor" />
+        <AssociationConnector Association="FHubDBModel.FK_ParameterMapping_Vendor1" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

@@ -1,0 +1,116 @@
+﻿@using FHubPanel.Models;
+@model List<sp_ParameterMapping_Select_Result>
+
+@{
+    int? _VVId = 0;
+}
+<table class="table table-bordered table-responsive" id="tblMaster">
+    <thead>
+        <tr>
+            <th>
+            </th>
+            <th>
+                Store Value Name
+            </th>
+            <th>
+                Vendor Value Name
+            </th>
+            <th>
+
+            </th>
+            <th>
+
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @for (int i = 0; i < Model.Count; i++)
+        {
+            <tr>
+                @Html.HiddenFor(model => @Model[i].RefMasterId)
+                @Html.HiddenFor(model => @Model[i].StoreId)
+                @Html.HiddenFor(model => @Model[i].VendorId)
+                @Html.HiddenFor(model => @Model[i].StoreValId)
+                @Html.HiddenFor(model => @Model[i].VendorValId)
+                <td>
+                    @if (Model[i].MappedStatus == "M")
+                    {
+                        <i class="fa fa-circle text-green"></i>
+                    }
+                    else if (Model[i].MappedStatus == "U")
+                    {
+                        <i class="fa fa-circle text-red"></i>
+                    }
+                    else
+                    {
+                        <i class="fa fa-circle text-orange"></i>
+                    }
+                </td>
+                <td>
+                    @Model[i].StoreValName
+                </td>
+                <td>
+                    @Model[i].VendorValName
+                </td>
+                <td>
+                    @if (Model[i].MappedStatus == "U" || Model[i].MappedStatus == "A")
+                    {
+                        @Html.DropDownList("RefMasterValue" + i, new SelectList((IEnumerable<SelectListItem>)ViewData["MasterValueList"], "Value", "Text"), "----Select Value----", new { @class = "form-control" })
+                    }
+                </td>
+                <td>
+                    @if (Model[i].MappedStatus == "U" || Model[i].MappedStatus == "A")
+                    {
+                        if (@Model[i].VendorValId == null)
+                        {
+                            _VVId = 0;
+                        }
+                        else
+                        {
+                            _VVId = @Model[i].VendorValId;
+                        }
+                        <a href="javascript:void(0);" onclick="SaveParameter(@Model[i].StoreValId,@_VVId,@i,'@Model[i].MappedStatus');">
+                            <i class="fa  fa-plus-square text-green" style="font-size: large;"></i>
+                        </a>
+                    }
+                    else
+                    {
+                        if (Model[i].ParamMappingId == null)
+                        {
+                            _VVId = 0;
+                        }
+                        else
+                        {
+                            _VVId = Model[i].ParamMappingId;
+                        }
+                        <a href="javascript:void(0);" onclick="RemoveParameter(@_VVId);">
+                            <i class="fa fa-minus-square text-red" style="font-size: large;"></i>
+                        </a>
+                    }
+                </td>
+            </tr>
+        }
+
+    </tbody>
+</table>
+
+<script>
+    //jQuery('#tblProdMaster').dataTable().fnDestroy();
+    $(document).ready(function () {
+        if ('@TempData["Warning"]' != '')
+            toastr["warning"]('@TempData["Warning"]');
+
+        $('#tblMaster').dataTable({
+            //"bServerSide": false,
+            //"responsive": true,
+            scrollX: true,
+            "searching": false,
+            "pageLength": 100,
+            columnDefs: [{
+                targets: [3, 4],
+                orderable : false
+            }]
+        });
+
+    });
+</script>

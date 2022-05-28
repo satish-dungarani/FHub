@@ -1,0 +1,67 @@
+﻿@using FHubPanel.Models;
+@model List<sp_NotificationMas_Select_Result>
+
+<div class="content-wrapper" style="min-height: 946px;">
+    <!-- Content Header (Page header) -->
+    <section class="content manageGrid">
+        <div class="box box-primary">
+            <div class="box-header">
+            <div class=" box-header with-border" style="cursor: move;">
+                <i class="@ViewBag.Icon"></i>
+                <h3 class="box-title"><b>@ViewBag.MasterType</b></h3>
+                <div class="box-tools pull-right">
+                    <button id="btnCreateNew" name="btnCreateNew"  class="btn btn-block btn-primary btn-flat" onclick="window.location.href = '/Notification/Manage'; "> Create New</button>
+                </div>
+            </div>
+        </div>
+        @*<div class="box-header">
+
+            </div>*@
+        <div class="box-body">
+            <table class="table table-bordered table-hover" id="tblMaster">
+                <thead>
+                    <tr>
+                        <th>Notify Date</th>
+                        <th>Group Name</th>
+                        <th>Contact Name</th>
+                        <th>Message</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (int i = 0; i < @Model.Count; i++)
+                    {
+                        <tr>
+                            @Html.HiddenFor(model => model[i].NotifyId)
+                            <td>@Model[i].NotifyDate.ToString("dd/MMM/yyyy")</td>
+                            <td>@Html.DisplayFor(model => model[i].GroupName)</td>
+                            <td>@Html.DisplayFor(model => model[i].AUName)</td>
+                            <td>@Html.DisplayFor(model => model[i].Message)</td>
+                        </tr>
+                    }
+
+                </tbody>
+            </table>
+        </div>
+</div>
+    </section>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        if ('@TempData["Success"]' != '') {
+            toastr["success"]('@TempData["Success"]');
+        }
+        else if ('@TempData["Warning"]' != '') {
+            toastr["warning"]('@TempData["Warning"]');
+        }
+        else if ('@TempData["Error"]' != '') {
+            toastr["error"]('@TempData["Error"]');
+        }
+
+        $("#tblMaster").dataTable({
+            //responsive: true,
+            scrollX: true,
+            "order": [[0, "desc"]]
+        });
+    });
+</script>

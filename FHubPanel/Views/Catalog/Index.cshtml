@@ -1,0 +1,337 @@
+﻿@model List<FHubPanel.Models.CatalogModel>
+
+<div class="content-wrapper" style="min-height: 946px;">
+
+    <section class="content manageGrid">
+
+        <div class="box box-primary">
+            <div class="box-header">
+                <div class="box-header with-border" style="cursor: move;">
+                    <i class="@ViewBag.Icon"></i>
+                    <h3 class="box-title"><b>@ViewBag.MasterType</b></h3>
+                    <div class="box-tools pull-right">
+                        <div class="col-md-5 pull-right">
+                            <div class="form-group">
+                                <button id="btnCreateNew" name="btnCreateNew" class="btn btn-block btn-primary btn-flat" onclick="window.location.href = '/Catalog/Manage'; "> Create New</button>
+                            </div>
+                        </div>
+                        <div class="col-md-7 pull-right">
+                            <div class="form-group">
+                                @*  <label>Search :</label>*@
+                                <input type="text" name="txtSearch" id="txtSearch" value="" style="margin-top: 3px" class="form-control" placeholder="Search..." />
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+                <div class="col-md-12 " style="margin-top:10px;">
+                    <div class="col-md-1 pull-left">
+                        <div class="form-group">
+                            <button id="btnFileFormat" name="btnFileFormat" data-toogle="tooltip" title="Download Catalogue Excel Format." class="btn btn-block btn-primary btn-flat" onclick="window.location.href = '/Catalog/FileFormatDownload'; "> <i class="fa fa-cloud-download"></i></button>
+                        </div>
+                    </div>
+                    @*@using (Ajax.BeginForm("BulkCatalogData", "Catalog", new AjaxOptions { HttpMethod = "POST", OnBegin = "FunBegin", OnComplete = "FunComplete", OnSuccess = "FunSuccess", OnFailure = "FunFailure" }, new { id = "CatalogBulkUpload", @class = "", enctype = "multipart/form-data" }))*@
+                    @using (Html.BeginForm("BulkCatalogData", "Catalog", FormMethod.Post, new { id = "CatalogBulkUpload", @class = "", enctype = "multipart/form-data" }))
+                    {
+                        <div class="col-md-2 pull-left">
+                            <div class="form-group">
+                                <button type="button" id="btnBulkCatalogUplod" name="btnBulkCatalogUplod" class="btn btn-block btn-primary btn-flat"><i class="fa fa-file-excel-o"></i> Excel Upload</button>
+                                <input type="file" name="ExcelFile" id="ExcelFile" value=" " style="display:none" />
+                                <input type="submit" name="btnSubmit" id="btnSubmit" value=" " style="display:none" />
+                            </div>
+                        </div>
+                    }
+                    <div class="col-md-2 pull-left">
+                        <div class="form-group">
+                            <button id="btnCatalogImgUplod" name="btnCatalogImgUplod" class="btn btn-block btn-primary btn-flat" onclick="ImageUpload('Catalogs');"><i class="fa fa-file-image-o"></i> Bulk Image Upload</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="box-body" id="categorycontainer">
+
+        </div>
+        <div class="col-lg-12 text-center">
+            <div id="progress" style="display:none">
+                <img src="~/Content/dist/img/ajax-loader.gif" width="50" height="50" />
+            </div>
+        </div>
+
+    </section>
+</div>
+
+<script type="text/javascript">
+    var pageSize = 15;
+    var pageIndex = 0;
+    jQuery(document).ready(function () {
+
+        if ('@TempData["Success"]' != '')
+            toastr["success"]('@TempData["Success"]');
+        else if ('@TempData["Error"]' != '')
+            toastr["error"]('@TempData["Error"]');
+
+
+
+        GetData();
+        $(window).scroll(function () {
+            if ($(window).scrollTop() ==
+               $(document).height() - $(window).height()) {
+                GetData();
+            }
+        });
+        //var timeout;
+        $("#txtSearch").on("input", function () {
+            // do stuff;
+            delay(function () {
+                pageIndex = 0;
+                $("#categorycontainer").empty();
+                //var _Search = " <div class='col-md-12'>"
+                //_Search += "<div class='col-md-3 pull-right'>"
+                //_Search += "<div class='form-group'>"
+                //_Search += "<label>Search :</label>"
+                //_Search += "<input type='text' name='txtSearch' id='txtSearch' value='' class='form-control' />"
+                //_Search += "</div>"
+                //_Search += "</div>"
+                //_Search += "</div>"
+                //$("#categorycontainer").add(_Search);
+                GetData();
+            }, 1000);
+        });
+        var delay = (function () {
+            var timer = 0;
+            return function (callback, ms) {
+                clearTimeout(timer);
+                timer = setTimeout(callback, ms);
+            };
+        })();
+
+        //fillGrid();
+
+        $("#btnBulkCatalogUplod").on('click', function (e) {
+            $("#ExcelFile").click();
+            e.preventDefault();
+        });
+
+        $("#ExcelFile").on('change', function (e) {
+            console.log(e);
+            //return false;
+            //$("#btnSubmit").click();
+            $("#CatalogBulkUpload").submit();
+        });
+
+        
+
+    });
+
+    function FunBegin() {
+        
+        $("#ajaxLoader").show();
+    }
+
+    function FunSuccess() {
+        
+        $("#ajaxLoader").hide();
+    }
+
+    function FunComplete() {
+        
+        $("#ajaxLoader").hide();
+    }
+
+    function FunFailure() {
+        
+        $("#ajaxLoader").hide();
+    }
+
+    function GetData() {
+        var _txtsearch = $('#txtSearch').val();
+
+        $.ajax({
+            type: 'GET',
+            url: '@Url.Action("AjaxHandler", "Catalog")',
+            data: { Search: _txtsearch, "pageindex": pageIndex, "pagesize": pageSize },
+            async: false,
+            dataType: 'json',
+            success: function (response) {
+                //
+                if (response.Result == "OK") {
+                    var data = response.data;
+                    if (data != null && data.length > 0) {
+                        for (var i = 0; i < data.length; i++) {
+                            //var _pcName = data[i].ProdCategoryName != null && data[i].ProdCategoryName != '' ? data[i].ProdCategoryName : '-';
+                            var _catCode = data[i].CatCode != null && data[i].CatCode != '' ? data[i].CatCode : '-';
+                            var _catDesc = data[i].CatDescription != null && data[i].CatDescription != '' ? data[i].CatDescription : '-';
+                            var _catld = data[i].CatLaunchDate != null && data[i].CatLaunchDate != '' ? data[i].CatLaunchDate : '-';
+                            var _catImg = data[i].CatImg != null && data[i].CatImg != '' ? data[i].CatImg : '/Content/dist/img/CatalogueNoImage.png';
+                            var _fullPath = data[i].FullImgPath != null && data[i].FullImgPath != '' ? (data[i].FullImgPath).split(' ').join('%20') : '/Content/dist/img/CatalogueNoImage.png';
+                            
+
+                            var _strdata = "<div class='col-md-4' id=" + data[i].CatId + " >";
+                            _strdata += "<div class='box' style='min-height: 200px;'>";
+                            _strdata += "<div class='box-body'>";
+                            //_strdata += "<div class='col-md-12'>";
+                            _strdata += "<a href='javascript:void(0)' onclick='editSession(" + data[i].CatId + ");'>";
+                            //_strdata += "<div class='col-md-12' >";
+                            _strdata += "<img src=" + _fullPath.split(' ').join('%20') + " style='max-width:100%' alt='Catalogue Image' /></br>";
+                            //_strdata += "</div>";
+                            _strdata += "<div class='col-md-12'>";
+                            _strdata += "<strong>Name (Code) : " + data[i].CatName + "</strong>";
+                            //_strdata += "<span>" + data[i].ServiceTypeName + "</span><br /><br />";
+                            _strdata += "<span> (<b>" + _catCode + "</b>)</span><br />";
+                            _strdata += "<strong>Launch Date : </strong>";
+                            _strdata += "<span> " + moment(new Date(parseInt(_catld.substring(6, _catld.length - 2)))).format('DD-MMM-YYYY') + "</span><br />";
+                            //_strdata += "<span>" + _state + "-" + _country + "</span><br /><br />";
+                            //_strdata += "<span><strong>" + _contactperson1 + "</strong> - " + _mobile1 + "</span><br />";
+                            //_strdata += "<span>" + _emaailId + "</span>";
+                            _strdata += "<strong>Fullset : </strong>";
+                            //_strdata += "<span>" + data[i].ServiceTypeName + "</span><br /><br />";
+                            _strdata += "<span> "
+                            if (data[i].IsFullset == true)
+                                _strdata += " <i class=\"fa fa-check\"></i>"
+                            else
+                                _strdata += " <i class=\"fa fa-times\"></i>"
+                            _strdata += "</span><br />";
+                            _strdata += "<strong>Active : </strong>";
+                            _strdata += "<span>"
+                            if (data[i].IsActive == true)
+                                _strdata += " <i class=\"fa fa-check\"></i>"
+                            else
+                                _strdata += " <i class=\"fa fa-times\"></i>"
+                            _strdata += "</span><br />";
+                            _strdata += "<strong>Total Items: </strong>";
+                            _strdata += "<span> " + data[i].TotalItem + "</span><br />";
+                            
+                            //_strdata += "<span>" + _state + "-" + _country + "</span><br /><br />";
+                            //_strdata += "<span><strong>" + _contactperson1 + "</strong> - " + _mobile1 + "</span><br />";
+                            //_strdata += "<span>" + _emaailId + "</span>";
+                            _strdata += "</div>";
+                            //_strdata += "<div class='col-md-9'>";
+                            //_strdata += "<span>Rating</span>";
+                            //_strdata += "</div>";
+                            _strdata += "</a>"
+                            _strdata += "</div>"
+                            //_strdata += "</div>"
+                            //_strdata += "<div class=\"col-md-12 pull-right\">";
+                            _strdata += " <div class='col-md-12 ' style=\"position: absolute;bottom: 15px !important; width: 100% !important;\">";
+                            _strdata += "<i class='fa fa-trash-o pull-right' style='font-size: 18px; cursor:pointer;' data-original-title='Delete' title='Delete' onclick=\"Delete(" + data[i].CatId + ")\"></i>";
+                            _strdata += "</div>";
+                            //_strdata += "</div>";
+                            _strdata += "</div></div>";
+                            $("#categorycontainer").append(_strdata);
+                        }
+                        pageIndex++;
+                    }
+                }
+                else {
+                    toastr["error"](response.msg);
+                }
+            },
+            beforeSend: function () {
+                $("#progress").show();
+            },
+            complete: function () {
+                $("#progress").hide();
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                toastr["error"](errorThrown);
+            }
+        });
+    }
+
+    function editSession(_ID) {
+
+
+        
+        if (_ID != undefined && _ID != '') {
+            $.ajax({
+                type: 'post',
+                dataType: 'json',
+                cache: false,
+                url: '@Url.Action("EditSession", "Catalog")',
+                data: { Id: _ID },
+                beforeSend: function () {
+                    //
+                    $("#ajaxLoader").show();
+                },
+                success: function (response, textStatus, jqXHR) {
+                    
+                    if (response.Result) {
+                        window.location.href = '@Url.Action("Manage", "Catalog")';
+                    }
+                    else {
+                        toastr["warning"](response._Message)
+                    }
+                    $("#ajaxLoader").hide();
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    
+                    toastr["error"](errorThrown);
+                    $("#ajaxLoader").hide();
+                }
+            });
+        }
+        else
+            toastr["error"]('No such record found!');
+    }
+
+    function Delete(_ID) {
+
+        //
+
+        if (_ID != undefined && _ID != '') {
+            bootbox.confirm({
+                size: 'small',
+                message: "Are you sure delete Catalogue?",
+                buttons: {
+
+                    'cancel': {
+                        label: 'Cancel',
+                        className: 'btn-default'
+                    },
+                    'confirm': {
+                        label: 'Delete',
+                        className: 'btn-danger'
+                    }
+
+                },
+                callback: function (result) {
+                    if (result) {
+                        $.ajax({
+                            type: 'post',
+                            dataType: 'json',
+                            cache: false,
+                            url: '@Url.Action("delete", "Catalog")',
+                            data: { Id: _ID },
+                            beforeSend: function () {
+                                $("#ajaxLoader").show();
+                            },
+                            success: function (response, textStatus, jqXHR) {
+                                if (response._result == true) {
+                                    $("#" + _ID).remove();
+                                    toastr["success"](response._Message);
+                                    //fillGrid();
+                                }
+                                else {
+                                    toastr["warning"](response._Message);
+                                }
+                                $("#ajaxLoader").hide();
+                            },
+                            error: function (jqXHR, textStatus, errorThrown) {
+
+                                //displayError(errorThrown);
+                                toastr["error"](response._Message);
+                                $("#ajaxLoader").hide();
+                            }
+                        });
+                    }
+                }
+            })
+        }
+        else
+            toastr["warning"]('No Edit Discount Master.');
+    }
+</script>
+

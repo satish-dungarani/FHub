@@ -1,0 +1,111 @@
+﻿@model List<FHubPanel.Models.MenuRoleRightsModel>
+
+
+<div class="box-body">
+    <div class="box box-primary">
+        <div class="row">
+            <div class="col-md-12">
+                <table class="table table-bordered table-hover" id="tblMaster">
+                    <thead>
+                        <tr>
+                            <th>Menu Name</th>
+                            <th class="chkboxtd">View</th>
+                            <th class="chkboxtd">Insert</th>
+                            <th class="chkboxtd">Update</th>
+                            <th class="chkboxtd">Delete</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+
+                            if (Model != null)
+                            {
+                                for (int i = 0; i < Model.Count; i++)
+                                {
+                                    <tr id="Row @i">
+                                        <td>
+                                            @if (Model[i].ParentMenuId == null)
+                                            {<b>@Model[i].MenuName</b>}
+                                            else
+                                            {<span style="margin-left:2em"> @Model[i].MenuName</span>}
+                                    </td>
+                                    <td class="chkboxtd">@Html.CheckBoxFor(model => Model[i].CanView, new { @class = "minimal view", id = "view" + @i })</td>
+                                    <td class="chkboxtd">
+                                        @if (Model[i].ParentMenuId != null)
+                                        {@Html.CheckBoxFor(model => Model[i].CanInsert, new { @class = "minimal insert row", id = @i })}
+                                    </td>
+                                    <td class="chkboxtd">
+                                        @if (Model[i].ParentMenuId != null)
+                                        {@Html.CheckBoxFor(model => Model[i].CanUpdate, new { @class = "minimal update row", id = @i })}
+                                    </td>
+                                    <td class="chkboxtd">
+                                        @if (Model[i].ParentMenuId != null)
+                                        {@Html.CheckBoxFor(model => Model[i].CanDelete, new { @class = "minimal delete row", id = @i })}
+                                    </td>
+
+                                    <td style="display:none">
+                                        @Html.HiddenFor(x => Model[i].RefRoleId)
+                                        @Html.HiddenFor(x => Model[i].RefMenuId)
+                                        @Html.HiddenFor(x => Model[i].InsUser)
+                                        @Html.HiddenFor(x => Model[i].InsDate)
+                                        @Html.HiddenFor(x => Model[i].InsTerminal)
+                                        @Html.HiddenFor(x => Model[i].UpdUser)
+                                        @Html.HiddenFor(x => Model[i].UpdDate)
+                                        @Html.HiddenFor(x => Model[i].UpdTerminal)
+                                    </td>
+                                </tr>
+                                }
+                            }
+                            else
+                            {
+                                <tr><td colspan="7">No Record Found!</td></tr>
+                            }
+
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
+            checkboxClass: 'icheckbox_minimal-blue',
+            radioClass: 'iradio_minimal-blue'
+        });
+
+        $("#tblMaster tr").click(function () {
+
+            var _RowId = this.id;
+            _RowId = _RowId.substring(4, _RowId.length)
+
+            $("#RefRoleId").prop('disabled', true);
+
+            if ($('input[name="[' + _RowId + '].CanInsert"]')[0].checked || $('input[name="[' + _RowId + '].CanUpdate"]')[0].checked || $('input[name="[' + _RowId + '].CanDelete"]')[0].checked)
+                $('input[name="[' + _RowId + '].CanView"]')[0].checked = true;
+            //else
+            //    $('input[name="[' + _RowId + '].CanView"]')[0].checked = false;
+
+        });
+
+        $(".row").on('ifChecked', function (event) {
+            $("#view" + this.id).iCheck('check');
+        })
+
+    });
+</script>
+
+<style type="text/css">
+    .icheckbox_minimal-blue, .iradio_minimal-blue {
+        margin: 0px;
+    }
+
+    .chkboxtd {
+        text-align: center;
+    }
+</style>
+

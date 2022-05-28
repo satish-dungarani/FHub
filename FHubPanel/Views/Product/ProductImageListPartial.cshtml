@@ -1,0 +1,78 @@
+﻿@using FHubPanel.Models;
+@model List<sp_ProductImgDet_SelectForAPI_Result>
+
+<div class="box-body no-padding">
+    @*<ul class="users-list clearfix">
+        @for (int i = 0; i < @Model.Count; i++)
+        {
+            <li style=" width: 40% !important;">
+                <a href="javascript:void(0);" onclick="setimage('@Model[i].OriginalImgPath');"><img src="@Model[i].ThumbnailImgPath" alt="User Image"></a>
+            </li>
+        }
+        </ul>*@<!-- /.users-list -->
+    <div class="owl-carousel">
+        @for (int i = 0; i < @Model.Count; i++)
+        {
+            <div class="item"><h4><a href="javascript:void(0);" onclick="DeleteProdImg(@Model[i].ProdImgId)" class="pull-right"><i class="fa fa-trash"></i></a><a href="javascript:void(0);" onclick="setimage('@Model[i].OriginalImgPath', '@Model[i].ProdImgId');"><img src="@Model[i].ThumbnailImgPath" alt="User Image" id="img-@Model[i].ProdImgId" class="img"></a></h4></div>
+        }
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        var owl = $('.owl-carousel');
+        owl.owlCarousel({
+            loop: true,
+            nav: true,
+            margin: 10,
+            responsive: {
+                0: {
+                    items: 1
+                },
+                600: {
+                    items: 2
+                },
+                1000: {
+                    items: 3,
+                    loop: false
+                }
+            }
+        });
+        owl.on('mousewheel', '.owl-stage', function (e) {
+            if (e.deltaY > 0) {
+                owl.trigger('next.owl');
+            } else {
+                owl.trigger('prev.owl');
+            }
+            e.preventDefault();
+        });
+
+    })
+
+</script>
+
+<style>
+    img.active {
+        border: 1px solid red;
+    }
+    .owl-prev, .owl-next {
+        display: inline;
+        padding: 1px 5px;
+        border-radius: 3px;
+        box-shadow: none;
+        border: 1px solid transparent;
+        background-color: #3c8dbc;
+        border-color: #367fa9;
+        color: #FFFFFF;
+        line-height: 1.5;
+        font-size: 12px;
+        margin-right: 5px;
+    }
+    .owl-nav {
+        margin: 0 auto;
+        text-align: center;
+    }
+    /*.owl-item active{
+        width: 25% !important;
+    }*/
+</style>

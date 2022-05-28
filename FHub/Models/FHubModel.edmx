@@ -1,0 +1,1294 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="FHubDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="AppLog">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="RefAUId" Type="int" Nullable="false" />
+          <Property Name="RefVendorId" Type="int" />
+          <Property Name="LogType" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="RefId" Type="int" />
+          <Property Name="LogDesc" Type="nchar" MaxLength="10" />
+          <Property Name="InsUser" Type="int" Nullable="false" />
+          <Property Name="InsDate" Type="date" Nullable="false" />
+          <Property Name="InsTerminal" Type="nvarchar" MaxLength="60" Nullable="false" />
+          <Property Name="UpdUser" Type="int" />
+          <Property Name="UpdDate" Type="date" />
+          <Property Name="UpdTerminal" Type="nvarchar" MaxLength="60" />
+        </EntityType>
+        <EntityType Name="AppUsers">
+          <Key>
+            <PropertyRef Name="AUId" />
+          </Key>
+          <Property Name="AUId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="AUName" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="CompanyName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Address" Type="nvarchar" MaxLength="100" />
+          <Property Name="LandMark" Type="nvarchar" MaxLength="100" />
+          <Property Name="Country" Type="nvarchar" MaxLength="50" />
+          <Property Name="State" Type="nvarchar" MaxLength="50" />
+          <Property Name="City" Type="nvarchar" MaxLength="50" />
+          <Property Name="Pincode" Type="nvarchar" MaxLength="50" />
+          <Property Name="ContactNo1" Type="nvarchar" MaxLength="50" />
+          <Property Name="ContactNo2" Type="nvarchar" MaxLength="50" />
+          <Property Name="MobileNo1" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="MobileNo2" Type="nvarchar" MaxLength="50" />
+          <Property Name="EmailId" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="WebSite" Type="nvarchar" MaxLength="100" />
+          <Property Name="GCMID" Type="nvarchar" MaxLength="200" />
+          <Property Name="DeviceID" Type="nvarchar" MaxLength="50" />
+          <Property Name="DeviceOS" Type="nvarchar" MaxLength="50" />
+          <Property Name="IsActive" Type="bit" />
+          <Property Name="IsNotify" Type="bit" />
+          <Property Name="DefaultView" Type="nvarchar" MaxLength="20" />
+          <Property Name="AppUserImg" Type="nvarchar" MaxLength="200" />
+          <Property Name="RateUs" Type="int" />
+          <Property Name="InsUser" Type="int" Nullable="false" />
+          <Property Name="InsDate" Type="datetime" Nullable="false" />
+          <Property Name="InsTerminal" Type="nvarchar" MaxLength="30" Nullable="false" />
+          <Property Name="UpdUser" Type="int" />
+          <Property Name="UpdDate" Type="datetime" />
+          <Property Name="UpdTerminal" Type="nvarchar" MaxLength="30" />
+        </EntityType>
+        <EntityType Name="ErrLog">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ErrDate" Type="datetime" />
+          <Property Name="ErrCode" Type="nchar" MaxLength="30" />
+          <Property Name="ErrMethod" Type="nvarchar" MaxLength="200" />
+          <Property Name="ErrDesc" Type="nvarchar(max)" />
+          <Property Name="ErrInternal" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="Vendor">
+          <Key>
+            <PropertyRef Name="VendorId" />
+          </Key>
+          <Property Name="VendorId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="VendorName" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Address" Type="nvarchar" MaxLength="100" />
+          <Property Name="Landmark" Type="nvarchar" MaxLength="100" />
+          <Property Name="Country" Type="nvarchar" MaxLength="50" />
+          <Property Name="State" Type="nvarchar" MaxLength="50" />
+          <Property Name="City" Type="nvarchar" MaxLength="50" />
+          <Property Name="Pincode" Type="nvarchar" MaxLength="50" />
+          <Property Name="ContactName" Type="nvarchar" MaxLength="50" />
+          <Property Name="ContactNo1" Type="nvarchar" MaxLength="50" />
+          <Property Name="ContactNo2" Type="nvarchar" MaxLength="50" />
+          <Property Name="MobileNo1" Type="nvarchar" MaxLength="50" />
+          <Property Name="MobileNo2" Type="nvarchar" MaxLength="50" />
+          <Property Name="FaxNo" Type="nvarchar" MaxLength="50" />
+          <Property Name="EmailId" Type="nvarchar" MaxLength="100" />
+          <Property Name="WebSite" Type="nvarchar" MaxLength="100" />
+          <Property Name="LogoImg" Type="nvarchar" MaxLength="200" />
+          <Property Name="VendorCode" Type="nvarchar" MaxLength="50" />
+          <Property Name="IsActive" Type="bit" />
+          <Property Name="InsUser" Type="int" Nullable="false" />
+          <Property Name="InsDate" Type="date" Nullable="false" />
+          <Property Name="InsTerminal" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="UpdUser" Type="int" />
+          <Property Name="UpdDate" Type="date" />
+          <Property Name="UpdTerminal" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="VendorAssociation">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="RefVendorId" Type="int" />
+          <Property Name="RefAUId" Type="int" />
+          <Property Name="VendorCode" Type="nvarchar" MaxLength="50" />
+          <Property Name="VendorStatus" Type="nvarchar" MaxLength="15" Nullable="false" />
+          <Property Name="AppUserStatus" Type="nvarchar" MaxLength="15" />
+          <Property Name="IsNotify" Type="bit" Nullable="false" />
+          <Property Name="ReqDate" Type="datetime" />
+          <Property Name="ApproveDate" Type="datetime" />
+          <Property Name="RateVendor" Type="int" />
+          <Property Name="InsUser" Type="int" Nullable="false" />
+          <Property Name="InsDate" Type="datetime" Nullable="false" />
+          <Property Name="InsTerminal" Type="nvarchar" MaxLength="30" Nullable="false" />
+          <Property Name="UpdUser" Type="int" />
+          <Property Name="UpdDate" Type="datetime" />
+          <Property Name="UpdTerminal" Type="nvarchar" MaxLength="30" />
+        </EntityType>
+        <EntityType Name="WriteToUs">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="RefAUId" Type="int" Nullable="false" />
+          <Property Name="Remark" Type="nvarchar(max)" />
+          <Property Name="InsUser" Type="int" Nullable="false" />
+          <Property Name="InsDate" Type="date" Nullable="false" />
+          <Property Name="InsTerminal" Type="nvarchar" MaxLength="60" Nullable="false" />
+          <Property Name="UpdUser" Type="int" />
+          <Property Name="UpdDate" Type="date" />
+          <Property Name="UpdTerminal" Type="nvarchar" MaxLength="60" />
+        </EntityType>
+        <Association Name="FK_AppLog_AppUsers">
+          <End Role="AppUsers" Type="Self.AppUsers" Multiplicity="1" />
+          <End Role="AppLog" Type="Self.AppLog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AppUsers">
+              <PropertyRef Name="AUId" />
+            </Principal>
+            <Dependent Role="AppLog">
+              <PropertyRef Name="RefAUId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AppLog_Vendor">
+          <End Role="Vendor" Type="Self.Vendor" Multiplicity="0..1" />
+          <End Role="AppLog" Type="Self.AppLog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Vendor">
+              <PropertyRef Name="VendorId" />
+            </Principal>
+            <Dependent Role="AppLog">
+              <PropertyRef Name="RefVendorId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_VendorAssociation_Vendor">
+          <End Role="Vendor" Type="Self.Vendor" Multiplicity="0..1" />
+          <End Role="VendorAssociation" Type="Self.VendorAssociation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Vendor">
+              <PropertyRef Name="VendorId" />
+            </Principal>
+            <Dependent Role="VendorAssociation">
+              <PropertyRef Name="RefVendorId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_VendorAssociation_VendorAssociation">
+          <End Role="AppUsers" Type="Self.AppUsers" Multiplicity="0..1" />
+          <End Role="VendorAssociation" Type="Self.VendorAssociation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AppUsers">
+              <PropertyRef Name="AUId" />
+            </Principal>
+            <Dependent Role="VendorAssociation">
+              <PropertyRef Name="RefAUId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_WriteToUs_AppUsers">
+          <End Role="AppUsers" Type="Self.AppUsers" Multiplicity="1" />
+          <End Role="WriteToUs" Type="Self.WriteToUs" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AppUsers">
+              <PropertyRef Name="AUId" />
+            </Principal>
+            <Dependent Role="WriteToUs">
+              <PropertyRef Name="RefAUId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="sp_AppLog_Save" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="pRefAUId" Type="int" Mode="In" />
+          <Parameter Name="pRefVendorId" Type="int" Mode="In" />
+          <Parameter Name="pLogType" Type="nvarchar" Mode="In" />
+          <Parameter Name="pRefId" Type="int" Mode="In" />
+          <Parameter Name="pLogDesc" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="pUser" Type="int" Mode="In" />
+          <Parameter Name="pTerminal" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="sp_AppUser_Save" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="pAUId" Type="int" Mode="In" />
+          <Parameter Name="pAUName" Type="nvarchar" Mode="In" />
+          <Parameter Name="pCompanyName" Type="nvarchar" Mode="In" />
+          <Parameter Name="pAddress" Type="nvarchar" Mode="In" />
+          <Parameter Name="pLandMark" Type="nvarchar" Mode="In" />
+          <Parameter Name="pCountry" Type="nvarchar" Mode="In" />
+          <Parameter Name="pState" Type="nvarchar" Mode="In" />
+          <Parameter Name="pCity" Type="nvarchar" Mode="In" />
+          <Parameter Name="pPincode" Type="nvarchar" Mode="In" />
+          <Parameter Name="pContactNo1" Type="nvarchar" Mode="In" />
+          <Parameter Name="pContactNo2" Type="nvarchar" Mode="In" />
+          <Parameter Name="pMobileNo1" Type="nvarchar" Mode="In" />
+          <Parameter Name="pMobileNo2" Type="nvarchar" Mode="In" />
+          <Parameter Name="pEmailId" Type="nvarchar" Mode="In" />
+          <Parameter Name="pWebSite" Type="nvarchar" Mode="In" />
+          <Parameter Name="pGCMID" Type="nvarchar" Mode="In" />
+          <Parameter Name="pDeviceID" Type="nvarchar" Mode="In" />
+          <Parameter Name="pDeviceOS" Type="nvarchar" Mode="In" />
+          <Parameter Name="pIsActive" Type="bit" Mode="In" />
+          <Parameter Name="pIsNotify" Type="bit" Mode="In" />
+          <Parameter Name="pDefaultView" Type="nvarchar" Mode="In" />
+          <Parameter Name="pAppUserImg" Type="nvarchar" Mode="In" />
+          <Parameter Name="pUser" Type="int" Mode="In" />
+          <Parameter Name="pTerminal" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="sp_AppUser_Select" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="pAUId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_AppUser_SelectWhere" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="pDeviceId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_CatalogMas_Filter" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="pRefVendorId" Type="int" Mode="In" />
+          <Parameter Name="pRefCategory" Type="nvarchar" Mode="In" />
+          <Parameter Name="pCatCode" Type="nvarchar" Mode="In" />
+          <Parameter Name="pPageSize" Type="int" Mode="In" />
+          <Parameter Name="pPageIndex" Type="int" Mode="In" />
+          <Parameter Name="pRefProdType" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="pRefFabric" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="pRefDesign" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="pRefBrand" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="pStartPrice" Type="numeric" Mode="In" />
+          <Parameter Name="pEndPrice" Type="numeric" Mode="In" />
+          <Parameter Name="pFullSet" Type="bit" Mode="In" />
+          <Parameter Name="pOrderBy" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="sp_CatalogMas_Select" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="pRefVendorId" Type="int" Mode="In" />
+          <Parameter Name="pRefCategory" Type="nvarchar" Mode="In" />
+          <Parameter Name="pPageSize" Type="int" Mode="In" />
+          <Parameter Name="pPageIndex" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_MasterValue_GetMinMaxPrice" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="pRefVendorId" Type="int" Mode="In" />
+          <Parameter Name="pRefCategory" Type="nvarchar(max)" Mode="In" />
+        </Function>
+        <Function Name="sp_MasterValue_Select" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="pId" Type="int" Mode="In" />
+          <Parameter Name="pRefMasterId" Type="int" Mode="In" />
+          <Parameter Name="pRefVendorId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_ProductCategory_SelectWhere" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="pdefWhere" Type="nvarchar(max)" Mode="In" />
+        </Function>
+        <Function Name="sp_ProductMas_Select" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="pRefVendorId" Type="int" Mode="In" />
+          <Parameter Name="pCatId" Type="int" Mode="In" />
+          <Parameter Name="pCategory" Type="nvarchar" Mode="In" />
+          <Parameter Name="pPageSize" Type="int" Mode="In" />
+          <Parameter Name="pPageIndex" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_Vendor_Select" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="pVendorId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_VendorAssociation_Save" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="pRefAUId" Type="int" Mode="In" />
+          <Parameter Name="pVendorCode" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="sp_VendorAssociation_Select" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="pAUId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_VendorAssociation_SelectWhere" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="pdefWhere" Type="nvarchar(max)" Mode="In" />
+        </Function>
+        <Function Name="sp_WriteToUs_Save" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="pRefAUId" Type="int" Mode="In" />
+          <Parameter Name="pRemark" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="pUser" Type="int" Mode="In" />
+          <Parameter Name="pTerminal" Type="nvarchar" Mode="In" />
+        </Function>
+        <EntityContainer Name="FHubDBModelStoreContainer">
+          <EntitySet Name="AppLog" EntityType="Self.AppLog" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AppUsers" EntityType="Self.AppUsers" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ErrLog" EntityType="Self.ErrLog" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Vendor" EntityType="Self.Vendor" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="VendorAssociation" EntityType="Self.VendorAssociation" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="WriteToUs" EntityType="Self.WriteToUs" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_AppLog_AppUsers" Association="Self.FK_AppLog_AppUsers">
+            <End Role="AppUsers" EntitySet="AppUsers" />
+            <End Role="AppLog" EntitySet="AppLog" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AppLog_Vendor" Association="Self.FK_AppLog_Vendor">
+            <End Role="Vendor" EntitySet="Vendor" />
+            <End Role="AppLog" EntitySet="AppLog" />
+          </AssociationSet>
+          <AssociationSet Name="FK_VendorAssociation_Vendor" Association="Self.FK_VendorAssociation_Vendor">
+            <End Role="Vendor" EntitySet="Vendor" />
+            <End Role="VendorAssociation" EntitySet="VendorAssociation" />
+          </AssociationSet>
+          <AssociationSet Name="FK_VendorAssociation_VendorAssociation" Association="Self.FK_VendorAssociation_VendorAssociation">
+            <End Role="AppUsers" EntitySet="AppUsers" />
+            <End Role="VendorAssociation" EntitySet="VendorAssociation" />
+          </AssociationSet>
+          <AssociationSet Name="FK_WriteToUs_AppUsers" Association="Self.FK_WriteToUs_AppUsers">
+            <End Role="AppUsers" EntitySet="AppUsers" />
+            <End Role="WriteToUs" EntitySet="WriteToUs" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="FHubDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="FHubDBEntities" annotation:LazyLoadingEnabled="true">
+          <FunctionImport Name="sp_VendorAssociation_Select" ReturnType="Collection(FHubDBModel.sp_VendorAssociation_Select_Result)">
+          <Parameter Name="pAUId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_Vendor_Select" ReturnType="Collection(FHubDBModel.sp_Vendor_Select_Result)">
+          <Parameter Name="pVendorId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <EntitySet Name="Vendors" EntityType="FHubDBModel.Vendor" />
+          <FunctionImport Name="sp_AppUser_Select" ReturnType="Collection(FHubDBModel.sp_AppUser_Select_Result)">
+          <Parameter Name="pAUId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_AppUser_SelectWhere" ReturnType="Collection(FHubDBModel.sp_AppUser_SelectWhere_Result)">
+          <Parameter Name="pDeviceId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_VendorAssociation_Save" ReturnType="Collection(Int32)">
+            <Parameter Name="pRefAUId" Mode="In" Type="Int32" />
+            <Parameter Name="pVendorCode" Mode="In" Type="String" />
+          </FunctionImport>
+          <EntitySet Name="AppUsers" EntityType="FHubDBModel.AppUser" />
+          <FunctionImport Name="sp_AppUser_Save" ReturnType="Collection(Int32)">
+            <Parameter Name="pAUId" Mode="In" Type="Int32" />
+            <Parameter Name="pAUName" Mode="In" Type="String" />
+            <Parameter Name="pCompanyName" Mode="In" Type="String" />
+            <Parameter Name="pAddress" Mode="In" Type="String" />
+            <Parameter Name="pLandMark" Mode="In" Type="String" />
+            <Parameter Name="pCountry" Mode="In" Type="String" />
+            <Parameter Name="pState" Mode="In" Type="String" />
+            <Parameter Name="pCity" Mode="In" Type="String" />
+            <Parameter Name="pPincode" Mode="In" Type="String" />
+            <Parameter Name="pContactNo1" Mode="In" Type="String" />
+            <Parameter Name="pContactNo2" Mode="In" Type="String" />
+            <Parameter Name="pMobileNo1" Mode="In" Type="String" />
+            <Parameter Name="pMobileNo2" Mode="In" Type="String" />
+            <Parameter Name="pEmailId" Mode="In" Type="String" />
+            <Parameter Name="pWebSite" Mode="In" Type="String" />
+            <Parameter Name="pGCMID" Mode="In" Type="String" />
+            <Parameter Name="pDeviceID" Mode="In" Type="String" />
+            <Parameter Name="pDeviceOS" Mode="In" Type="String" />
+            <Parameter Name="pIsActive" Mode="In" Type="Boolean" />
+            <Parameter Name="pIsNotify" Mode="In" Type="Boolean" />
+            <Parameter Name="pDefaultView" Mode="In" Type="String" />
+            <Parameter Name="pAppUserImg" Mode="In" Type="String" />
+            <Parameter Name="pUser" Mode="In" Type="Int32" />
+            <Parameter Name="pTerminal" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="sp_MasterValue_Select" ReturnType="Collection(FHubDBModel.sp_MasterValue_Select_Result)">
+            <Parameter Name="pId" Mode="In" Type="Int32" />
+            <Parameter Name="pRefMasterId" Mode="In" Type="Int32" />
+            <Parameter Name="pRefVendorId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_MasterValue_GetMinMaxPrice" ReturnType="Collection(FHubDBModel.sp_MasterValue_GetMinMaxPrice_Result)">
+            <Parameter Name="pRefVendorId" Mode="In" Type="Int32" />
+            <Parameter Name="pRefCategory" Mode="In" Type="String" />
+          </FunctionImport>
+          <EntitySet Name="ErrLogs" EntityType="FHubDBModel.ErrLog" />
+          <FunctionImport Name="sp_CatalogMas_Filter" ReturnType="Collection(FHubDBModel.sp_CatalogMas_Filter_Result)">
+            <Parameter Name="pRefVendorId" Mode="In" Type="Int32" />
+            <Parameter Name="pRefCategory" Mode="In" Type="String" />
+            <Parameter Name="pCatCode" Mode="In" Type="String" />
+            <Parameter Name="pPageSize" Mode="In" Type="Int32" />
+            <Parameter Name="pPageIndex" Mode="In" Type="Int32" />
+            <Parameter Name="pRefProdType" Mode="In" Type="String" />
+            <Parameter Name="pRefFabric" Mode="In" Type="String" />
+            <Parameter Name="pRefDesign" Mode="In" Type="String" />
+            <Parameter Name="pRefBrand" Mode="In" Type="String" />
+            <Parameter Name="pStartPrice" Mode="In" Type="Decimal" />
+            <Parameter Name="pEndPrice" Mode="In" Type="Decimal" />
+            <Parameter Name="pFullSet" Mode="In" Type="Boolean" />
+            <Parameter Name="pOrderBy" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="sp_ProductMas_Select" ReturnType="Collection(FHubDBModel.sp_ProductMas_Select_Result)">
+            <Parameter Name="pRefVendorId" Mode="In" Type="Int32" />
+            <Parameter Name="pCatId" Mode="In" Type="Int32" />
+            <Parameter Name="pCategory" Mode="In" Type="String" />
+            <Parameter Name="pPageSize" Mode="In" Type="Int32" />
+            <Parameter Name="pPageIndex" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_VendorAssociation_SelectWhere" ReturnType="Collection(FHubDBModel.sp_VendorAssociation_SelectWhere_Result)">
+          <Parameter Name="pdefWhere" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="sp_ProductCategory_SelectWhere" ReturnType="Collection(FHubDBModel.sp_ProductCategory_SelectWhere_Result)">
+          <Parameter Name="pdefWhere" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="sp_CatalogMas_Select" ReturnType="Collection(FHubDBModel.sp_CatalogMas_Select_Result)">
+            <Parameter Name="pRefVendorId" Mode="In" Type="Int32" />
+            <Parameter Name="pRefCategory" Mode="In" Type="String" />
+            <Parameter Name="pPageSize" Mode="In" Type="Int32" />
+            <Parameter Name="pPageIndex" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_AppLog_Save" ReturnType="Collection(Int32)">
+            <Parameter Name="pRefAUId" Mode="In" Type="Int32" />
+            <Parameter Name="pRefVendorId" Mode="In" Type="Int32" />
+            <Parameter Name="pLogType" Mode="In" Type="String" />
+            <Parameter Name="pRefId" Mode="In" Type="Int32" />
+            <Parameter Name="pLogDesc" Mode="In" Type="String" />
+            <Parameter Name="pUser" Mode="In" Type="Int32" />
+            <Parameter Name="pTerminal" Mode="In" Type="String" />
+          </FunctionImport>
+          <EntitySet Name="AppLogs" EntityType="FHubDBModel.AppLog" />
+          <AssociationSet Name="FK_AppLog_AppUsers" Association="FHubDBModel.FK_AppLog_AppUsers">
+            <End Role="AppUser" EntitySet="AppUsers" />
+            <End Role="AppLog" EntitySet="AppLogs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AppLog_Vendor" Association="FHubDBModel.FK_AppLog_Vendor">
+            <End Role="Vendor" EntitySet="Vendors" />
+            <End Role="AppLog" EntitySet="AppLogs" />
+          </AssociationSet>
+          <EntitySet Name="WriteToUs" EntityType="FHubDBModel.WriteToU" />
+          <AssociationSet Name="FK_WriteToUs_AppUsers" Association="FHubDBModel.FK_WriteToUs_AppUsers">
+            <End Role="AppUser" EntitySet="AppUsers" />
+            <End Role="WriteToU" EntitySet="WriteToUs" />
+          </AssociationSet>
+          <FunctionImport Name="sp_WriteToUs_Save" ReturnType="Collection(Int32)">
+            <Parameter Name="pRefAUId" Mode="In" Type="Int32" />
+            <Parameter Name="pRemark" Mode="In" Type="String" />
+            <Parameter Name="pUser" Mode="In" Type="Int32" />
+            <Parameter Name="pTerminal" Mode="In" Type="String" />
+          </FunctionImport>
+          <EntitySet Name="VendorAssociations" EntityType="FHubDBModel.VendorAssociation" />
+          <AssociationSet Name="FK_VendorAssociation_VendorAssociation" Association="FHubDBModel.FK_VendorAssociation_VendorAssociation">
+            <End Role="AppUser" EntitySet="AppUsers" />
+            <End Role="VendorAssociation" EntitySet="VendorAssociations" />
+          </AssociationSet>
+          <AssociationSet Name="FK_VendorAssociation_Vendor" Association="FHubDBModel.FK_VendorAssociation_Vendor">
+            <End Role="Vendor" EntitySet="Vendors" />
+            <End Role="VendorAssociation" EntitySet="VendorAssociations" />
+          </AssociationSet>
+          </EntityContainer>
+        <ComplexType Name="sp_VendorAssociation_Select_Result">
+          <Property Type="Int32" Name="Id" Nullable="false" />
+          <Property Type="Int32" Name="RefVendorId" Nullable="true" />
+          <Property Type="Int32" Name="RefAUId" Nullable="true" />
+          <Property Type="String" Name="AUName" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="VendorCode" Nullable="true" MaxLength="50" />
+          <Property Type="Boolean" Name="IsNotify" Nullable="false" />
+          <Property Type="DateTime" Name="ReqDate" Nullable="true" Precision="23" />
+          <Property Type="DateTime" Name="ApproveDate" Nullable="true" Precision="23" />
+          <Property Type="Int32" Name="InsUser" Nullable="false" />
+          <Property Type="DateTime" Name="InsDate" Nullable="false" Precision="23" />
+          <Property Type="String" Name="InsTerminal" Nullable="false" MaxLength="30" />
+          <Property Type="Int32" Name="UpdUser" Nullable="true" />
+          <Property Type="DateTime" Name="UpdDate" Nullable="true" Precision="23" />
+          <Property Type="String" Name="UpdTerminal" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="VendorName" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="LogoImg" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="VendorStatus" Nullable="false" MaxLength="15" />
+          <Property Type="String" Name="AppUserStatus" Nullable="true" MaxLength="15" />
+        </ComplexType>
+        <ComplexType Name="sp_Vendor_Select_Result">
+          <Property Type="Int32" Name="VendorId" Nullable="false" />
+          <Property Type="String" Name="VendorName" Nullable="false" MaxLength="100" />
+          <Property Type="String" Name="Address" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="Landmark" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="Country" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="State" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="City" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="Pincode" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="ContactName" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="ContactNo1" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="ContactNo2" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="MobileNo1" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="MobileNo2" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="FaxNo" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="EmailId" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="WebSite" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="LogoImg" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="VendorCode" Nullable="true" MaxLength="6" />
+          <Property Type="Boolean" Name="IsActive" Nullable="true" />
+          <Property Type="Int32" Name="InsUser" Nullable="false" />
+          <Property Type="DateTime" Name="InsDate" Nullable="false" />
+          <Property Type="String" Name="InsTerminal" Nullable="false" MaxLength="50" />
+          <Property Type="Int32" Name="UpdUser" Nullable="true" />
+          <Property Type="DateTime" Name="UpdDate" Nullable="true" />
+          <Property Type="String" Name="UpdTerminal" Nullable="true" MaxLength="50" />
+        </ComplexType>
+        <EntityType Name="Vendor">
+          <Key>
+            <PropertyRef Name="VendorId" />
+          </Key>
+          <Property Name="VendorId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="VendorName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Address" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Landmark" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Country" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="State" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="City" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Pincode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ContactName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ContactNo1" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ContactNo2" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="MobileNo1" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="MobileNo2" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="FaxNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="EmailId" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="WebSite" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="LogoImg" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="VendorCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="IsActive" Type="Boolean" />
+          <Property Name="InsUser" Type="Int32" Nullable="false" />
+          <Property Name="InsDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="InsTerminal" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="UpdUser" Type="Int32" />
+          <Property Name="UpdDate" Type="DateTime" Precision="0" />
+          <Property Name="UpdTerminal" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="AppLogs" Relationship="FHubDBModel.FK_AppLog_Vendor" FromRole="Vendor" ToRole="AppLog" />
+          <NavigationProperty Name="VendorAssociations" Relationship="FHubDBModel.FK_VendorAssociation_Vendor" FromRole="Vendor" ToRole="VendorAssociation" />
+        </EntityType>
+        <ComplexType Name="sp_AppUser_Select_Result">
+          <Property Type="Int32" Name="AUId" Nullable="false" />
+          <Property Type="String" Name="AUName" Nullable="false" MaxLength="100" />
+          <Property Type="String" Name="CompanyName" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="Address" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="LandMark" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="Country" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="State" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="City" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Pincode" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="ContactNo1" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="ContactNo2" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="MobileNo1" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="MobileNo2" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="EmailId" Nullable="false" MaxLength="100" />
+          <Property Type="String" Name="WebSite" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="DeviceID" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="DeviceOS" Nullable="true" MaxLength="50" />
+          <Property Type="Boolean" Name="IsActive" Nullable="true" />
+          <Property Type="Boolean" Name="IsNotify" Nullable="true" />
+          <Property Type="Int32" Name="InsUser" Nullable="false" />
+          <Property Type="String" Name="InsTerminal" Nullable="false" MaxLength="30" />
+          <Property Type="DateTime" Name="InsDate" Nullable="false" Precision="23" />
+          <Property Type="Int32" Name="UpdUser" Nullable="true" />
+          <Property Type="String" Name="UpdTerminal" Nullable="true" MaxLength="30" />
+          <Property Type="DateTime" Name="UpdDate" Nullable="true" Precision="23" />
+          <Property Type="String" Name="GCMID" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="AppUserImg" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="DefaultView" Nullable="true" MaxLength="20" />
+        </ComplexType>
+        <ComplexType Name="sp_AppUser_SelectWhere_Result">
+          <Property Type="Int32" Name="AUId" Nullable="false" />
+          <Property Type="String" Name="AUName" Nullable="false" MaxLength="100" />
+          <Property Type="String" Name="CompanyName" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="Address" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="LandMark" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="Country" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="State" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="City" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Pincode" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="ContactNo1" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="ContactNo2" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="MobileNo1" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="MobileNo2" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="EmailId" Nullable="false" MaxLength="100" />
+          <Property Type="String" Name="WebSite" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="DeviceID" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="DeviceOS" Nullable="true" MaxLength="50" />
+          <Property Type="Boolean" Name="IsActive" Nullable="true" />
+          <Property Type="Boolean" Name="IsNotify" Nullable="true" />
+          <Property Type="Int32" Name="InsUser" Nullable="false" />
+          <Property Type="String" Name="InsTerminal" Nullable="false" MaxLength="30" />
+          <Property Type="DateTime" Name="InsDate" Nullable="false" Precision="23" />
+          <Property Type="Int32" Name="UpdUser" Nullable="true" />
+          <Property Type="String" Name="UpdTerminal" Nullable="true" MaxLength="30" />
+          <Property Type="DateTime" Name="UpdDate" Nullable="true" Precision="23" />
+          <Property Type="String" Name="GCMID" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="AppUserImg" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="DefaultView" Nullable="true" MaxLength="20" />
+        </ComplexType>
+        <EntityType Name="AppUser">
+          <Key>
+            <PropertyRef Name="AUId" />
+          </Key>
+          <Property Name="AUId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="AUName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="CompanyName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Address" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="LandMark" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Country" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="State" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="City" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Pincode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ContactNo1" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ContactNo2" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="MobileNo1" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="MobileNo2" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="EmailId" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="WebSite" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="GCMID" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="DeviceID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DeviceOS" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="IsActive" Type="Boolean" />
+          <Property Name="IsNotify" Type="Boolean" />
+          <Property Name="DefaultView" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="AppUserImg" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="InsUser" Type="Int32" Nullable="false" />
+          <Property Name="InsDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="InsTerminal" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="UpdUser" Type="Int32" />
+          <Property Name="UpdDate" Type="DateTime" Precision="3" />
+          <Property Name="UpdTerminal" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="RateUs" Type="Int32" />
+          <NavigationProperty Name="AppLogs" Relationship="FHubDBModel.FK_AppLog_AppUsers" FromRole="AppUser" ToRole="AppLog" />
+          <NavigationProperty Name="WriteToUs" Relationship="FHubDBModel.FK_WriteToUs_AppUsers" FromRole="AppUser" ToRole="WriteToU" />
+          <NavigationProperty Name="VendorAssociations" Relationship="FHubDBModel.FK_VendorAssociation_VendorAssociation" FromRole="AppUser" ToRole="VendorAssociation" />
+        </EntityType>
+        <ComplexType Name="sp_MasterValue_Select_Result">
+          <Property Type="Int32" Name="ID" Nullable="false" />
+          <Property Type="Int32" Name="RefMasterId" Nullable="false" />
+          <Property Type="String" Name="MasterName" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="RefVendorId" Nullable="true" />
+          <Property Type="String" Name="VendorName" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="ValueName" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="ValueDesc" Nullable="true" MaxLength="200" />
+          <Property Type="Decimal" Name="OrdNo" Nullable="true" Precision="5" Scale="2" />
+          <Property Type="Boolean" Name="IsActive" Nullable="false" />
+          <Property Type="Int32" Name="InsUser" Nullable="false" />
+          <Property Type="DateTime" Name="InsDate" Nullable="false" Precision="23" />
+          <Property Type="String" Name="InsTerminal" Nullable="false" MaxLength="30" />
+          <Property Type="Int32" Name="UpdUser" Nullable="true" />
+          <Property Type="DateTime" Name="UpdDate" Nullable="true" Precision="23" />
+          <Property Type="String" Name="UpdTerminal" Nullable="true" MaxLength="30" />
+        </ComplexType>
+        <ComplexType Name="sp_MasterValue_GetMinMaxPrice_Result">
+          <Property Type="Decimal" Name="MinPrice" Nullable="true" Precision="38" Scale="2" />
+          <Property Type="Decimal" Name="MaxPrice" Nullable="true" Precision="38" Scale="2" />
+        </ComplexType>
+        <EntityType Name="ErrLog">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ErrDate" Type="DateTime" Precision="3" />
+          <Property Name="ErrCode" Type="String" MaxLength="30" FixedLength="true" Unicode="true" />
+          <Property Name="ErrMethod" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="ErrDesc" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ErrInternal" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <ComplexType Name="sp_CatalogMas_Filter_Result">
+          <Property Type="String" Name="CatCode" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="CatDescription" Nullable="true" MaxLength="500" />
+          <Property Type="Int32" Name="CatId" Nullable="false" />
+          <Property Type="String" Name="CatImg" Nullable="true" MaxLength="200" />
+          <Property Type="DateTime" Name="CatLaunchDate" Nullable="true" />
+          <Property Type="String" Name="OriginalImgPath" Nullable="true" />
+          <Property Type="String" Name="ThumbnailImgPath" Nullable="true" />
+          <Property Type="String" Name="CatName" Nullable="false" MaxLength="100" />
+          <Property Type="Int32" Name="RefVendorId" Nullable="false" />
+          <Property Type="String" Name="VendorName" Nullable="true" MaxLength="100" />
+          <Property Type="Int32" Name="TotalProduct" Nullable="true" />
+          <Property Type="Decimal" Name="TotalPrice" Nullable="true" Precision="38" Scale="2" />
+          <Property Type="Boolean" Name="IsFullset" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="sp_ProductMas_Select_Result">
+          <Property Type="Int32" Name="ProdId" Nullable="false" />
+          <Property Type="String" Name="ProdCode" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="ProdDescription" Nullable="true" MaxLength="500" />
+          <Property Type="String" Name="RefProdCategory" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="RefColor" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="RefProdType" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="RefSize" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="RefFabric" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="RefDesign" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="RefBrand" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="Celebrity" Nullable="true" MaxLength="50" />
+          <Property Type="Decimal" Name="RetailPrice" Nullable="true" Precision="10" Scale="2" />
+          <Property Type="Decimal" Name="WholeSalePrice" Nullable="true" Precision="10" Scale="2" />
+          <Property Type="Boolean" Name="IsActive" Nullable="true" />
+          <Property Type="String" Name="OriginalImgPath" Nullable="true" />
+          <Property Type="String" Name="ThumbnailImgPath" Nullable="true" />
+          <Property Type="Int32" Name="RefVendorId" Nullable="false" />
+          <Property Type="String" Name="VendorName" Nullable="true" MaxLength="100" />
+          <Property Type="Int32" Name="RefCatId" Nullable="true" />
+          <Property Type="String" Name="CatCode" Nullable="true" MaxLength="50" />
+          <Property Type="Boolean" Name="IsFullset" Nullable="true" />
+          <Property Type="DateTime" Name="CatLaunchDate" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="sp_VendorAssociation_SelectWhere_Result">
+          <Property Type="Int32" Name="Id" Nullable="false" />
+          <Property Type="Int32" Name="RefVendorId" Nullable="true" />
+          <Property Type="String" Name="VendorName" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="LogoImg" Nullable="true" MaxLength="200" />
+          <Property Type="Int32" Name="RefAUId" Nullable="true" />
+          <Property Type="String" Name="AUName" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="VendorCode" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="VendorStatus" Nullable="false" MaxLength="15" />
+          <Property Type="String" Name="AppUserStatus" Nullable="true" MaxLength="15" />
+          <Property Type="Boolean" Name="IsNotify" Nullable="false" />
+          <Property Type="DateTime" Name="ReqDate" Nullable="true" Precision="23" />
+          <Property Type="DateTime" Name="ApproveDate" Nullable="true" Precision="23" />
+          <Property Type="Int32" Name="InsUser" Nullable="false" />
+          <Property Type="DateTime" Name="InsDate" Nullable="false" Precision="23" />
+          <Property Type="String" Name="InsTerminal" Nullable="false" MaxLength="30" />
+          <Property Type="Int32" Name="UpdUser" Nullable="true" />
+          <Property Type="DateTime" Name="UpdDate" Nullable="true" Precision="23" />
+          <Property Type="String" Name="UpdTerminal" Nullable="true" MaxLength="30" />
+        </ComplexType>
+        <ComplexType Name="sp_ProductCategory_SelectWhere_Result">
+          <Property Type="Int32" Name="PCId" Nullable="false" />
+          <Property Type="Int32" Name="RefVendorId" Nullable="false" />
+          <Property Type="String" Name="VendorName" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="ProdCategoryName" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="ProdCategoryDesc" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="ProdCategoryImg" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="OriginalImgPath" Nullable="true" />
+          <Property Type="String" Name="ThumbnailImgPath" Nullable="true" />
+          <Property Type="Int32" Name="InsUser" Nullable="true" />
+          <Property Type="DateTime" Name="InsDate" Nullable="true" Precision="23" />
+          <Property Type="String" Name="InsTerminal" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="UpdUser" Nullable="true" />
+          <Property Type="DateTime" Name="UpdDate" Nullable="true" Precision="23" />
+          <Property Type="String" Name="UpdTerminal" Nullable="true" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="sp_CatalogMas_Select_Result">
+          <Property Type="String" Name="CatCode" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="CatDescription" Nullable="true" MaxLength="500" />
+          <Property Type="Int32" Name="CatId" Nullable="false" />
+          <Property Type="String" Name="CatImg" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="OriginalImgPath" Nullable="true" />
+          <Property Type="String" Name="ThumbnailImgPath" Nullable="true" />
+          <Property Type="String" Name="CatName" Nullable="false" MaxLength="100" />
+          <Property Type="Int32" Name="RefVendorId" Nullable="false" />
+          <Property Type="String" Name="VendorName" Nullable="true" MaxLength="100" />
+          <Property Type="Int32" Name="TotalProduct" Nullable="true" />
+          <Property Type="Decimal" Name="TotalPrice" Nullable="true" Precision="38" Scale="2" />
+        </ComplexType>
+        <EntityType Name="AppLog">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="RefAUId" Type="Int32" Nullable="false" />
+          <Property Name="RefVendorId" Type="Int32" />
+          <Property Name="LogType" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="RefId" Type="Int32" />
+          <Property Name="LogDesc" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="InsUser" Type="Int32" Nullable="false" />
+          <Property Name="InsDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="InsTerminal" Type="String" Nullable="false" MaxLength="60" FixedLength="false" Unicode="true" />
+          <Property Name="UpdUser" Type="Int32" />
+          <Property Name="UpdDate" Type="DateTime" Precision="0" />
+          <Property Name="UpdTerminal" Type="String" MaxLength="60" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="AppUser" Relationship="FHubDBModel.FK_AppLog_AppUsers" FromRole="AppLog" ToRole="AppUser" />
+          <NavigationProperty Name="Vendor" Relationship="FHubDBModel.FK_AppLog_Vendor" FromRole="AppLog" ToRole="Vendor" />
+        </EntityType>
+        <Association Name="FK_AppLog_AppUsers">
+          <End Type="FHubDBModel.AppUser" Role="AppUser" Multiplicity="1" />
+          <End Type="FHubDBModel.AppLog" Role="AppLog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AppUser">
+              <PropertyRef Name="AUId" />
+            </Principal>
+            <Dependent Role="AppLog">
+              <PropertyRef Name="RefAUId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AppLog_Vendor">
+          <End Type="FHubDBModel.Vendor" Role="Vendor" Multiplicity="0..1" />
+          <End Type="FHubDBModel.AppLog" Role="AppLog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Vendor">
+              <PropertyRef Name="VendorId" />
+            </Principal>
+            <Dependent Role="AppLog">
+              <PropertyRef Name="RefVendorId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="WriteToU">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="RefAUId" Type="Int32" Nullable="false" />
+          <Property Name="Remark" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="InsUser" Type="Int32" Nullable="false" />
+          <Property Name="InsDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="InsTerminal" Type="String" Nullable="false" MaxLength="60" FixedLength="false" Unicode="true" />
+          <Property Name="UpdUser" Type="Int32" />
+          <Property Name="UpdDate" Type="DateTime" Precision="0" />
+          <Property Name="UpdTerminal" Type="String" MaxLength="60" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="AppUser" Relationship="FHubDBModel.FK_WriteToUs_AppUsers" FromRole="WriteToU" ToRole="AppUser" />
+        </EntityType>
+        <Association Name="FK_WriteToUs_AppUsers">
+          <End Type="FHubDBModel.AppUser" Role="AppUser" Multiplicity="1" />
+          <End Type="FHubDBModel.WriteToU" Role="WriteToU" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AppUser">
+              <PropertyRef Name="AUId" />
+            </Principal>
+            <Dependent Role="WriteToU">
+              <PropertyRef Name="RefAUId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="VendorAssociation">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="RefVendorId" Type="Int32" />
+          <Property Name="RefAUId" Type="Int32" />
+          <Property Name="VendorCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="VendorStatus" Type="String" Nullable="false" MaxLength="15" FixedLength="false" Unicode="true" />
+          <Property Name="AppUserStatus" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
+          <Property Name="IsNotify" Type="Boolean" Nullable="false" />
+          <Property Name="ReqDate" Type="DateTime" Precision="3" />
+          <Property Name="ApproveDate" Type="DateTime" Precision="3" />
+          <Property Name="RateVendor" Type="Int32" />
+          <Property Name="InsUser" Type="Int32" Nullable="false" />
+          <Property Name="InsDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="InsTerminal" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="UpdUser" Type="Int32" />
+          <Property Name="UpdDate" Type="DateTime" Precision="3" />
+          <Property Name="UpdTerminal" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="AppUser" Relationship="FHubDBModel.FK_VendorAssociation_VendorAssociation" FromRole="VendorAssociation" ToRole="AppUser" />
+          <NavigationProperty Name="Vendor" Relationship="FHubDBModel.FK_VendorAssociation_Vendor" FromRole="VendorAssociation" ToRole="Vendor" />
+        </EntityType>
+        <Association Name="FK_VendorAssociation_VendorAssociation">
+          <End Type="FHubDBModel.AppUser" Role="AppUser" Multiplicity="0..1" />
+          <End Type="FHubDBModel.VendorAssociation" Role="VendorAssociation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AppUser">
+              <PropertyRef Name="AUId" />
+            </Principal>
+            <Dependent Role="VendorAssociation">
+              <PropertyRef Name="RefAUId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_VendorAssociation_Vendor">
+          <End Type="FHubDBModel.Vendor" Role="Vendor" Multiplicity="0..1" />
+          <End Type="FHubDBModel.VendorAssociation" Role="VendorAssociation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Vendor">
+              <PropertyRef Name="VendorId" />
+            </Principal>
+            <Dependent Role="VendorAssociation">
+              <PropertyRef Name="RefVendorId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="FHubDBModelStoreContainer" CdmEntityContainer="FHubDBEntities">
+          <FunctionImportMapping FunctionImportName="sp_VendorAssociation_Select" FunctionName="FHubDBModel.Store.sp_VendorAssociation_Select">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="FHubDBModel.sp_VendorAssociation_Select_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="RefVendorId" ColumnName="RefVendorId" />
+                <ScalarProperty Name="RefAUId" ColumnName="RefAUId" />
+                <ScalarProperty Name="AUName" ColumnName="AUName" />
+                <ScalarProperty Name="VendorCode" ColumnName="VendorCode" />
+                <ScalarProperty Name="IsNotify" ColumnName="IsNotify" />
+                <ScalarProperty Name="ReqDate" ColumnName="ReqDate" />
+                <ScalarProperty Name="ApproveDate" ColumnName="ApproveDate" />
+                <ScalarProperty Name="InsUser" ColumnName="InsUser" />
+                <ScalarProperty Name="InsDate" ColumnName="InsDate" />
+                <ScalarProperty Name="InsTerminal" ColumnName="InsTerminal" />
+                <ScalarProperty Name="UpdUser" ColumnName="UpdUser" />
+                <ScalarProperty Name="UpdDate" ColumnName="UpdDate" />
+                <ScalarProperty Name="UpdTerminal" ColumnName="UpdTerminal" />
+                <ScalarProperty Name="VendorName" ColumnName="VendorName" />
+                <ScalarProperty Name="LogoImg" ColumnName="LogoImg" />
+                <ScalarProperty Name="VendorStatus" ColumnName="VendorStatus" />
+                <ScalarProperty Name="AppUserStatus" ColumnName="AppUserStatus" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_Vendor_Select" FunctionName="FHubDBModel.Store.sp_Vendor_Select">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="FHubDBModel.sp_Vendor_Select_Result">
+                <ScalarProperty Name="VendorId" ColumnName="VendorId" />
+                <ScalarProperty Name="VendorName" ColumnName="VendorName" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="Landmark" ColumnName="Landmark" />
+                <ScalarProperty Name="Country" ColumnName="Country" />
+                <ScalarProperty Name="State" ColumnName="State" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="Pincode" ColumnName="Pincode" />
+                <ScalarProperty Name="ContactName" ColumnName="ContactName" />
+                <ScalarProperty Name="ContactNo1" ColumnName="ContactNo1" />
+                <ScalarProperty Name="ContactNo2" ColumnName="ContactNo2" />
+                <ScalarProperty Name="MobileNo1" ColumnName="MobileNo1" />
+                <ScalarProperty Name="MobileNo2" ColumnName="MobileNo2" />
+                <ScalarProperty Name="FaxNo" ColumnName="FaxNo" />
+                <ScalarProperty Name="EmailId" ColumnName="EmailId" />
+                <ScalarProperty Name="WebSite" ColumnName="WebSite" />
+                <ScalarProperty Name="LogoImg" ColumnName="LogoImg" />
+                <ScalarProperty Name="VendorCode" ColumnName="VendorCode" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="InsUser" ColumnName="InsUser" />
+                <ScalarProperty Name="InsDate" ColumnName="InsDate" />
+                <ScalarProperty Name="InsTerminal" ColumnName="InsTerminal" />
+                <ScalarProperty Name="UpdUser" ColumnName="UpdUser" />
+                <ScalarProperty Name="UpdDate" ColumnName="UpdDate" />
+                <ScalarProperty Name="UpdTerminal" ColumnName="UpdTerminal" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <EntitySetMapping Name="Vendors">
+            <EntityTypeMapping TypeName="FHubDBModel.Vendor">
+              <MappingFragment StoreEntitySet="Vendor">
+                <ScalarProperty Name="UpdTerminal" ColumnName="UpdTerminal" />
+                <ScalarProperty Name="UpdDate" ColumnName="UpdDate" />
+                <ScalarProperty Name="UpdUser" ColumnName="UpdUser" />
+                <ScalarProperty Name="InsTerminal" ColumnName="InsTerminal" />
+                <ScalarProperty Name="InsDate" ColumnName="InsDate" />
+                <ScalarProperty Name="InsUser" ColumnName="InsUser" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="VendorCode" ColumnName="VendorCode" />
+                <ScalarProperty Name="LogoImg" ColumnName="LogoImg" />
+                <ScalarProperty Name="WebSite" ColumnName="WebSite" />
+                <ScalarProperty Name="EmailId" ColumnName="EmailId" />
+                <ScalarProperty Name="FaxNo" ColumnName="FaxNo" />
+                <ScalarProperty Name="MobileNo2" ColumnName="MobileNo2" />
+                <ScalarProperty Name="MobileNo1" ColumnName="MobileNo1" />
+                <ScalarProperty Name="ContactNo2" ColumnName="ContactNo2" />
+                <ScalarProperty Name="ContactNo1" ColumnName="ContactNo1" />
+                <ScalarProperty Name="ContactName" ColumnName="ContactName" />
+                <ScalarProperty Name="Pincode" ColumnName="Pincode" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="State" ColumnName="State" />
+                <ScalarProperty Name="Country" ColumnName="Country" />
+                <ScalarProperty Name="Landmark" ColumnName="Landmark" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="VendorName" ColumnName="VendorName" />
+                <ScalarProperty Name="VendorId" ColumnName="VendorId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="sp_AppUser_Select" FunctionName="FHubDBModel.Store.sp_AppUser_Select">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="FHubDBModel.sp_AppUser_Select_Result">
+                <ScalarProperty Name="AUId" ColumnName="AUId" />
+                <ScalarProperty Name="AUName" ColumnName="AUName" />
+                <ScalarProperty Name="CompanyName" ColumnName="CompanyName" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="LandMark" ColumnName="LandMark" />
+                <ScalarProperty Name="Country" ColumnName="Country" />
+                <ScalarProperty Name="State" ColumnName="State" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="Pincode" ColumnName="Pincode" />
+                <ScalarProperty Name="ContactNo1" ColumnName="ContactNo1" />
+                <ScalarProperty Name="ContactNo2" ColumnName="ContactNo2" />
+                <ScalarProperty Name="MobileNo1" ColumnName="MobileNo1" />
+                <ScalarProperty Name="MobileNo2" ColumnName="MobileNo2" />
+                <ScalarProperty Name="EmailId" ColumnName="EmailId" />
+                <ScalarProperty Name="WebSite" ColumnName="WebSite" />
+                <ScalarProperty Name="DeviceID" ColumnName="DeviceID" />
+                <ScalarProperty Name="DeviceOS" ColumnName="DeviceOS" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="IsNotify" ColumnName="IsNotify" />
+                <ScalarProperty Name="InsUser" ColumnName="InsUser" />
+                <ScalarProperty Name="InsTerminal" ColumnName="InsTerminal" />
+                <ScalarProperty Name="InsDate" ColumnName="InsDate" />
+                <ScalarProperty Name="UpdUser" ColumnName="UpdUser" />
+                <ScalarProperty Name="UpdTerminal" ColumnName="UpdTerminal" />
+                <ScalarProperty Name="UpdDate" ColumnName="UpdDate" />
+                <ScalarProperty Name="GCMID" ColumnName="GCMID" />
+                <ScalarProperty Name="AppUserImg" ColumnName="AppUserImg" />
+                <ScalarProperty Name="DefaultView" ColumnName="DefaultView" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_AppUser_SelectWhere" FunctionName="FHubDBModel.Store.sp_AppUser_SelectWhere">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="FHubDBModel.sp_AppUser_SelectWhere_Result">
+                <ScalarProperty Name="AUId" ColumnName="AUId" />
+                <ScalarProperty Name="AUName" ColumnName="AUName" />
+                <ScalarProperty Name="CompanyName" ColumnName="CompanyName" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="LandMark" ColumnName="LandMark" />
+                <ScalarProperty Name="Country" ColumnName="Country" />
+                <ScalarProperty Name="State" ColumnName="State" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="Pincode" ColumnName="Pincode" />
+                <ScalarProperty Name="ContactNo1" ColumnName="ContactNo1" />
+                <ScalarProperty Name="ContactNo2" ColumnName="ContactNo2" />
+                <ScalarProperty Name="MobileNo1" ColumnName="MobileNo1" />
+                <ScalarProperty Name="MobileNo2" ColumnName="MobileNo2" />
+                <ScalarProperty Name="EmailId" ColumnName="EmailId" />
+                <ScalarProperty Name="WebSite" ColumnName="WebSite" />
+                <ScalarProperty Name="DeviceID" ColumnName="DeviceID" />
+                <ScalarProperty Name="DeviceOS" ColumnName="DeviceOS" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="IsNotify" ColumnName="IsNotify" />
+                <ScalarProperty Name="InsUser" ColumnName="InsUser" />
+                <ScalarProperty Name="InsTerminal" ColumnName="InsTerminal" />
+                <ScalarProperty Name="InsDate" ColumnName="InsDate" />
+                <ScalarProperty Name="UpdUser" ColumnName="UpdUser" />
+                <ScalarProperty Name="UpdTerminal" ColumnName="UpdTerminal" />
+                <ScalarProperty Name="UpdDate" ColumnName="UpdDate" />
+                <ScalarProperty Name="GCMID" ColumnName="GCMID" />
+                <ScalarProperty Name="AppUserImg" ColumnName="AppUserImg" />
+                <ScalarProperty Name="DefaultView" ColumnName="DefaultView" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_VendorAssociation_Save" FunctionName="FHubDBModel.Store.sp_VendorAssociation_Save" />
+          <EntitySetMapping Name="AppUsers">
+            <EntityTypeMapping TypeName="FHubDBModel.AppUser">
+              <MappingFragment StoreEntitySet="AppUsers">
+                <ScalarProperty Name="RateUs" ColumnName="RateUs" />
+                <ScalarProperty Name="UpdTerminal" ColumnName="UpdTerminal" />
+                <ScalarProperty Name="UpdDate" ColumnName="UpdDate" />
+                <ScalarProperty Name="UpdUser" ColumnName="UpdUser" />
+                <ScalarProperty Name="InsTerminal" ColumnName="InsTerminal" />
+                <ScalarProperty Name="InsDate" ColumnName="InsDate" />
+                <ScalarProperty Name="InsUser" ColumnName="InsUser" />
+                <ScalarProperty Name="AppUserImg" ColumnName="AppUserImg" />
+                <ScalarProperty Name="DefaultView" ColumnName="DefaultView" />
+                <ScalarProperty Name="IsNotify" ColumnName="IsNotify" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="DeviceOS" ColumnName="DeviceOS" />
+                <ScalarProperty Name="DeviceID" ColumnName="DeviceID" />
+                <ScalarProperty Name="GCMID" ColumnName="GCMID" />
+                <ScalarProperty Name="WebSite" ColumnName="WebSite" />
+                <ScalarProperty Name="EmailId" ColumnName="EmailId" />
+                <ScalarProperty Name="MobileNo2" ColumnName="MobileNo2" />
+                <ScalarProperty Name="MobileNo1" ColumnName="MobileNo1" />
+                <ScalarProperty Name="ContactNo2" ColumnName="ContactNo2" />
+                <ScalarProperty Name="ContactNo1" ColumnName="ContactNo1" />
+                <ScalarProperty Name="Pincode" ColumnName="Pincode" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="State" ColumnName="State" />
+                <ScalarProperty Name="Country" ColumnName="Country" />
+                <ScalarProperty Name="LandMark" ColumnName="LandMark" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="CompanyName" ColumnName="CompanyName" />
+                <ScalarProperty Name="AUName" ColumnName="AUName" />
+                <ScalarProperty Name="AUId" ColumnName="AUId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="sp_AppUser_Save" FunctionName="FHubDBModel.Store.sp_AppUser_Save" />
+          <FunctionImportMapping FunctionImportName="sp_MasterValue_Select" FunctionName="FHubDBModel.Store.sp_MasterValue_Select">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="FHubDBModel.sp_MasterValue_Select_Result">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="RefMasterId" ColumnName="RefMasterId" />
+                <ScalarProperty Name="MasterName" ColumnName="MasterName" />
+                <ScalarProperty Name="RefVendorId" ColumnName="RefVendorId" />
+                <ScalarProperty Name="VendorName" ColumnName="VendorName" />
+                <ScalarProperty Name="ValueName" ColumnName="ValueName" />
+                <ScalarProperty Name="ValueDesc" ColumnName="ValueDesc" />
+                <ScalarProperty Name="OrdNo" ColumnName="OrdNo" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="InsUser" ColumnName="InsUser" />
+                <ScalarProperty Name="InsDate" ColumnName="InsDate" />
+                <ScalarProperty Name="InsTerminal" ColumnName="InsTerminal" />
+                <ScalarProperty Name="UpdUser" ColumnName="UpdUser" />
+                <ScalarProperty Name="UpdDate" ColumnName="UpdDate" />
+                <ScalarProperty Name="UpdTerminal" ColumnName="UpdTerminal" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_MasterValue_GetMinMaxPrice" FunctionName="FHubDBModel.Store.sp_MasterValue_GetMinMaxPrice">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="FHubDBModel.sp_MasterValue_GetMinMaxPrice_Result">
+                <ScalarProperty Name="MinPrice" ColumnName="MinPrice" />
+                <ScalarProperty Name="MaxPrice" ColumnName="MaxPrice" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <EntitySetMapping Name="ErrLogs">
+            <EntityTypeMapping TypeName="FHubDBModel.ErrLog">
+              <MappingFragment StoreEntitySet="ErrLog">
+                <ScalarProperty Name="ErrInternal" ColumnName="ErrInternal" />
+                <ScalarProperty Name="ErrDesc" ColumnName="ErrDesc" />
+                <ScalarProperty Name="ErrMethod" ColumnName="ErrMethod" />
+                <ScalarProperty Name="ErrCode" ColumnName="ErrCode" />
+                <ScalarProperty Name="ErrDate" ColumnName="ErrDate" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="sp_CatalogMas_Filter" FunctionName="FHubDBModel.Store.sp_CatalogMas_Filter">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="FHubDBModel.sp_CatalogMas_Filter_Result">
+                <ScalarProperty Name="CatCode" ColumnName="CatCode" />
+                <ScalarProperty Name="CatDescription" ColumnName="CatDescription" />
+                <ScalarProperty Name="CatId" ColumnName="CatId" />
+                <ScalarProperty Name="CatImg" ColumnName="CatImg" />
+                <ScalarProperty Name="CatLaunchDate" ColumnName="CatLaunchDate" />
+                <ScalarProperty Name="OriginalImgPath" ColumnName="OriginalImgPath" />
+                <ScalarProperty Name="ThumbnailImgPath" ColumnName="ThumbnailImgPath" />
+                <ScalarProperty Name="CatName" ColumnName="CatName" />
+                <ScalarProperty Name="RefVendorId" ColumnName="RefVendorId" />
+                <ScalarProperty Name="VendorName" ColumnName="VendorName" />
+                <ScalarProperty Name="TotalProduct" ColumnName="TotalProduct" />
+                <ScalarProperty Name="TotalPrice" ColumnName="TotalPrice" />
+                <ScalarProperty Name="IsFullset" ColumnName="IsFullset" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_ProductMas_Select" FunctionName="FHubDBModel.Store.sp_ProductMas_Select">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="FHubDBModel.sp_ProductMas_Select_Result">
+                <ScalarProperty Name="ProdId" ColumnName="ProdId" />
+                <ScalarProperty Name="ProdCode" ColumnName="ProdCode" />
+                <ScalarProperty Name="ProdDescription" ColumnName="ProdDescription" />
+                <ScalarProperty Name="RefProdCategory" ColumnName="RefProdCategory" />
+                <ScalarProperty Name="RefColor" ColumnName="RefColor" />
+                <ScalarProperty Name="RefProdType" ColumnName="RefProdType" />
+                <ScalarProperty Name="RefSize" ColumnName="RefSize" />
+                <ScalarProperty Name="RefFabric" ColumnName="RefFabric" />
+                <ScalarProperty Name="RefDesign" ColumnName="RefDesign" />
+                <ScalarProperty Name="RefBrand" ColumnName="RefBrand" />
+                <ScalarProperty Name="Celebrity" ColumnName="Celebrity" />
+                <ScalarProperty Name="RetailPrice" ColumnName="RetailPrice" />
+                <ScalarProperty Name="WholeSalePrice" ColumnName="WholeSalePrice" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="OriginalImgPath" ColumnName="OriginalImgPath" />
+                <ScalarProperty Name="ThumbnailImgPath" ColumnName="ThumbnailImgPath" />
+                <ScalarProperty Name="RefVendorId" ColumnName="RefVendorId" />
+                <ScalarProperty Name="VendorName" ColumnName="VendorName" />
+                <ScalarProperty Name="RefCatId" ColumnName="RefCatId" />
+                <ScalarProperty Name="CatCode" ColumnName="CatCode" />
+                <ScalarProperty Name="IsFullset" ColumnName="IsFullset" />
+                <ScalarProperty Name="CatLaunchDate" ColumnName="CatLaunchDate" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_VendorAssociation_SelectWhere" FunctionName="FHubDBModel.Store.sp_VendorAssociation_SelectWhere" >
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="FHubDBModel.sp_VendorAssociation_SelectWhere_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="RefVendorId" ColumnName="RefVendorId" />
+                <ScalarProperty Name="VendorName" ColumnName="VendorName" />
+                <ScalarProperty Name="LogoImg" ColumnName="LogoImg" />
+                <ScalarProperty Name="RefAUId" ColumnName="RefAUId" />
+                <ScalarProperty Name="AUName" ColumnName="AUName" />
+                <ScalarProperty Name="VendorCode" ColumnName="VendorCode" />
+                <ScalarProperty Name="VendorStatus" ColumnName="VendorStatus" />
+                <ScalarProperty Name="AppUserStatus" ColumnName="AppUserStatus" />
+                <ScalarProperty Name="IsNotify" ColumnName="IsNotify" />
+                <ScalarProperty Name="ReqDate" ColumnName="ReqDate" />
+                <ScalarProperty Name="ApproveDate" ColumnName="ApproveDate" />
+                <ScalarProperty Name="InsUser" ColumnName="InsUser" />
+                <ScalarProperty Name="InsDate" ColumnName="InsDate" />
+                <ScalarProperty Name="InsTerminal" ColumnName="InsTerminal" />
+                <ScalarProperty Name="UpdUser" ColumnName="UpdUser" />
+                <ScalarProperty Name="UpdDate" ColumnName="UpdDate" />
+                <ScalarProperty Name="UpdTerminal" ColumnName="UpdTerminal" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_ProductCategory_SelectWhere" FunctionName="FHubDBModel.Store.sp_ProductCategory_SelectWhere">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="FHubDBModel.sp_ProductCategory_SelectWhere_Result">
+                <ScalarProperty Name="PCId" ColumnName="PCId" />
+                <ScalarProperty Name="RefVendorId" ColumnName="RefVendorId" />
+                <ScalarProperty Name="VendorName" ColumnName="VendorName" />
+                <ScalarProperty Name="ProdCategoryName" ColumnName="ProdCategoryName" />
+                <ScalarProperty Name="ProdCategoryDesc" ColumnName="ProdCategoryDesc" />
+                <ScalarProperty Name="ProdCategoryImg" ColumnName="ProdCategoryImg" />
+                <ScalarProperty Name="OriginalImgPath" ColumnName="OriginalImgPath" />
+                <ScalarProperty Name="ThumbnailImgPath" ColumnName="ThumbnailImgPath" />
+                <ScalarProperty Name="InsUser" ColumnName="InsUser" />
+                <ScalarProperty Name="InsDate" ColumnName="InsDate" />
+                <ScalarProperty Name="InsTerminal" ColumnName="InsTerminal" />
+                <ScalarProperty Name="UpdUser" ColumnName="UpdUser" />
+                <ScalarProperty Name="UpdDate" ColumnName="UpdDate" />
+                <ScalarProperty Name="UpdTerminal" ColumnName="UpdTerminal" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_CatalogMas_Select" FunctionName="FHubDBModel.Store.sp_CatalogMas_Select">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="FHubDBModel.sp_CatalogMas_Select_Result">
+                <ScalarProperty Name="CatCode" ColumnName="CatCode" />
+                <ScalarProperty Name="CatDescription" ColumnName="CatDescription" />
+                <ScalarProperty Name="CatId" ColumnName="CatId" />
+                <ScalarProperty Name="CatImg" ColumnName="CatImg" />
+                <ScalarProperty Name="OriginalImgPath" ColumnName="OriginalImgPath" />
+                <ScalarProperty Name="ThumbnailImgPath" ColumnName="ThumbnailImgPath" />
+                <ScalarProperty Name="CatName" ColumnName="CatName" />
+                <ScalarProperty Name="RefVendorId" ColumnName="RefVendorId" />
+                <ScalarProperty Name="VendorName" ColumnName="VendorName" />
+                <ScalarProperty Name="TotalProduct" ColumnName="TotalProduct" />
+                <ScalarProperty Name="TotalPrice" ColumnName="TotalPrice" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_AppLog_Save" FunctionName="FHubDBModel.Store.sp_AppLog_Save" />
+          <EntitySetMapping Name="AppLogs">
+            <EntityTypeMapping TypeName="FHubDBModel.AppLog">
+              <MappingFragment StoreEntitySet="AppLog">
+                <ScalarProperty Name="UpdTerminal" ColumnName="UpdTerminal" />
+                <ScalarProperty Name="UpdDate" ColumnName="UpdDate" />
+                <ScalarProperty Name="UpdUser" ColumnName="UpdUser" />
+                <ScalarProperty Name="InsTerminal" ColumnName="InsTerminal" />
+                <ScalarProperty Name="InsDate" ColumnName="InsDate" />
+                <ScalarProperty Name="InsUser" ColumnName="InsUser" />
+                <ScalarProperty Name="LogDesc" ColumnName="LogDesc" />
+                <ScalarProperty Name="RefId" ColumnName="RefId" />
+                <ScalarProperty Name="LogType" ColumnName="LogType" />
+                <ScalarProperty Name="RefVendorId" ColumnName="RefVendorId" />
+                <ScalarProperty Name="RefAUId" ColumnName="RefAUId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="WriteToUs">
+            <EntityTypeMapping TypeName="FHubDBModel.WriteToU">
+              <MappingFragment StoreEntitySet="WriteToUs">
+                <ScalarProperty Name="UpdTerminal" ColumnName="UpdTerminal" />
+                <ScalarProperty Name="UpdDate" ColumnName="UpdDate" />
+                <ScalarProperty Name="UpdUser" ColumnName="UpdUser" />
+                <ScalarProperty Name="InsTerminal" ColumnName="InsTerminal" />
+                <ScalarProperty Name="InsDate" ColumnName="InsDate" />
+                <ScalarProperty Name="InsUser" ColumnName="InsUser" />
+                <ScalarProperty Name="Remark" ColumnName="Remark" />
+                <ScalarProperty Name="RefAUId" ColumnName="RefAUId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="sp_WriteToUs_Save" FunctionName="FHubDBModel.Store.sp_WriteToUs_Save" />
+          <EntitySetMapping Name="VendorAssociations">
+            <EntityTypeMapping TypeName="FHubDBModel.VendorAssociation">
+              <MappingFragment StoreEntitySet="VendorAssociation">
+                <ScalarProperty Name="UpdTerminal" ColumnName="UpdTerminal" />
+                <ScalarProperty Name="UpdDate" ColumnName="UpdDate" />
+                <ScalarProperty Name="UpdUser" ColumnName="UpdUser" />
+                <ScalarProperty Name="InsTerminal" ColumnName="InsTerminal" />
+                <ScalarProperty Name="InsDate" ColumnName="InsDate" />
+                <ScalarProperty Name="InsUser" ColumnName="InsUser" />
+                <ScalarProperty Name="RateVendor" ColumnName="RateVendor" />
+                <ScalarProperty Name="ApproveDate" ColumnName="ApproveDate" />
+                <ScalarProperty Name="ReqDate" ColumnName="ReqDate" />
+                <ScalarProperty Name="IsNotify" ColumnName="IsNotify" />
+                <ScalarProperty Name="AppUserStatus" ColumnName="AppUserStatus" />
+                <ScalarProperty Name="VendorStatus" ColumnName="VendorStatus" />
+                <ScalarProperty Name="VendorCode" ColumnName="VendorCode" />
+                <ScalarProperty Name="RefAUId" ColumnName="RefAUId" />
+                <ScalarProperty Name="RefVendorId" ColumnName="RefVendorId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

@@ -1,0 +1,57 @@
+﻿@using FHubPanel.Models;
+@model List<sp_VendorAssociation_SelectWhere_Result>
+
+<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+    <i class="fa fa-bell-o"></i>
+    @if (Model.Count != 0)
+    {
+        <span class="label label-success">@Model.Count</span>
+    }
+</a>
+<ul class="dropdown-menu">
+    @*style="background-color: #3c8dbc;color: #ffffff;"*@
+    <li class="header" >You have @Model.Count requests</li>
+    <li>
+        <!-- inner menu: contains the actual data -->
+        <ul class="menu">
+            @for (int i = 0; i < @Model.Count; i++)
+            {
+                <li>
+                    <!-- start message -->
+                    <a href="#">
+                        <div class="pull-left">
+                            <img src="~/content/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+                        </div>
+                        <h4>
+                            @Model[i].AUName
+                            <small><i class="fa fa-clock-o"></i> @Model[i].Interval hours</small>
+                        </h4>
+                        <div class="pull-right">
+                            <input type="button" name="btnAccept" value="Accept" id="btnAccept" class="btn btn-xs btn-primary btn-flat" onclick="ChnageRequestStatus(@Model[i].Id,'Approved', 'Top');" />
+                            <input type="button" name="btnReject" value="Reject" id="btnReject" class="btn btn-xs btn-danger btn-flat" onclick="ChnageRequestStatus(@Model[i].Id,'Rejected','Top');" />
+                        </div>
+                        <p>@if (@Model[i].CompanyName.Length > 20)
+                           {
+                               @Model[i].CompanyName.Substring(0,19) 
+                           }
+                           else
+                           {
+                               @Model[i].CompanyName
+                           }
+                             </p>
+                    </a>
+                </li><!-- end message -->
+            }
+        </ul>
+    </li>
+    <li class="footer"><a href="/Contact/Index">View all</a></li>
+    @*style="background-color: #3c8dbc;"*@
+</ul>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+    });
+
+
+</script>

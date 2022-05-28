@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="ed35b1c8e014454483af81a0292d32ea" Name="Diagram1" ZoomLevel="59">
+        <EntityTypeShape EntityType="FHubDBModel.Vendor" Width="1.5" PointX="0.75" PointY="7.875" />
+        <EntityTypeShape EntityType="FHubDBModel.AppUser" Width="1.5" PointX="5.375" PointY="4.25" />
+        <EntityTypeShape EntityType="FHubDBModel.ErrLog" Width="1.5" PointX="0.75" PointY="0.75" />
+        <EntityTypeShape EntityType="FHubDBModel.AppLog" Width="1.5" PointX="10.625" PointY="7.25" />
+        <AssociationConnector Association="FHubDBModel.FK_AppLog_AppUsers" />
+        <AssociationConnector Association="FHubDBModel.FK_AppLog_Vendor" />
+        <EntityTypeShape EntityType="FHubDBModel.WriteToU" Width="1.5" PointX="7.625" PointY="11.375" />
+        <AssociationConnector Association="FHubDBModel.FK_WriteToUs_AppUsers" />
+        <EntityTypeShape EntityType="FHubDBModel.VendorAssociation" Width="1.5" PointX="7.625" PointY="5.875" />
+        <AssociationConnector Association="FHubDBModel.FK_VendorAssociation_VendorAssociation" />
+        <AssociationConnector Association="FHubDBModel.FK_VendorAssociation_Vendor" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

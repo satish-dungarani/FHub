@@ -1,0 +1,519 @@
+﻿@using FHubPanel.Models;
+@model GroupMa
+
+
+<div class="content-wrapper" style="min-height: 946px;">
+
+    <section class="content manageGrid">
+
+        <div class="box box-primary">
+            <div class="box-header">
+                <div class="box-header with-border" style="cursor: move;">
+                    <i class="@ViewBag.Icon"></i>
+                    <h3 class="box-title"><b>@ViewBag.MasterType</b></h3>
+                    <div class="box-tools pull-right">
+                        <div class="col-md-5 pull-right">
+                            <div class="form-group">
+                                <button id="btnCreateNew" name="btnCreateNew" class="btn btn-block btn-primary btn-flat" onclick="AddNewGroup('Create');"> Create Group</button>
+                            </div>
+                        </div>
+                        <div class="col-md-7 pull-right">
+                            <div class="form-group">
+                                @*<label>Search :</label>*@
+                                <input type="text" name="txtSearch" id="txtSearch" value="" class="form-control" placeholder="Search..." style="margin-top:3px" />
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="box-body">
+                @*<div class="row">*@
+                @using (Html.BeginForm("Save", "ContactGroup", FormMethod.Post, new { @class = "", id = "frmContactGroup", enctype = "multipart/form-data" }))
+                {
+                    @Html.HiddenFor(Model => Model.GroupId)
+                    @Html.HiddenFor(Model => Model.RefVendorId)
+                    <div class="col-md-12 box-header with-border" style="margin-bottom: 20px;" id="divCreateGroup">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                @Html.TextBoxFor(Model => Model.GroupName, new { @class = "form-control", style = "margin-top : 3px;", placeholder = "New Group Name...." })
+
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <input type="submit" name="btnSubmit" id="btnSubmit" value="Save" class="btn btn-primary btn-flat" onclick="return GroupValiDation();" />
+                                <button type="button" id="btnCancel" name="btnCancel" class="btn btn-primary btn-flat" onclick="AddNewGroup('Cancel');"> Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+                }
+                @*</div>*@
+                <div class="" id="GroupContainer">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div id="divAddContactList">
+            @Html.Partial("_ChooseContactPartial", new List<GroupContactsModel>())
+        </div>
+
+        <div class="col-lg-12 text-center">
+            <div id="progress" style="display:none">
+                <img src="~/Content/dist/img/ajax-loader.gif" width="50" height="50" />
+            </div>
+        </div>
+
+    </section>
+</div>
+
+<script type="text/javascript">
+    //var pageSize = 6;
+    //var pageIndex = 0;
+    jQuery(document).ready(function () {
+
+        if ('@TempData["Success"]' != '')
+            toastr["success"]('@TempData["Success"]');
+        else if ('@TempData["Error"]' != '')
+            toastr["error"]('@TempData["Error"]');
+
+        AddNewGroup('');
+
+        GetData();
+        //$(window).scroll(function () {
+        //    if ($(window).scrollTop() ==
+        //       $(document).height() - $(window).height()) {
+        //        GetData();
+        //    }
+        //});
+        ////var timeout;
+        //$("#txtSearch").on("input", function () {
+        //    // do stuff;
+        //    delay(function () {
+        //        pageIndex = 0;
+        //        $("#GroupContainer").empty();
+        //        //var _Search = " <div class='col-md-12'>"
+        //        //_Search += "<div class='col-md-3 pull-right'>"
+        //        //_Search += "<div class='form-group'>"
+        //        //_Search += "<label>Search :</label>"
+        //        //_Search += "<input type='text' name='txtSearch' id='txtSearch' value='' class='form-control' />"
+        //        //_Search += "</div>"
+        //        //_Search += "</div>"
+        //        //_Search += "</div>"
+        //        //$("#categorycontainer").add(_Search);
+        //        GetData();
+        //    }, 1000);
+        //});
+        //var delay = (function () {
+        //    var timer = 0;
+        //    return function (callback, ms) {
+        //        clearTimeout(timer);
+        //        timer = setTimeout(callback, ms);
+        //    };
+        //})();
+
+        //fillGrid();
+
+        //
+        //$('.minipic').jqzoom({
+        //    zoomType: 'standard',
+        //    lens: true,
+        //    preloadImages: false,
+        //    alwaysOn: false,
+        //    zoomHeight: 200,
+        //    zoomWidth: 200
+        //});
+    });
+    function AddNewGroup(_Type) {
+        if (_Type == 'Create')
+            $("#divCreateGroup").show();
+        else
+            $("#divCreateGroup").hide();
+    }
+
+    function UpdateGroupName(_GroupId) {
+        $("#GroupName").val($("#txtGroupName" + _GroupId).val());
+        $("#GroupId").val(_GroupId);
+        $("#btnSubmit").click();
+    }
+
+    function DeleteGroup(_Id) {
+        if (_Id != undefined && _Id != '') {
+            bootbox.confirm({
+                size: 'small',
+                message: "Are you sure delete Group?",
+                buttons: {
+
+                    'cancel': {
+                        label: 'Cancel',
+                        className: 'btn-default'
+                    },
+                    'confirm': {
+                        label: 'Delete',
+                        className: 'btn-danger'
+                    }
+
+                },
+                callback: function (result) {
+                    if (result) {
+                        $.ajax({
+                            type: 'get',
+                            dataType: 'json',
+                            cache: false,
+                            url: '@Url.Action("DeleteGroup","ContactGroup")',
+                            data: { Id: _Id },
+                            beforeSend: function () {
+
+                            },
+                            success: function (response) {
+                                if (response.Result)
+                                    window.location.href = '/ContactGroup/Index';
+                                else
+                                    toastr["error"](response.Message);
+                            },
+                            error: function (ex, st, th) {
+                                toastr["error"](th);
+                            }
+                        })
+                    }
+                }
+            })
+        }
+        else
+            toastr["warning"]('No Delete Group.');
+    }
+
+    function GroupValiDation() {
+        var _GroupName = $("#GroupName")
+        if (_GroupName.val() == '' || _GroupName == undefined) {
+            toastr["warning"]('Group Name can not left blank!')
+            _GroupName.focus();
+            return false;
+        }
+
+        return true;
+    }
+
+    function GetData() {
+        var _txtsearch = $('#txtSearch').val();
+
+        $.ajax({
+            type: 'GET',
+            url: '@Url.Action("AjaxHandler", "ContactGroup")',
+            data: { Search: _txtsearch },
+            dataType: 'json',
+            success: function (response) {
+                
+                if (response.Result == "OK") {
+                    var data = response.data;
+
+                    var VendorRejectedList = response.VendorRejectedList;
+                    var AURejectedList = response.AURejectedList;
+
+                    if (data != null && data.length > 0) {
+
+                        var _strdata = "";
+                        var _Setactiveclass = "";
+
+                        //_strdata += "<div class=\"col-md-12\">"
+                        _strdata += "<!-- Custom Tabs -->"
+                        _strdata += "<div class=\"nav-tabs-custom\">"
+                        _strdata += "<ul class=\"nav nav-tabs\">"
+                        for (var i = 0; i < data.length; i++) {
+                            _Setactiveclass = "";
+                            if (i == 0)
+                                _Setactiveclass = " active";
+
+                            _strdata += "<li class=\"" + _Setactiveclass + "\"><a href=\"#" + data[i].GroupId + "\" data-toggle=\"tab\" aria-expanded=\"false\" onclick=\"\">" + data[i].GroupName + "</a></li>"
+                        }
+                        _strdata += "<li class=\"pull-right\"><a href=\"#tabl1\" data-toggle=\"tab\" aria-expanded=\"false\" onclick=\"\">Rejected By You</a></li>"
+                        _strdata += "<li class=\"pull-right\"><a href=\"#tabl2\" data-toggle=\"tab\" aria-expanded=\"false\" onclick=\"\">Rejected By User</a></li>"
+                        _strdata += "</ul>"
+
+                        _strdata += "<div class=\"tab-content\">"
+                        for (var j = 0; j < data.length; j++) {
+                            _Setactiveclass = "";
+                            if (j == 0)
+                                _Setactiveclass = " active";
+
+                            _strdata += "<div class=\"tab-pane " + _Setactiveclass + "\" id=" + data[j].GroupId + ">"
+                            //_strdata += "<div class=\"box\">"
+                            _strdata += "<div class=\"box-header\">"
+                            _strdata += "<div class=\"col-md-12\">"
+                            _strdata += "<div class=\"row\">"
+                            _strdata += "<div class=\"col-md-2\">"
+                            _strdata += "<input type=\"text\" name=\"txtGroupName" + data[j].GroupId + "\" id=\"txtGroupName" + data[j].GroupId + "\" value=\"" + data[j].GroupName + "\" class=\"form-control\" style=\"margin-top: 2px;\" />"
+                            _strdata += "</div>"
+                            _strdata += "<div class=\"col-md-2\">"
+                            _strdata += "<button id=\"btnUpdateGroup\" name=\"btnUpdateGroup\" type=\"button\" class=\"btn btn-primary btn-flat\" onclick=\"UpdateGroupName(" + data[j].GroupId + ")\"> Update</button>"
+                            _strdata += "</div>"
+                            _strdata += "<div class=\"col-md-3 pull-right\">"
+                            //_strdata += "<div class=\"form-group\">"
+                            _strdata += "<button id=\"btnAddContact\" name=\"btnAddContact\" type=\"button\" class=\"btn btn-primary btn-flat\" onclick=\"GetGroupContactList(" + data[j].GroupId + ")\"> Add Contact</button>"
+                            _strdata += "<button id=\"btnDeleteGroup\" name=\"btnDeleteGroup\" type=\"button\" class=\"btn btn-primary btn-flat\" onclick=\"DeleteGroup(" + data[j].GroupId + ")\" style=\"margin-left: 5px;\"> Delete Group</button>"
+                            //_strdata += "</div>"
+                            _strdata += "</div>"
+                            _strdata += "</div>"
+                            _strdata += "</div>"
+                            _strdata += "</div><!-- /.box-header -->"
+                            _strdata += "<div class=\"box-body no-padding\">"
+                            _strdata += "<table id='tblGroupContact' class=\"table table-striped table-responsive\">"
+                            _strdata += "<thead><tr>"
+                            _strdata += "<th style=\"width: 10px\">#</th>"
+                            _strdata += "<th>Contact Name</th>"
+                            _strdata += "<th>Email Id</th>"
+                            _strdata += "<th style=\"width: 200px\">Mobile No</th>"
+                            _strdata += "<th style=\"width: 10px\">#</th>"
+                            _strdata += "</tr>"
+                            _strdata += "</thead>"
+                            _strdata += "<tbody>"
+                            $.ajax({
+                                type: 'get',
+                                dataType: 'json',
+                                cahce: false,
+                                async: false,
+                                url: '@Url.Action("GrpContactList","ContactGroup")',
+                                data: { _GroupId: data[j].GroupId },
+                                beforeSend: function () {
+                                    
+                                },
+                                success: function (res) {
+                                    
+                                    if (res.Result == "OK") {
+                                        var detaildata = res.detaildata;
+                                        if (detaildata != null && detaildata.length > 0) {
+                                            for (var k = 0; k < detaildata.length ; k++) {
+                                                _strdata += "<tr id=\"row" + detaildata[k].Id + "\">"
+                                                _strdata += "<td>" + parseInt(k + 1) + "</td>"
+                                                _strdata += "<td>" + detaildata[k].AUName + "</td>"
+                                                _strdata += "<td>" + detaildata[k].EmailId + "</td>"
+                                                _strdata += "<td>" + detaildata[k].MobileNo1 + "</td>"
+                                                _strdata += "<td><a href=\"javascript:void(0);\" onclick=\"Delete(" + detaildata[k].Id + ");\"><i class=\"fa fa-trash\"></i></a></td>"
+                                                _strdata += "</tr>"
+                                            }
+                                        }
+
+                                    }
+                                },
+                                error: function (ex, st, th) {
+                                    toastr["error"](th);
+                                }
+
+                            })
+                            _strdata += "</tbody></table>"
+                            //_strdata += "</div><!-- /.box-body -->"
+                            _strdata += "</div>"
+                            _strdata += "</div><!-- /.tab-pane -->"
+                        }
+
+                        _strdata += "<div class=\"tab-pane \" id=\"tabl1\">"
+                        _strdata += "<table class=\"table\">"
+                        _strdata += "<tbody><tr>"
+                        _strdata += "<th style=\"width: 10px\">#</th>"
+                        _strdata += "<th>Contact Name</th>"
+                        _strdata += "<th>Email Id</th>"
+                        _strdata += "<th style=\"width: 200px\">Mobile No</th>"
+                        //_strdata += "<th style=\"width: 10px\">#</th>"
+                        _strdata += "</tr>"
+                        if (VendorRejectedList != null && VendorRejectedList.length > 0) {
+                            for (var l = 0; l < VendorRejectedList.length ; l++) {
+                                _strdata += "<tr id=\"row" + VendorRejectedList[l].Id + "\">"
+                                _strdata += "<td>" + parseInt(l + 1) + "</td>"
+                                _strdata += "<td>" + VendorRejectedList[l].AUName + "</td>"
+                                _strdata += "<td>" + VendorRejectedList[l].EmailId + "</td>"
+                                _strdata += "<td>" + VendorRejectedList[l].MobileNo1 + "</td>"
+                                //_strdata += "<td><a href=\"javascript:void(0);\" onclick=\"Delete(" + VendorRejectedList[l].Id + ");\"><i class=\"fa fa-trash\"></i></a></td>"
+                                _strdata += "</tr>"
+                            }
+                        }
+                        _strdata += "</tbody></table>"
+                        _strdata += "</div><!-- /.tab-pane -->"
+
+                        _strdata += "<div class=\"tab-pane \" id=\"tabl2\">"
+                        _strdata += "<table class=\"table\">"
+                        _strdata += "<tbody><tr>"
+                        _strdata += "<th style=\"width: 10px\">#</th>"
+                        _strdata += "<th>Contact Name</th>"
+                        _strdata += "<th>Email Id</th>"
+                        _strdata += "<th style=\"width: 200px\">Mobile No</th>"
+                        //_strdata += "<th style=\"width: 10px\">#</th>"
+                        _strdata += "</tr>"
+                        if (AURejectedList != null && AURejectedList.length > 0) {
+                            for (var m = 0; m < AURejectedList.length ; m++) {
+                                _strdata += "<tr id=\"row" + AURejectedList[m].Id + "\">"
+                                _strdata += "<td>" + parseInt(m + 1) + "</td>"
+                                _strdata += "<td>" + AURejectedList[m].AUName + "</td>"
+                                _strdata += "<td>" + AURejectedList[m].EmailId + "</td>"
+                                _strdata += "<td>" + AURejectedList[m].MobileNo1 + "</td>"
+                                //_strdata += "<td><a href=\"javascript:void(0);\" onclick=\"Delete(" + AURejectedList[m].Id + ");\"><i class=\"fa fa-trash\"></i></a></td>"
+                                _strdata += "</tr>"
+                            }
+                        }
+                        _strdata += "</tbody></table>"
+                        _strdata += "</div><!-- /.tab-pane -->"
+                        _strdata += "</div><!-- /.tab-content -->"
+                        _strdata += "</div><!-- nav-tabs-custom -->"
+                        //_strdata += "</div>"
+
+                        
+
+                        $("#GroupContainer").empty();
+                        $("#GroupContainer").html(_strdata);
+
+                        $("#tblGroupContact").dataTable({
+                            responsive: true,
+                            columnDefs : [{
+                                targets : [4],
+                                orderable: false
+                            }]
+                        })
+                    }
+                }
+                else {
+                    toastr["error"](response.msg);
+                }
+            },
+            beforeSend: function () {
+                $("#progress").show();
+            },
+            complete: function () {
+                $("#progress").hide();
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                toastr["error"](errorThrown);
+            }
+        });
+    }
+
+    function GetGroupContactList(_GroupId) {
+        
+        $.ajax({
+            type: 'get',
+            dataType: 'html',
+            cahce: false,
+            async: false,
+            url: '@Url.Action("FullContactList","ContactGroup")',
+            data: { RefGroupId: _GroupId },
+            beforeSend: function () {
+                
+            },
+            success: function (result) {
+                
+                if (result != null) {
+                    $("#divAddContactList").html('');
+                    $("#divAddContactList").html(result);
+
+                    $("#RefGroupId").val(_GroupId);
+                }
+            },
+            error: function (ex, st, th) {
+                toastr["error"](th);
+            }
+
+        });
+
+        $("#divAddContact").modal();
+    }
+
+    function editSession(_ID) {
+
+
+        
+        if (_ID != undefined && _ID != '') {
+            $.ajax({
+                type: 'post',
+                dataType: 'json',
+                cache: false,
+                url: '@Url.Action("EditSession", "Product")',
+                data: { Id: _ID },
+                beforeSend: function () {
+                    //
+                    $("#ajaxLoader").show();
+                },
+                success: function (response, textStatus, jqXHR) {
+                    
+                    if (response.Result) {
+                        window.location.href = '@Url.Action("Manage", "Product")';
+                    }
+                    else {
+                        toastr["warning"](response._Message)
+                    }
+                    $("#ajaxLoader").hide();
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    
+                    toastr["error"](errorThrown);
+                    $("#ajaxLoader").hide();
+                }
+            });
+        }
+        else
+            toastr["error"]('No such record found!');
+    }
+
+    function Delete(_ID) {
+
+        //
+
+        if (_ID != undefined && _ID != '') {
+            bootbox.confirm({
+                size: 'small',
+                message: "Are you sure delete Contact?",
+                buttons: {
+
+                    'cancel': {
+                        label: 'Cancel',
+                        className: 'btn-default'
+                    },
+                    'confirm': {
+                        label: 'Delete',
+                        className: 'btn-danger'
+                    }
+
+                },
+                callback: function (result) {
+                    if (result) {
+                        $.ajax({
+                            type: 'post',
+                            dataType: 'json',
+                            cache: false,
+                            url: '@Url.Action("delete", "ContactGroup")',
+                            data: { Id: _ID },
+                            beforeSend: function () {
+                                $("#ajaxLoader").show();
+                            },
+                            success: function (response, textStatus, jqXHR) {
+                                if (response.Result == true) {
+                                    $("#row" + _ID).remove();
+                                    toastr["success"](response.Message);
+                                    //fillGrid();
+                                }
+                                else {
+                                    toastr["warning"](response.Message);
+                                }
+                                $("#ajaxLoader").hide();
+                            },
+                            error: function (jqXHR, textStatus, errorThrown) {
+
+                                //displayError(errorThrown);
+                                toastr["error"](errorThrown);
+                                $("#ajaxLoader").hide();
+                            }
+                        });
+                    }
+                }
+            })
+        }
+        else
+            toastr["warning"]('No Edit Discount Master.');
+    }
+</script>
+
+<style>
+    h3.widget-user-username {
+        margin-left: 0px !important;
+        text-align: center;
+    }
+</style>

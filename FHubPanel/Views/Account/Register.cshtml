@@ -1,0 +1,225 @@
+﻿@using FHubPanel.Models;
+@model VendorModel
+
+@{
+    Layout = "~/Views/Shared/_LoginLayout.cshtml";
+}
+
+<div class="register-box">
+    <div class="register-logo">
+        <a href="/Account/Register">Fashion<b>DIVA</b></a>
+    </div>
+
+    <div class="register-box-body">
+        <h3 class="login-box-msg">Registration Form</h3>
+        @using (Html.BeginForm("Register", "Account", FormMethod.Post, new { id = "myregisterform", @class = "", enctype = "multipart/form-data" }))
+        {
+
+            @Html.HiddenFor(Model => Model.VendorId)
+            @Html.HiddenFor(Model => Model.SubscriptionType)
+            <div class="row">
+                @*<div class="col-md-12">*@
+                <div class="col-md-6">
+                    <div class="form-group has-feedback">
+                        @Html.TextBoxFor(Model => Model.VendorName, new { @class = "form-control", placeholder = "Vendor Name" })
+                        <span class="glyphicon glyphicon-user form-control-feedback"></span>
+                    </div>
+
+                    @*<div class="form-group has-feedback">
+                            @Html.TextAreaFor(Model => Model.Address, new { @class = "form-control" , placeholder = "Address" })
+                            <span class="glyphicon glyphicon-user form-control-feedback"></span>
+                        </div>
+                        <div class="form-group has-feedback">
+                            @Html.TextBoxFor(Model => Model.Country, new { @class = "form-control" , placeholder = "Country" })
+                            <span class="glyphicon glyphicon-user form-control-feedback"></span>
+                        </div>
+                        <div class="form-group has-feedback">
+                            @Html.TextBoxFor(Model => Model.State, new { @class = "form-control" , placeholder = "State" })
+                            <span class="glyphicon glyphicon-user form-control-feedback"></span>
+                        </div>*@
+                    <div class="form-group has-feedback">
+                        @Html.TextBoxFor(Model => Model.City, new { @class = "form-control", placeholder = "City" })
+                        <span class="glyphicon glyphicon-map-marker form-control-feedback"></span>
+                    </div>
+                    @*<div class="form-group has-feedback">
+                            @Html.TextBoxFor(Model => Model.Pincode, new { @class = "form-control" , placeholder = "Pincode" })
+                            <span class="glyphicon glyphicon-user form-control-feedback"></span>
+                        </div>*@
+                    <div class="form-group has-feedback">
+                        @Html.TextBoxFor(Model => Model.MobileNo1, new { @class = "form-control", placeholder = "Mobile No" })
+                        <span class="glyphicon glyphicon-phone form-control-feedback"></span>
+                    </div>
+                    <div class="form-group has-feedback">
+                        @Html.TextBoxFor(Model => Model.EmailId, new { @class = "form-control", placeholder = "Email" })
+                        <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group has-feedback">
+                        @Html.TextBoxFor(Model => Model.UserName, new { @class = "form-control", placeholder = "User Name" })
+                        <span class="glyphicon glyphicon-user form-control-feedback"></span>
+                    </div>
+                    <div class="form-group has-feedback">
+                        @Html.PasswordFor(Model => Model.Password, new { @class = "form-control", placeholder = "Password" })
+                        <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+                    </div>
+                    <div class="form-group has-feedback">
+                        @Html.PasswordFor(Model => Model.ConfirmPassword, new { @class = "form-control", placeholder = "Retype Password" })
+                        <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+                    </div>
+                    <div class="form-group has-feedback">
+                        @Html.TextBoxFor(Model => Model.ReferenceCode, new { @class = "form-control", placeholder = "Vendor Reference Code" })
+                        <span class="glyphicon glyphicon-link form-control-feedback"></span>
+                    </div>
+                </div>
+                @*</div>*@
+
+                @*<div class="col-xs-8">
+                        <div class="checkbox icheck">
+                            <label class="">
+                                <div class="icheckbox_square-blue" aria-checked="false" aria-disabled="false" style="position: relative;"><input type="checkbox" style="position: absolute; top: -20%; left: -20%; display: block; width: 140%; height: 140%; margin: 0px; padding: 0px; border: 0px; opacity: 0; background: rgb(255, 255, 255);"><ins class="iCheck-helper" style="position: absolute; top: -20%; left: -20%; display: block; width: 140%; height: 140%; margin: 0px; padding: 0px; border: 0px; opacity: 0; background: rgb(255, 255, 255);"></ins></div> I agree to the <a href="#">terms</a>
+                            </label>
+                        </div>
+                    </div>*@<!-- /.col -->
+                <div class="col-xs-8">
+                    <a href="@Url.Action("Login", "Account")" class="text-center pull-left">I already have a membership</a>
+                </div>
+                <div class="col-xs-4 pull-right">
+                    <button type="submit" class="btn btn-primary btn-block btn-flat" onclick="return Validation();">Register</button>
+                </div><!-- /.col -->
+            </div>
+        }
+
+        @*<div class="social-auth-links text-center">
+                <p>- OR -</p>
+                <a href="#" class="btn btn-block btn-social btn-facebook btn-flat"><i class="fa fa-facebook"></i> Sign up using Facebook</a>
+                <a href="#" class="btn btn-block btn-social btn-google btn-flat"><i class="fa fa-google-plus"></i> Sign up using Google+</a>
+            </div>*@
+
+
+    </div><!-- /.form-box -->
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        if ('@TempData["Warning"]' != '')
+            toastr["warning"]('@TempData["Warning"]');
+        else if ('@TempData["Error"]' != '')
+            toastr["error"]('@TempData["Error"]');
+    })
+
+    function Validation() {
+
+        
+
+        var _VendorName = $("#VendorName");
+        if (_VendorName.val() == '' || _VendorName == undefined) {
+            _VendorName.focus();
+            toastr["warning"]('Vendor Name can not left blank!');
+            return false;
+        }
+
+        var _UserName = $("#UserName");
+        if (_UserName.val() == '' || _UserName == undefined) {
+            _UserName.focus();
+            toastr["warning"]('User Name can not left blank!');
+            return false;
+        }
+        if (_UserName.val().indexOf(' ') >= 0) {
+            _UserName.focus();
+            toastr["warning"]('User Name can not allow space!');
+            return false;
+        }
+
+        var _City = $("#City");
+        if (_City.val() == '' || _City == undefined) {
+            _City.focus();
+            toastr["warning"]('City can not left blank!');
+            return false;
+        }
+        var _MobileNo1 = $("#MobileNo1");
+        if (_MobileNo1.val() == '' || _MobileNo1 == undefined) {
+            _MobileNo1.focus();
+            toastr["warning"]('Mobile No 1 can not left blank!');
+            return false;
+        }
+        var _EmailId = $("#EmailId");
+        if (_EmailId.val() == '' || _EmailId == undefined) {
+            _EmailId.focus();
+            toastr["warning"]('Email Id can not left blank!');
+            return false;
+        }
+
+        if ($("#VendorId").val() == 0 || $("#VendorId").val() == '') {
+
+            var _Password = $("#Password");
+            if (_Password.val() == '' || _Password == undefined) {
+                _Password.focus();
+                toastr["warning"]('Password can not left blank!');
+                return false;
+            }
+            if (_Password.val().length < 6) {
+                _Password.focus();
+                toastr["warning"]('Password must greater than 6 charactor!');
+                return false;
+            }
+
+            var _ConfPassword = $("#ConfirmPassword");
+            if (_ConfPassword.val() == '' || _ConfPassword == undefined) {
+                _ConfPassword.focus();
+                toastr["warning"]('Confirm Password can not left blank!');
+                return false;
+            }
+
+            if (_Password.val() != _ConfPassword.val()) {
+                _ConfPassword.focus();
+                toastr["warning"]('Password and Confirm Password not equal!');
+                return false;
+            }
+        }
+
+        if ($("#VendorId").val() == 0 || $("#VendorId").val() == '') {
+            var _flg = "true";
+            
+            $.ajax({
+                type: "get",
+                async: false,
+                dataType: 'json',
+                //contentType: "application/json; charset=utf-8",
+                url: '@Url.Action("isValueExists", "Account")',
+                data: { pUserName: _UserName.val() },
+                beforeSend: function () {
+                    
+                    $("#ajaxLoader").show();
+                },
+                success: function (data) {
+                   
+
+                    if (data) {
+                        toastr["warning"]('Duplicate User Name. Please enter another!');
+                        _flg = "false";
+                    }
+                    $("#ajaxLoader").hide();
+                },
+                error: function (result, st, er) {
+                    
+                    toastr["error"](result);
+                    $("#ajaxLoader").hide();
+                },
+            });
+            if (_flg == "true") {
+                
+                return true;
+            }
+            else {
+                
+                return false;
+            }
+        }
+    }
+</script>
+<style>
+    .register-box {
+        width: 720px;
+    }
+</style>

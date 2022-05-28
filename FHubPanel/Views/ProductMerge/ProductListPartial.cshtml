@@ -1,0 +1,139 @@
+﻿@using FHubPanel.Models;
+@model  CatalogModel
+
+<table class="table table-bordered table-responsive" id="tblProdMaster">
+    <thead>
+        <tr>
+            <th>
+
+            </th>
+            <th>
+                Product Name
+            </th>
+            <th>
+                Product Code
+            </th>
+            <th>
+                Category
+            </th>
+            <th>
+                Color
+            </th>
+            <th>
+                Product Type
+            </th>
+            <th>
+                Size
+            </th>
+            <th>
+                Fabric
+            </th>
+            <th>
+                Design
+            </th>
+            <th>
+                Brand
+            </th>
+            <th>
+                ActiveTill Date
+            </th>
+            <th>
+                Retail Price
+            </th>
+            <th>
+                WholeSale Price
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @for (int i = 0; i < Model.ProductList.Count; i++)
+        {
+            <tr>
+                @Html.HiddenFor(model => Model.ProductList[i].ProdId)
+                @Html.HiddenFor(model => Model.ProductList[i].RefProdCategory)
+                @Html.HiddenFor(model => Model.ProductList[i].RefColor)
+                @Html.HiddenFor(model => Model.ProductList[i].RefProdType)
+                @Html.HiddenFor(model => Model.ProductList[i].RefSize)
+                @Html.HiddenFor(model => Model.ProductList[i].RefFabric)
+                @Html.HiddenFor(model => Model.ProductList[i].RefDesign)
+                @Html.HiddenFor(model => Model.ProductList[i].RefBrand)
+                <td>
+                    <img src="@Model.ProductList[i].ThumbnailImgPath" alt="No Image For Product" style=" height: 100px; width: 75px;" />
+                </td>
+                <td>
+                    @Html.TextBoxFor(model => Model.ProductList[i].ProdName, new { @class = "form-control ProdName" })
+                </td>
+                <td>
+                    @Html.TextBoxFor(model => Model.ProductList[i].ProdCode, new { @class = "form-control ProdCode" })
+                </td>
+                <td>
+                    @Html.DisplayFor(model => Model.ProductList[i].RefProdCategory)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => Model.ProductList[i].RefColor)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => Model.ProductList[i].RefProdType)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => Model.ProductList[i].RefSize)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => Model.ProductList[i].RefFabric)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => Model.ProductList[i].RefDesign)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => Model.ProductList[i].RefBrand)
+                </td>
+                <td>
+                    @Html.TextBoxFor(model => Model.ProductList[i].ActivetillDate, "{0:dd/MMM/yyyy}", new { @class = "form-control activetilldate" })
+                </td>
+                <td>
+                    @Html.TextBoxFor(model => Model.ProductList[i].RetailPrice, new { @class = "form-control" })
+                </td>
+                <td>
+                    @Html.TextBoxFor(model => Model.ProductList[i].WholeSalePrice, new { @class = "form-control" })
+                </td>
+            </tr>
+        }
+
+    </tbody>
+</table>
+
+<script>
+    //jQuery('#tblProdMaster').dataTable().fnDestroy();
+    $(document).ready(function () {
+
+        $(".ProdName").on('change', function () {
+
+            DuplicationCheck($(this), 'Product Name')
+        });
+
+        $(".ProdCode").on('change', function () {
+            DuplicationCheck($(this), 'Product Code')
+        });
+
+        $('#tblProdMaster').dataTable({
+            //"bServerSide": false,
+            //"responsive": true,
+            scrollX: true,
+            paging: false,
+            searching: false,
+            columnDefs: [{
+                targets: [1, 2, 10, 11, 12],
+                orderable : false
+            }]
+        });
+
+        $('.activetilldate').datepicker({
+            format: "dd-M-yyyy",
+            autoclose: true,
+            
+        });
+    });
+
+   
+
+</script>

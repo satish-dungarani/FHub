@@ -1,0 +1,12 @@
+﻿@Html.DropDownList("RefCatId", new SelectList((IEnumerable<SelectListItem>)ViewData["CatalogueList"], "Value", "Text"),"----Select Catalogue----", new { @class = "form-control select2" ,})
+
+<script>
+    $(document).ready(function () {
+        $("#RefCatId").val('');
+        $("#RefCatId").select2();
+        $("#RefCatId").on('change', function () {
+            
+            GetValues();
+        });
+    });
+</script>

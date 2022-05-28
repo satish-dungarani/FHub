@@ -1,0 +1,353 @@
+﻿@model FHubPanel.Models.MasterValueModels
+
+<div class="content-wrapper" style="min-height: 946px;">
+    <!-- Content Header (Page header) -->
+    @*<section class="content-header">
+        <h1>
+
+            <small></small>
+        </h1>
+        <ol class="breadcrumb">
+            <li><a href="/Home/Index"><i class="fa fa-dashboard"></i>Home</a></li>
+            <li><a href="/Setup/Index">Setup</a></li>
+            <li class="active">Masters</li>
+        </ol>
+    </section>*@
+
+
+
+    <section class="content manageGrid">
+
+        @*<div class="box box-primary">
+                <div class="box-header ui-sortable-handle" style="cursor: move;">
+                    <i class="fa fa-dashboard"></i>
+                    <h3 class="box-title"><b>@ViewBag.MasterType</b></h3>
+                    <div class="box-tools pull-right">
+                        <button id="btnCreateNew" name="btnCreateNew" class="btn btn-block btn-primary btn-flat" onclick="window.location.href = '/Setup/Manage'; "> Create New</button>
+                    </div>
+                </div>
+                <div class="box-footer clearfix no-border">
+                </div>
+            </div>*@
+
+        @*<div class="callout callout-info">
+                <div class="box-header ui-sortable-handle" style="cursor: move;">
+                    <i class="fa fa-dashboard"></i>
+                    <h3 class="box-title"><b>@ViewBag.MasterType</b></h3>
+                    <div class="box-tools pull-right">
+                        <button id="btnCreateNew" name="btnCreateNew" class="btn bg-navy" onclick="window.location.href = '/Setup/Manage'; "> Create New</button>
+                    </div>
+                </div>
+            </div>*@
+
+        @*<div class="row"> <div class="col-md-12"></div></div>*@
+        @*@Html.HiddenFor(model => Model.RefVendorId)*@
+        <div class="box box-primary">
+            <div class="box-header">
+                <div class="box-header with-border" style="cursor: move;">
+                    <i class="@ViewBag.Icon"></i>
+                    <h3 class="box-title"><b>@ViewBag.MasterType</b></h3>
+                    <div class="box-tools pull-right">
+                        <button id="btnCreateNew" name="btnCreateNew" class="btn btn-block btn-primary btn-flat" onclick="window.location.href = '/Setup/Manage'; "> Create New</button>
+                    </div>
+                </div>
+            </div>
+            <div class="box-body">
+                @*<div class="row">*@
+                <table class="table table-bordered table-hover" id="tblMaster">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Desc</th>
+                            <th>Ord No</th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+                @*</div>*@
+            </div>
+        </div>
+    </section>
+</div>
+
+<script type="text/javascript">
+    jQuery(document).ready(function () {
+
+        if ('@TempData["Success"]' != '')
+            toastr["success"]('@TempData["Success"]');
+        else if ('@TempData["Error"]' != '')
+            toastr["error"]('@TempData["Error"]');
+
+        fillGrid();
+
+        
+
+        $(".btnCreate").click(function () {
+            $(".manageMaster").show();
+            $(".manageGrid").hide();
+        });
+
+        $(".btnCancel").click(function () {
+            clearForm();
+            $(".manageMaster").hide();
+            $(".manageGrid").show();
+        });
+
+    });
+
+    function clearForm() {
+        $(".valueName")[0].value = '';
+        $(".shortName")[0].value = '';
+    }
+
+    function editSession(_ID) {
+
+
+
+        if (_ID != undefined && _ID != '') {
+            $.ajax({
+                type: 'post',
+                dataType: 'json',
+                cache: false,
+                url: '@Url.Action("editSession", "setup")',
+                data: { pID: _ID },
+                beforeSend: function () {
+                    $("#ajaxLoader").show();
+                },
+                success: function (response, textStatus, jqXHR) {
+
+                    if (response.Result) {
+                        window.location.href = '@Url.Action("manage", "setup")';
+                    }
+                    else {
+                        toastr["warning"](response._Message)
+                    }
+                    $("#ajaxLoader").hide();
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+
+                    toastr["error"](errorThrown);
+                    $("#ajaxLoader").hide();
+                }
+            });
+        }
+        else
+            toastr["error"]('No such record found!');
+    }
+
+    function Delete(_ID) {
+
+        //
+
+        if (_ID != undefined && _ID != '') {
+            bootbox.confirm({
+                size: 'small',
+                message: "Are you sure delete Consumer?",
+                buttons: {
+
+                    'cancel': {
+                        label: 'Cancel',
+                        className: 'btn-default'
+                    },
+                    'confirm': {
+                        label: 'Delete',
+                        className: 'btn-danger'
+                    }
+
+                },
+                callback: function (result) {
+                    if (result) {
+                        $.ajax({
+                            type: 'post',
+                            dataType: 'json',
+                            cache: false,
+                            url: '@Url.Action("delete", "setup")',
+                            data: { Id: _ID },
+                            beforeSend: function () {
+                                $("#ajaxLoader").show();
+                            },
+                            success: function (response, textStatus, jqXHR) {
+                                if (response._result == true) {
+                                    toastr["success"](response._Message);
+                                    fillGrid();
+                                }
+                                else {
+                                    toastr["warning"](response._Message);
+                                }
+                                $("#ajaxLoader").hide();
+                            },
+                            error: function (jqXHR, textStatus, errorThrown) {
+
+                                //displayError(errorThrown);
+                                toastr["error"](response._Message);
+                                $("#ajaxLoader").hide();
+                            }
+                        });
+                    }
+                }
+            })
+        }
+        else
+            toastr["warning"]('No Edit Discount Master.');
+    }
+
+    function updateStatus(_ID, _currentStatus) {
+        
+        if (_ID != undefined && _ID != '') {
+
+            bootbox.confirm({
+                size: 'small',
+                message: "Are you sure to change User Role Status?",
+                buttons: {
+
+                    'cancel': {
+                        label: 'Cancel',
+                        className: 'btn-default'
+                    },
+                    'confirm': {
+                        label: 'Ok',
+                        className: 'btn-danger'
+                    }
+
+                },
+                callback: function (result) {
+                    if (result) {
+                        $.ajax({
+                            type: 'post',
+                            dataType: 'json',
+                            cache: false,
+                            url: '@Url.Action("updateStatus", "setup")',
+                            data: { Id: _ID, CurrentStatus: _currentStatus },
+                            beforeSend: function () {
+
+
+                                $("#ajaxLoader").show();
+                            },
+                            success: function (response, textStatus, jqXHR) {
+                                
+                                if (response) {
+                                    if (_currentStatus == 'True') {
+
+                                        $("#row" + _ID).removeClass("fa-check").addClass("fa-remove");
+                                        document.getElementById("row" + _ID).style.color = "red";
+                                        var clickData = $("#row" + _ID).attr("onclick");
+                                        $("#row" + _ID).attr("onclick", clickData.replace("True", "False"));
+                                    }
+                                    else {
+                                        $("#row" + _ID).removeClass("fa-remove").addClass("fa-check");
+                                        document.getElementById("row" + _ID).style.color = "green";
+                                        var clickData = $("#row" + _ID).attr("onclick");
+                                        $("#row" + _ID).attr("onclick", clickData.replace("False", "True"));
+                                    }
+                                }
+                                else
+                                {
+                                    toastr["error"]("Server Error. Please try again later!");
+                                }
+                                $("#ajaxLoader").hide();
+                            },
+                            error: function (jqXHR, textStatus, errorThrown) {
+                                toastr["error"](errorThrown);
+                                $("#ajaxLoader").hide();
+                            }
+                        });
+                    }
+                }
+            })
+        }
+        else
+            toastr["warning"]('No Edit Discount Master.');
+    }
+
+    function fillGrid() {
+        
+        var visiblemode = "";
+        //if ($("#IsSystemGenerated").val() == "True")
+        //    visiblemode = "hidden";
+        //else
+        //    visiblemode = "visible";
+
+        jQuery('#tblMaster').dataTable().fnDestroy();
+        var oTable = jQuery('#tblMaster').dataTable({
+            "bServerSide": false,
+            "sAjaxSource": '@Url.Action("AjaxHandler", "Setup")',
+            "bProcessing": false,
+            "responsive": true,
+            "sPaginationType": 'full_numbers',
+            "oLanguage": {
+                "sLengthMenu": "Show _MENU_ Rows",
+                "sSearch": "Search :",
+                "oPaginate": {
+                    "sPrevious": "",
+                    "sNext": ""
+                }
+            },
+            "aaSorting": [[0, 'asc']],
+            "aoColumns": [
+
+                          { "sName": "ValueName" },
+                          { "sName": "ValueDesc" },
+                          { "sName": "OrdNo" },
+                          {
+                              "sName": "IsActive",
+                              "sClass": "text-center",
+                              "sWidth": "10px",
+                              "bSearchable": false,
+                              "bSortable": false,
+                              "mRender": function (data, type, oObj) {
+                                  if (oObj[5] == 0)
+                                      visiblemode = "hidden";
+                                  else
+                                      visiblemode = "visible";
+
+                                  if (oObj[3] == 'True')
+                                      return "<i id='row" + oObj[4] + "' class='ui-tooltip fa fa-check' style='font-size: 18px;color:green; cursor:pointer;visibility:" + visiblemode + "' onclick=\"updateStatus(" + oObj[4] + ",'" + oObj[3] + "')\"><div style='display:none'>" + oObj[3] + "</div></i>";
+                                  else
+                                      return "<i id='row" + oObj[4] + "' class='ui-tooltip fa fa-remove' style='font-size: 18px;color:red; cursor:pointer;visibility:" + visiblemode + "' onclick=\"updateStatus(" + oObj[4] + ",'" + oObj[3] + "')\"><div style='display:none'>" + oObj[3] + "</div></i>";
+                              }
+                          },
+
+                          {
+                              "sName": "ID",
+                              "sClass": "text-center",
+                              "sWidth": "10px",
+                              "bSearchable": false,
+                              "bSortable": false,
+                              "mRender": function (data, type, oObj) {
+                                  if (oObj[5] == 0)
+                                      visiblemode = "hidden";
+                                  else
+                                      visiblemode = "visible";
+
+                                  return "<i class='ui-tooltip fa fa-pencil' id='edit' style='font-size: 18px; cursor:pointer;visibility:" + visiblemode + "' onclick=\"editSession('" + oObj[4] + "')\" ></i>";
+                              }
+                          },
+                          {
+                              "sName": "ID",
+                              "sClass": "text-center",
+                              "sWidth": "10px",
+                              "bSearchable": false,
+                              "bSortable": false,
+                              "mRender": function (data, type, oObj) {
+                                  if (oObj[5] == 0)
+                                      visiblemode = "hidden";
+                                  else
+                                      visiblemode = "visible";
+
+                                  return "<i class='ui-tooltip fa fa-trash-o' style='font-size: 18px; cursor:pointer; visibility:" + visiblemode + "' data-original-title='Delete' onclick=\"Delete('" + oObj[4] + "')\"></i>";
+
+                              }
+                          }
+            ]
+        })
+        //$('#tblMaster_wrapper .dataTables_filter input').addClass("form-control input-sm").attr("placeholder", "Search");
+        //// modify table search input
+        //$('#tblMaster_wrapper .dataTables_length select').addClass("m-wrap small");
+        // modify table per page dropdown
+        //$('#tblMaster_wrapper .dataTables_length select').select2();
+    }
+
+</script>

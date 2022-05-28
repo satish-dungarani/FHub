@@ -1,0 +1,129 @@
+﻿@using FHubPanel.Models;
+@model LoginViewModel
+
+@{
+    Layout = "~/Views/Shared/_LoginLayout.cshtml";
+}
+
+<div class="login-box">
+    <div class="login-logo">
+        <a href="/Account/Login">Fashion<b>DIVA</b></a>
+    </div><!-- /.login-logo -->
+    <div class="login-box-body">
+        <p class="login-box-msg">Sign in to start your session</p>
+        @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "", id = "myloginform", enctype = "multipart/form-data" }))
+        {
+            <div class="form-group has-feedback">
+                @Html.TextBoxFor(Model => Model.UserName, new { @class = "form-control", placeholder = "User Name" })
+                <span class="glyphicon glyphicon-user form-control-feedback"></span>
+            </div>
+            <div class="form-group has-feedback">
+                @Html.PasswordFor(Model => Model.Password, new { @class = "form-control", placeholder = "Password" })
+                @*<input type="password" name="Password" id="Password" value="" class="form-control"  placeholder="Password" />*@
+                <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+            </div>
+            <div class="row">
+                <div class="col-xs-8">
+                    @Html.CheckBoxFor(Model => Model.RememberMe, new { @class = "minimal" })
+                    <label>Remember Me</label>
+                </div><!-- /.col -->
+                <div class="col-xs-4">
+                    <button type="submit" class="btn btn-primary btn-block btn-flat" onclick="return LoginValidate();">Sign In</button>
+                </div><!-- /.col -->
+            </div>
+        }
+        <div class="social-auth-links text-center">
+            @*<p>- OR -</p>*@
+            @*@Html.Partial("_ExternalLoginsListPartial", new { Action = "ExternalLogin", ReturnUrl = ViewBag.ReturnUrl })*@
+            @*<a href="#" class="btn btn-block btn-social btn-facebook btn-flat"><i class="fa fa-facebook"></i> Sign in using Facebook</a>
+                <a href="https://localhost:1255/signin-google" class="btn btn-block btn-social btn-google btn-flat"><i class="fa fa-google-plus"></i> Sign in using Google+</a>*@
+        </div><!-- /.social-auth-links -->
+
+        <a href="javascript:void(0);" onclick="FunSendMailForResetPassword();">I forgot my password</a><br>
+        <a href="@Url.Action("Register","Account")" class="text-center">Register a new vendor</a>
+
+    </div><!-- /.login-box-body -->
+</div><!-- /.login-box -->
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        
+        if ('@TempData["Success"]' != '')
+            toastr["success"]('@TempData["Success"]');
+        if ('@TempData["Warning"]' != '')
+            toastr["warning"]('@TempData["Warning"]');
+
+        console.log(getCookie('VendorCookie'));
+
+        $("#Password").val(getCookie('VendorCookie'));
+        $("#UserName").focus();
+    });
+
+    function getCookie(cname) {
+        var name = cname + "=";
+        var ca = document.cookie.split(';');
+        for (var i = 0; i < ca.length; i++) {
+            var c = ca[i];
+            while (c.charAt(0) == ' ')
+                c = c.substring(1);
+            if (c.indexOf(name) == 0) {
+                return c.substring((c.lastIndexOf('=') + 1), c.length);
+            }
+        }
+        return "";
+    }
+
+    function LoginValidate() {
+        var _UserName = $("#UserName");
+        if (_UserName.val() == '' || _UserName == undefined) {
+            _UserName.focus();
+            toastr["warning"]('User Name can not left blank!');
+            return false;
+        }
+
+        var _Password = $("#Password");
+        if (_Password.val() == '' || _Password == undefined) {
+            _Password.focus();
+            toastr["warning"]('Password can not left blank!');
+            return false;
+        }
+        if (_Password.val().length < 6) {
+            _Password.focus();
+            toastr["warning"]('Password must grater than 6 charactor!');
+            return false;
+        }
+        return true;
+    }
+
+    function FunSendMailForResetPassword() {
+        var _UserName = $("#UserName");
+        if (_UserName.val() == '' || _UserName == undefined) {
+            _UserName.focus();
+            toastr["warning"]('User Name can not left blank!');
+            return false;
+        }
+
+        $.ajax({
+            type: 'get',
+            dataType: 'json',
+            cache: false,
+            url: '@Url.Action("ForgetPassword", "Account")',
+            data: { UserName: _UserName.val() },
+            beforeSend: function () {
+                
+            },
+            success: function (response) {
+                
+                if (response.Result)
+                    toastr["success"](response.Message);
+                else
+                    toastr["warning"](response.Message);
+            },
+            error: function (ex, st, th) {
+                
+                toastr["error"](th);
+            }
+        });
+    }
+
+</script>

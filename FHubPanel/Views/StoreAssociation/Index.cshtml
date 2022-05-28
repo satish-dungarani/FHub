@@ -1,0 +1,427 @@
+﻿
+<div class="content-wrapper" style="min-height: 946px;">
+
+    <section class="content manageGrid">
+
+        <div class="box box-primary">
+            <div class="box-header">
+                <div class="box-header with-border" style="cursor: move;">
+                    <i class="@ViewBag.Icon"></i>
+                    <h3 class="box-title"><b>@ViewBag.MasterType</b></h3>
+                    <div class="box-tools col-md-3">
+                        <div class="col-md-12 pull-right">
+                            <input type="text" name="txtSearch" id="txtSearch" value="" class="form-control pull-right" placeholder="Search..." />
+                        </div>
+                    </div>
+                    @*<button id="btnCreateNew" name="btnCreateNew" class="btn btn-block btn-primary btn-flat" onclick="window.location.href = '/Catalog/Manage'; "> Create New</button>*@
+                </div>
+            </div>
+
+            <div class="box-body">
+                @Html.Hidden("tabId")
+                @*<div class="row">*@
+                <div class="col-md-12">
+                    <div class="nav-tabs-custom">
+                        <ul class="nav nav-tabs">
+                            <li class="active"><a href="#tabRequested" data-toggle="tab" aria-expanded="false" onclick="GetVendorAsso('tabRequested');">Make Request</a></li>
+                            <li class=""><a href="#tabReqReceived" data-toggle="tab" aria-expanded="true" onclick="GetVendorAsso('tabReqReceived');">Request Received</a></li>
+                            <li class="pull-right">
+                                <button type="button" name="btnAll" id="btnAll" class="btn btn-primary btn-flat " onclick="SetVendorStoreStatus('', 'All');">All</button>
+                                <button type="button" name="btnApproved" id="btnApproved" class="btn btn-success btn-flat" onclick="SetVendorStoreStatus('', 'Approved');">Approved</button>
+                                <button type="button" name="btnPending" id="btnPending" class="btn bg-orange-active btn-flat " onclick="SetVendorStoreStatus('', 'Pending');">Pending</button>
+                                <button type="button" name="btnRejected" id="btnRejected" class="btn btn-danger btn-flat" onclick="SetVendorStoreStatus('', 'Rejected');">Rejected</button>
+                            </li>
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane active" id="tabRequested">
+                                <div class="body-content">
+                                    <div class="row">
+                                        <div class="col-md-12 form-horizontal ">
+                                            
+                                                <div class="form-group">
+                                                    <label class="control-label pull-left">Vendor Code</label>
+                                                    <div class="col-md-3">
+                                                        @Html.TextBox("ReqVendorCode", null, new { @class = "form-control" })
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <button id="dialogButtonYes" name="dialogButtonYes" class="btn btn-primary btn-flat " type="submit" onclick="SendRequest();">Send Request</button>
+                                                    </div>
+                                                </div>
+                                                
+
+                                            @*<button type="button" name="btnRequest" id="btnRequest" class="btn btn-primary btn-flat " onclick="StoreRequest('Request');">Store Request</button>*@
+                                            @*<button type="button" name="btnAll" id="btnAll" class="btn btn-primary btn-flat " onclick="SetVendorStatus('tabRequested', 'All');">All</button>
+            <button type="button" name="btnPending" id="btnPending" class="btn bg-orange-active btn-flat " onclick="SetVendorStatus('tabRequested', 'Pending');">Pending</button>
+            <button type="button" name="btnApproved" id="btnApproved" class="btn btn-success btn-flat" onclick="SetVendorStatus('tabRequested', 'Approved');">Approved</button>
+            <button type="button" name="btnRejected" id="btnRejected" class="btn btn-danger btn-flat" onclick="SetVendorStatus('tabRequested', 'Rejected');">Rejected</button>*@
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div><!-- /.tab-pane -->
+                            <div class="tab-pane" id="tabReqReceived">
+                                @*<div class="body-content">
+                                        <div class="row">
+                                            <div class="col-md-12 pull-right">
+                                                <div class="row pull-right">
+                                                    <button type="button" name="btnAll" id="btnAll" class="btn btn-primary btn-flat " onclick="SetStoreStatus('tabReqReceived', 'All');">All</button>
+                                                    <button type="button" name="btnPending" id="btnPending" class="btn bg-orange-active btn-flat " onclick="SetStoreStatus('tabReqReceived', 'Pending');">Pending</button>
+                                                    <button type="button" name="btnApproved" id="btnApproved" class="btn btn-success btn-flat" onclick="SetStoreStatus('tabReqReceived', 'Approved');">Approved</button>
+                                                    <button type="button" name="btnRejected" id="btnRejected" class="btn btn-danger btn-flat" onclick="SetStoreStatus('tabReqReceived', 'Rejected');">Rejected</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>*@
+                            </div><!-- /.tab-pane -->
+                        </div><!-- /.tab-content -->
+                    </div><!-- nav-tabs-custom -->
+
+                    <input type="hidden" name="hidVendorStatus" value="" id="hidStatus" />
+                    @*<input type="hidden" name="hidStoreStatus" value="" id="hidStoreStatus" />*@
+
+                    @*<div class="col-md-6">
+                            <button type="button" name="btnPending" id="btnPending" class="btn bg-orange-active btn-flat" onclick="SetVensorStatus('Pending');">Pending</button>
+                            <button type="button" name="btnApproved" id="btnApproved" class="btn btn-success btn-flat" onclick="SetVensorStatus('Approved');">Approved</button>
+                            <button type="button" name="btnRejected" id="btnRejected" class="btn btn-danger btn-flat" onclick="SetVensorStatus('Rejected');">Rejected</button>
+                        </div>*@
+                </div>
+                @*</div>*@
+
+            </div>
+        </div>
+        <div class="box-body">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="" id="ContactContainer">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        @*</div>*@
+
+        <div class="col-lg-12 text-center">
+            <div id="progress" style="display:none">
+                <img src="~/Content/dist/img/ajax-loader.gif" width="50" height="50" />
+            </div>
+        </div>
+
+        @* Modal For Enquiry Response Send to appUser *@
+        @*<div id="divStoreRequest" class="modal extended-modal fade no-display" tabindex="-1" data-width="800" data-height="400" style="z-index: 2000 !important">
+                <div class="modal-dialog modal-sm">
+                    <div class="modal-content">
+                        <div class="modal-header bg-light-blue">
+
+                            <button type="button" class="close center-block" id="btnClose" data-dismiss="modal" aria-hidden="true">
+                                &times;
+
+                            </button>
+                            <h4 class="modal-title">Send Request To Store</h4>
+                        </div>
+
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label>Vendor Code</label>
+                                        @Html.TextBox("ReqVendorCode", null, new { @class = "form-control" })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button id="dialogButtonYes" name="dialogButtonYes" class="btn btn-primary btn-flat" type="submit" onclick="SendRequest();">Send</button>
+                        </div>
+                    </div>
+                </div>
+            </div>*@
+
+    </section>
+</div>
+
+<script type="text/javascript">
+    var pageSize = 12;
+    var pageIndex = 0;
+    var VendorStatus = '';
+    var _Tab = 'tabRequested';
+    jQuery(document).ready(function () {
+
+        if ('@TempData["Success"]' != '')
+            toastr["success"]('@TempData["Success"]');
+        else if ('@TempData["Error"]' != '')
+            toastr["error"]('@TempData["Error"]');
+
+        $("#hidStatus").val('All');
+        $("#tabId").val('tabRequested');
+
+        GetData();
+        $(window).scroll(function () {
+            if ($(window).scrollTop() ==
+               $(document).height() - $(window).height()) {
+                GetData();
+            }
+        });
+        //var timeout;
+        $("#txtSearch").on("input", function () {
+            // do stuff;
+            delay(function () {
+                pageIndex = 0;
+                $("#ContactContainer").empty();
+                //var _Search = " <div class='col-md-12'>"
+                //_Search += "<div class='col-md-3 pull-right'>"
+                //_Search += "<div class='form-group'>"
+                //_Search += "<label>Search :</label>"
+                //_Search += "<input type='text' name='txtSearch' id='txtSearch' value='' class='form-control' />"
+                //_Search += "</div>"
+                //_Search += "</div>"
+                //_Search += "</div>"
+                //$("#categorycontainer").add(_Search);
+                GetData();
+            }, 1000);
+        });
+        var delay = (function () {
+            var timer = 0;
+            return function (callback, ms) {
+                clearTimeout(timer);
+                timer = setTimeout(callback, ms);
+            };
+        })();
+
+    });
+
+    function SendRequest() {
+
+        var _Code = $("#ReqVendorCode");
+        if (_Code.val() == '' || _Code == undefined) {
+            _Code.focus();
+            toastr["warning"]('Vendor Code can not left blank!')
+            return false;
+        }
+
+        $.ajax({
+            type: 'post',
+            dataType: 'json',
+            cache: false,
+            url: '@Url.Action("SendRequest","StoreAssociation")',
+            data: { VendorCode: $("#ReqVendorCode").val() },
+            beforeSend: function () {
+                $("#ajaxLoader").show();
+            },
+            success: function (response) {
+                
+                $("#ajaxLoader").hide();
+                if (response.Result) {
+                    toastr["success"]('Request Successfully send to store owner.');
+                    $("#ContactContainer").empty();
+                    pageSize = 12;
+                    pageIndex = 0;
+                    GetData();
+                    $("#ReqVendorCode").val('');
+                    $("#divStoreRequest").modal('hide');
+                }
+                else {
+                    toastr["warning"](response.Message);
+                }
+            },
+            error: function (ex, st, th) {
+                
+                $("#ajaxLoader").hide();
+                toastr["error"](th);
+            }
+        })
+    }
+
+    //function SetStoreStatus(_TabId, _Status) {
+    //    $("#ContactContainer").empty();
+    //    $("#hidStoreStatus").val(_Status);
+    //    pageSize = 12;
+    //    pageIndex = 0;
+    //    //_Tab = $("#tabId").val();
+    //    GetData();
+    //}
+    function SetVendorStoreStatus(_TabId, _Status) {
+        $("#ContactContainer").empty();
+        $("#hidStatus").val(_Status);
+        pageSize = 12;
+        pageIndex = 0;
+        //_Tab =  $("#tabId").val();
+        GetData();
+    }
+
+    //function StoreRequest(_Value) {
+    //    $("#divStoreRequest").modal();
+    //    $("#ReqVendorCode").focus();
+    //}
+
+    function GetVendorAsso(_TabId) {
+        //$("#tabId").val(_TabId);
+        $("#ContactContainer").empty();
+        pageSize = 12;
+        pageIndex = 0;
+        _Tab = _TabId;
+        GetData();
+    }
+
+    function GetData() {
+        var _txtsearch = $('#txtSearch').val();
+        
+        $.ajax({
+            type: 'GET',
+            url: '@Url.Action("AjaxHandler", "StoreAssociation")',
+            data: { Search: _txtsearch, "PageIndex": pageIndex, "PageSize": pageSize, Status: $("#hidStatus").val(), TabId: _Tab },
+            dataType: 'json',
+            success: function (response) {
+                //
+                if (response.Result == "OK") {
+                    
+                    var data = response.data;
+                    if (data != null && data.length > 0) {
+                        for (var i = 0; i < data.length; i++) {
+                            var _VendorName;
+                            var _ThumbnaiImg;
+                            if (_Tab == 'tabRequested') {
+                                _VendorName = data[i].StoreName != null && data[i].StoreName != '' ? data[i].StoreName : '-';
+                                _ThumbnaiImg = data[i].StoreImg != null && data[i].StoreImg != '' ? data[i].ThumbnailStoreImgPath : '/Content/dist/img/nologo.png';
+                            }
+                            else {
+                                _VendorName = data[i].VendorName != null && data[i].VendorName != '' ? data[i].VendorName : '-';
+                                _ThumbnaiImg = data[i].LogoImg != null && data[i].LogoImg != '' ? data[i].ThumbnailVendorImgPath : '/Content/dist/img/nologo.png';
+                            }
+
+                            var _Website = data[i].WebSite != null && data[i].WebSite != '' ? data[i].WebSite : '-';
+                            var _EmailId = data[i].EmailId != null && data[i].EmailId != '' ? data[i].EmailId : '-';
+                            
+                            var _UDate = data[i].UpdDate != null && data[i].UpdDate != '' ? data[i].UpdDate.substring(data[i].UpdDate.indexOf('(') + 1, data[i].UpdDate.indexOf(')')) : '';
+
+                            var _Setbg = 'bg-aqua-active';
+                            if (data[i].VendorStatus == 'Pending' || data[i].StoreStatus == 'Requested')
+                                _Setbg = 'bg-orange-active';
+                            else if (data[i].VendorStatus == 'Approved' || data[i].StoreStatus == 'Approved')
+                                _Setbg = 'bg-green-active';
+                            else if (data[i].VendorStatus == 'Rejected' || data[i].StoreStatus == 'Cancelled')
+                                _Setbg = 'bg-red-active';
+                            //var _fullPath = data[i].AppUserImg != null && data[i].AppUserImg != '' ? data[i].FullImgPath : '/Content/dist/img/NoUser.jpg';
+
+                            var _strdata = "<div class=\"col-md-4\" id=\"div" + data[i].Id + "\">"
+                            _strdata += "<div class=\"box box-widget widget-user\">"
+                            //if (_Tab == 'tabRequested') {
+                            //    _strdata += "<div class=\"widget-user-header " + _Setbg + "\">"
+                            //    _strdata += "<h5 class=\"widget-user-desc pull-right\" style=\"margin-top: 8px;\">" + _Website + "</h5>"
+                            //    _strdata += "<h3 class=\"widget-user-username\">" + _VendorName + "</h3>"
+                            //    _strdata += "<h5 class=\"widget-user-desc\"><i class=\"fa fa-phone\"> " + data[i].MobileNo1 + "</i></h5>"
+                            //    _strdata += "</div>"
+                            //} else {
+                            _strdata += "<div class=\"widget-user-header bg-white\" style=\"background: url('" + _ThumbnaiImg.split(' ').join('%20') + "') center center;background-repeat: no-repeat;height: 175px !important;\" >"
+                            //style=\"background: url('" + _ThumbnaiImg + "') center center;
+                            //_strdata += "<h5 class=\"widget-user-desc pull-right\" style=\"margin-top: 8px;\">" + _Website + "</h5>"
+                            //_strdata += "<h3 class=\"widget-user-username\">" + _VendorName + "</h3>"
+                            //_strdata += "<h5 class=\"widget-user-desc\"><i class=\"fa fa-phone\"> " + data[i].MobileNo1 + "</i></h5>"
+                            //_strdata += "<img id=\"storeimg\" src=\"" + _ThumbnaiImg.split(' ').join('%20') + "\" class='center-block' style=\"max-height:100%;\" />"
+                            _strdata += "</div>"
+                            //}
+                            //_strdata += "<div class=\"widget-user-image\">"
+                            //_strdata += "<img class=\"img-circle\" src=\" /Content/dist/img/NoUser.jpg \" alt=\"User Image Not Available\">"
+                            //_strdata += "</div>"
+                            _strdata += "<div class=\"box-footer\" style=\"padding-top: 10px;\">"
+                            _strdata += "<div class=\"row\">"
+                            _strdata += "<div class=\"col-sm-12 \">"
+                            _strdata += "<div class=\"col-sm-6 border-right\" style=\"margin-top: 10px;\" >"
+                            _strdata += "<div class=\"description-block center-block\">"
+                            //_strdata += " <h5 class=\"description-header\">1</h5>"
+                            //_strdata += " <span class=\"description-text\">"
+                            _strdata += "<h5 class=\"widget-user-desc\" style=\"margin-top: 8px;\">" + _VendorName + "</h5>"
+                            //_strdata += " </span>"
+                            _strdata += "</div>"
+                            _strdata += "</div>"
+                            _strdata += "<div class=\"col-sm-4 border-right\" style=\"margin-top: 10px;\">"
+                            _strdata += "<div class=\"description-block\">"
+                            //_strdata += " <h5 class=\"description-header\">2</h5>"
+                            _strdata += "<h5 class=\"widget-user-desc \" style=\"margin-top: 8px;\">" + data[i].MobileNo1 + "</h5>"
+                            //_strdata += "<span class=\"badge " + _Setbg + "\" style=\"margin-top: 10px;\">" + data[i].EnqCount + "</span>"
+                            _strdata += " </div>"
+                            _strdata += "</div>"
+                            _strdata += "<div class=\"col-sm-2\" style=\"margin-top: 10px;\">"
+                            _strdata += "<div class=\"description-block\">"
+                            _strdata += "<span class=\"description-text\">"
+                            if (_Tab != "tabRequested") {
+                                //_strdata += "<h5 class=\"description-header\">35</h5>"
+
+                                if (data[i].StoreStatus == 'Pending' || data[i].StoreStatus == 'Rejected')
+                                    _strdata += "<a href=\"javascript:void(0);\" onclick =\"ChnageReqStatus(" + data[i].Id + ",'Approved', 'StoreAssociation','ReqReceived','" + moment(new Date(parseInt(_UDate))).format('DD-MMM-YYYY HH:mm:ss') + "');\" class=\"\" data-toggle=\"tooltip\" title=\"Approve\"> <i class=\"fa fa-check\" style=\"color:#00a65a;\"></i></a>"
+                                if (data[i].StoreStatus == 'Pending' || data[i].StoreStatus == 'Approved')
+                                    _strdata += "<a href=\"javascript:void(0);\" onclick = \"ChnageReqStatus(" + data[i].Id + ",'Rejected', 'StoreAssociation','ReqReceived','" + moment(new Date(parseInt(_UDate))).format('DD-MMM-YYYY HH:mm:ss') + "');\" class=\"\" data-toggle=\"tooltip\" title=\"Reject\" > <i class=\"fa fa-times\" style=\"color:#dd4b39\"></i></a>"
+                                //style=\"padding-left: 15px;\"
+                            }
+                            else {
+                                if (data[i].StoreStatus == 'Pending')
+                                    _strdata += "<a href=\"javascript:void(0);\" onclick = \"ChnageReqStatus(" + data[i].Id + ",'Cancelled', 'StoreAssociation','Requested','" + moment(new Date(parseInt(_UDate))).format('DD-MMM-YYYY HH:mm:ss') + "');\" class=\"\" data-toggle=\"tooltip\" title=\"Cancel\" > <i class=\"fa fa-times\" style=\"color:#dd4b39\"></i></a>"
+                                if (data[i].StoreStatus == 'Approved')
+                                    _strdata += "<a href=\"javascript:void(0);\" onclick = \"ChnageReqStatus(" + data[i].Id + ",'Deleted', 'StoreAssociation','Requested','" + moment(new Date(parseInt(_UDate))).format('DD-MMM-YYYY HH:mm:ss') + "');\" class=\"\" data-toggle=\"tooltip\" title=\"Delete\"> <i class=\"fa fa-times\" style=\"color:#dd4b39\"></i></a>"
+                            }
+                            _strdata += "</span>"
+                            _strdata += "</div>"
+                            _strdata += "</div>"
+                            _strdata += "</div>"
+                            _strdata += "</div>"
+                            _strdata += "</div>"
+                            _strdata += "</div>"
+                            _strdata += " </div>";
+
+                            $("#ContactContainer").append(_strdata);
+                        }
+                        pageIndex++;
+                    }
+                }
+                else {
+                    toastr["error"](response.msg);
+                }
+            },
+            beforeSend: function () {
+                $("#progress").show();
+            },
+            complete: function () {
+                $("#progress").hide();
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                toastr["error"](errorThrown);
+            }
+        });
+    }
+
+
+    function ChnageReqStatus(_Id, _Status, _CallBasck, _For, _UpdDate) {
+        
+        $.ajax({
+            type: 'post',
+            dataType: 'json',
+            cache: false,
+            url: '@Url.Action("ChangeStatus","StoreAssociation")',
+            data: { Id: _Id, Status: _Status, sFor: _For, UpdDate: _UpdDate == 'Invalid date' ? null : _UpdDate },
+            beforeSend: function () {
+                //
+                $("#ajaxLoader").show();
+            },
+            success: function (response) {
+                //
+                $("#ajaxLoader").hide();
+                if (response.Result) {
+                    //pageIndex = 0;
+                    //GetData();
+                    $("#div" + _Id).remove();
+                    toastr["success"](response.Message);
+                }
+                else {
+                    toastr["warning"](response.Message);
+                }
+            },
+            error: function (ex, th, st) {
+                //
+                $("#ajaxLoader").hide();
+                toastr["error"](st);
+            }
+        })
+    }
+
+
+</script>

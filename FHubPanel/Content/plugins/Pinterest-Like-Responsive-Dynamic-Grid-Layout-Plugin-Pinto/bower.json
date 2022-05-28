@@ -1,0 +1,25 @@
+{
+  "name": "pinto",
+  "version": "1.5.0",
+  "homepage": "https://github.com/maxlawrence/pinto",
+  "authors": [
+    "Max Lawrence <avirtum@gmail.com>"
+  ],
+  "description": "jQuery Responsive Grid Layout Plugin. It's a lightweight, responsive & customizable pinterest like grid with equal column width.",
+  "main": [
+    "jquery.pinto.js"
+  ],
+  "keywords": [
+    "javascript",
+    "jquery",
+    "plugin",
+    "grid",
+    "layout",
+    "pinterest",
+    "responsive"
+  ],
+  "dependencies": {
+    "jquery": ">1.9.0"
+  },
+  "license": "MIT"
+}

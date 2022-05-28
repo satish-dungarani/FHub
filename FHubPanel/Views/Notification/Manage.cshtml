@@ -1,0 +1,169 @@
+﻿@using FHubPanel.Models;
+@model NotificationMa
+
+<div class="content-wrapper" style="min-height: 946px;">
+
+    <section class="content">
+        @using (Html.BeginForm("Save", "Notification", FormMethod.Post, new { id = "myform", @class = "", enctype = "multipart/form-data" }))
+        {
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="box box-primary">
+                        <div class="box-body">
+
+                            <div class="col-md-12">
+                                <div class="box-header with-border box-info">
+                                    <i class="@ViewBag.Icon"></i>
+                                    <h3 class="box-title"><b>@ViewBag.MasterType</b> </h3>
+                                </div>
+                                @Html.HiddenFor(Model => Model.NotifyId)
+                                @Html.HiddenFor(Model => Model.NotifyDate)
+                                @Html.HiddenFor(Model => Model.RefVendorId)
+                                @Html.HiddenFor(Model => Model.InsUser)
+                                @Html.HiddenFor(Model => Model.InsTerminal)
+                                @Html.HiddenFor(Model => Model.InsDate)
+                                @Html.HiddenFor(Model => Model.UpdUser)
+                                @Html.HiddenFor(Model => Model.UpdTerminal)
+                                @Html.HiddenFor(Model => Model.UpdDate)
+
+                                <div class="col-md-12">
+
+
+                                    @*<div class="col-md-9">*@
+                                    <div class="row" style="margin-top:10px !important">
+
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label>Group List</label>
+                                                @Html.HiddenFor(Model => Model.RefGroupId)
+                                                @Html.DropDownList("RefGroupList", new SelectList((IEnumerable<SelectListItem>)ViewData["GroupList"], "Value", "Text"), new { @class = "form-control select2", multiple = "multiple" })
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label>Contact List</label>
+                                                @Html.HiddenFor(Model => Model.RefAppUserId)
+                                                <div id="divContactList">
+                                                    @Html.Partial("_ContactListPartial")
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label>Message</label>
+                                                @Html.TextAreaFor(Model => Model.Message, new { @class = "form-control", @maxlength = 500 })
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-3 ">
+                                            <img id="imgLogo" src="@Html.DisplayFor(Model => Model.ImgPath)" class="center-block" style="max-width:50%" />
+                                            <div class="form-group">
+                                                <input type="file" name="fileLogo" accept="image/*" id="fleLogo" class="center-block" value="" style="margin-top: 10px;" />
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="box-footer">
+                            <input id="btnSubmit" type="submit" value="Submit" class="btn btn-primary btn-flat" onclick="return Validation();" />
+                            @*<button class="btn btn-primary" onclick="@("window.location.href='" + @Url.Action("index", "setup") + "'");">Cancel</button>*@
+                            @*@Html.ActionLink("cancel", "index", new { @class = "btn btn-primary" })*@
+                            <button id="btnCancel" name="btnCancle" class="btn bg-orange margin btn-flat" onclick="window.location.href = '/Notification/Index'; return false;">Cancel</button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        }
+    </section>
+</div>
+
+<script type="text/javascript">
+    jQuery(document).ready(function () {
+        
+        if ('@TempData["Warning"]' != '') {
+            toastr["warning"]('@TempData["Warning"]');
+        }
+        else if ('@TempData["Error"]' != '') {
+            toastr["error"]('@TempData["Error"]');
+        }
+
+        $("#RefGroupList").on('select2:close', function (evt) {
+            
+            var _Grouplist = '';
+            for (var i = 0; i < $(this).select2('data').length; i++) {
+                if (i == 0)
+                    _Grouplist = $(this).select2('data')[i].id;
+                else
+                    _Grouplist += ',' + $(this).select2('data')[i].id;
+            }
+
+            $("#RefGroupId").val(_Grouplist)
+
+            $.ajax({
+                type: 'get',
+                dataType: 'html',
+                cache: false,
+                async: false,
+                url : '@Url.Action("GetContactList", "Notification")',
+                data: { GroupIdList: $("#RefGroupId").val()},
+                beforeSend: function () {
+
+                },
+                success: function (response) {
+                    $("#divContactList").html("");
+                    $("#divContactList").html(response);
+                },
+                error: function (ex, st, th) {
+                    toastr["error"](th);
+                }
+            });
+        });
+
+        $("#fleLogo").change(function () {
+            
+            imgDisplay(this);
+        });
+    });
+
+    function imgDisplay(input) {
+        
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                $("#imgLogo").attr('src', e.target.result);
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    function Validation() {
+
+        
+
+        var _GroupId = $("#RefGroupList");
+        var _AUId = $("#RefContactList");
+        if ((_GroupId.val() == '' || _GroupId == undefined) && (_AUId.val() == '' || _AUId == undefined)) {
+            _GroupId.focus();
+            toastr["warning"]('Group or Contact not left blank!');
+            return false;
+        }
+
+        var _ContactList = '';
+        for (var i = 0; i < $("#RefContactList").select2('data').length; i++) {
+            if (i == 0)
+                _ContactList = $("#RefContactList").select2('data')[i].id;
+            else
+                _ContactList += ',' + $("#RefContactList").select2('data')[i].id;
+        }
+        $("#RefAppUserId").val(_ContactList)
+
+        return true;
+    }
+
+</script>

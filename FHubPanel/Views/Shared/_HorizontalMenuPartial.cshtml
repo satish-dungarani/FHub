@@ -1,0 +1,91 @@
+﻿@model List<DataAnalyst.Models.MenuMasterModel>
+
+
+<ul class="nav navbar-nav">
+
+    @foreach (var MainMenu in Model)
+    {
+        if (MainMenu.ParentManuId == null)
+        {
+            var Link = "/" + MainMenu.ConstrollerName + "/" + MainMenu.ActionName;
+            var _ClassName = "";
+            var _AddSubMenu = "";
+            if (MainMenu.ConstrollerName == null || MainMenu.ActionName == null)
+            {
+                Link = "#";
+                _ClassName = "dropdown";
+                foreach (var submenu in Model)
+                {
+                    if (MainMenu.Id == submenu.ParentManuId)
+                    {
+                        if (submenu.MenuPath == null)
+                        {
+                            _AddSubMenu += "<li><a href=\"/" + submenu.ConstrollerName + "/" + submenu.ActionName + "\"><i class=\"fa fa-circle-o text-aqua\"></i> " + submenu.MenuDes + "</a></li>\n\n";
+                        }
+                        else
+                        {
+                            _AddSubMenu += "<li><a href=\"" + Link + "\" onclick=\"return " + submenu.MenuPath + "\"><i class=\"fa fa-circle-o text-aqua\"></i> " + submenu.MenuDes + "</a></li>\n\n";
+                        }
+
+                    }
+                }
+            }
+
+            if (_ClassName != "")
+            {
+                <li id="@MainMenu.Id" class="@_ClassName" >
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        @MainMenu.MenuDes
+                        <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu" role="menu">
+                        @Html.Raw(_AddSubMenu)
+                    </ul>
+                </li>
+            }
+            else
+            {
+                <li id="@MainMenu.Id" class="mainmn" >
+                    <a href="@Link">
+                        <span>@MainMenu.MenuDes</span>
+                    </a>
+                </li>
+            }
+        }
+    }
+</ul>
+
+
+
+
+
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        //
+        
+
+        //$(".mainmn").on("click", function () {
+        //    
+        //    var Menuid = localStorage.getItem("menuid");
+        //    if (Menuid != undefined)
+        //        $("#" + Menuid).removeClass("active");
+        //    localStorage.setItem("menuid", $(".mainmn").attr('id'));
+        //});
+
+        //var Menuid = localStorage.getItem("menuid");
+        //if (Menuid != '')
+        //    $("#" + Menuid).addClass("active");
+
+        //
+        //$('ul li').click(function () {
+        //    
+        //    $('ul li').removeClass('active');
+        //    $(this).closest('li').addClass('active');
+        //});
+
+    });
+
+
+</script>

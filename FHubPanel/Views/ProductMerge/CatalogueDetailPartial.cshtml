@@ -1,0 +1,141 @@
+﻿@using FHubPanel.Models;
+@model CatalogModel
+
+
+<div class="col-md-12 box-header with-border">
+    <div class="col-md-3 ">
+        <div class="row" style="margin-top:10px !important">
+            <img id="imgLogo" src="@Html.DisplayFor(Model => Model.FullImgPath)" class="center-block" style="max-width:50%" />
+        </div>
+    </div>
+    <div class="col-md-9">
+        <div class="row" style="margin-top:10px !important">
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label>Catalogue Code <span style="color:red">*</span></label>
+                    @Html.TextBoxFor(Model => Model.CatCode, new { @class = "form-control", @maxlength = 100 })
+                </div>
+            </div>
+            <div class="col-md-8">
+                <div class="form-group">
+                    <label>Catalogue Name <span style="color:red">*</span></label>
+                    @Html.TextBoxFor(Model => Model.CatName, new { @class = "form-control", @maxlength = 200 })
+                </div>
+            </div>
+
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label>Catalogue Description</label>
+                    @Html.TextAreaFor(Model => Model.CatDescription, new { @class = "form-control", @maxlength = 200 })
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label>Catalogue Launch Date</label>
+                    @Html.TextBoxFor(Model => Model.CatLaunchDate, "{0:dd/MMM/yyyy}", new { @class = "form-control" })
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+
+                    @Html.CheckBoxFor(Model => Model.IsFullset, new { @class = "minimal" })
+                    <label>Is Fullset</label>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="col-md-12">
+    <div class="box-header with-border">
+        <h3 class="box-title">Products Detail</h3>
+        <input type="button" name="btnQRPrice" id="btnQRPrice" value="Quick Revise Price" class="btn btn-primary btn-flat pull-right" onclick="$('#divquickchange').toggle();" />
+        <br />
+    </div>
+    <div class="row" style=" margin-top: 5px;">
+        <div class="col-md-12" id="divquickchange" style="display:none;">
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label>Retail Price </label>
+                    @Html.TextBox("RPrice", null, new { @class = "form-control" })
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label>Wholesale Price </label>
+                    @Html.TextBox("WSPrice", null, new { @class = "form-control" })
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label>Percentage %</label>
+                    @Html.RadioButton("PriceRatio", "Percent", true, new { @class = "minimal" })
+                    <label>Money ₹</label>
+                    @Html.RadioButton("PriceRatio", "Money", new { @class = "minimal" })
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="form-group">
+                    <input type="button" name="btnIncrease" id="btnIncrease" value="Add" class="btn btn-primary btn-flat" style="margin-top: 20px;" onclick="RevisePrice();" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="" id="divProductList" style=" margin-top: 20px !important;">
+        @Html.Partial("ProductListPartial")
+        @*@Html.RenderPartial("ProductListPartial", @Model);*@
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $("#RPrice").val(0);
+        $("#WSPrice").val(0);
+
+        $("#CatName").on('change', function () {
+            CatalogueDuplicationCheck($("#CatName"), 'Catalogue Name')
+        });
+
+        $("#CatCode").on('change', function () {
+            CatalogueDuplicationCheck($("#CatCode"), 'Catalogue Code')
+        });
+
+        
+        $("#WSPrice").val(0);
+    });
+
+    function RevisePrice() {
+        if ($("#RPrice").val() == '' || $("#RPrice") == undefined || parseInt($("#RPrice").val()) < 0)
+        {
+            toastr["warning"]('Please set Retail price or ratio graterthan or equal to 0!');
+            $("#RPrice").focus();
+            return false;
+        }
+        if ($("#WSPrice").val() == '' || $("#WSPrice") == undefined || parseInt($("#WSPrice").val()) < 0) {
+            toastr["warning"]('Please set Wholesale price or ratio graterthan or equal to 0.');
+            $("#WSPrice").focus();
+            return false;
+        }
+
+        var _WP, _RP;
+        for (var i = 0; i < $("#tblProdMaster tbody tr").length; i++) {
+            if ($("#PriceRatio:checked").val() == 'Percent') {
+                _RP = (parseFloat($("#ProductList_" + i + "__RetailPrice").val()) * parseFloat($("#RPrice").val())) / 100;
+                $("#ProductList_" + i + "__RetailPrice").val(parseFloat($("#ProductList_" + i + "__RetailPrice").val()) + _RP);
+                _WP = (parseFloat($("#ProductList_" + i + "__WholeSalePrice").val()) * parseFloat($("#WSPrice").val())) / 100;
+                $("#ProductList_" + i + "__WholeSalePrice").val(parseFloat($("#ProductList_" + i + "__WholeSalePrice").val()) + _WP);
+            }
+            else {
+                $("#ProductList_" + i + "__RetailPrice").val(parseFloat($("#ProductList_" + i + "__RetailPrice").val()) + parseFloat($("#RPrice").val()))
+                $("#ProductList_" + i + "__WholeSalePrice").val(parseFloat($("#ProductList_" + i + "__WholeSalePrice").val()) + parseFloat($("#WSPrice").val()))
+            }
+        }
+        $("#RPrice").val(0);
+        $("#WSPrice").val(0);
+        $("#divquickchange").hide();
+    }
+
+</script>
+

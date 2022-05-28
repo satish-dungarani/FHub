@@ -1,0 +1,192 @@
+﻿@using FHubPanel.Models;
+@model List<MenuMasterModel>
+
+<aside class="main-sidebar">
+    <!-- sidebar: style can be found in sidebar.less -->
+    <section class="sidebar">
+        @*@using (Ajax.BeginForm("","", new AjaxOptions{HttpMethod="Get", OnSuccess= "", OnFailure=""},new {@class="sidebar-form"}))
+            {
+                <div class="input-group">
+                    <input type="text" name="q" id="txtsearch" class="form-control" placeholder="Search...">
+                    <span class="input-group-btn">
+                        <button type="submit" name="search" id="search-btn" class="btn btn-flat" onclick="GetConsumer();"><i class="fa fa-search"></i></button>
+                    </span>
+                </div>
+            }*@
+        <ul class="sidebar-menu">
+            @*<li class="header">MENUS</li>*@
+            @foreach (var MainMenu in Model)
+            {
+                if (MainMenu.ParentManuId == null)
+                {
+                    var Link = "/" + MainMenu.ConstrollerName + "/" + MainMenu.ActionName;
+                    var DashboardLink = "";
+                    var _LinkClass = "";
+                    var _ClassName = "";
+                    var _SetActive = "";
+                    var _RemoveActive = "";
+                    if (MainMenu.MenuName == "Dashboard")
+                    {
+                        _ClassName = "active";
+                        DashboardLink = Link;
+                    }
+                    else if(MainMenu.MenuName == "Connect Store")
+                    {
+                        _LinkClass = "cnst bg-green";
+                        _SetActive = "$('.cnst').addClass('bg-green-active');";
+                        _RemoveActive = "$('.cnst').removeClass('bg-green-active');";
+                    }
+                    
+                    var _AddSubMenu = "";
+                    var _MMId = "MM" + MainMenu.Id;
+                    var _SMId = "";
+                    if (MainMenu.ConstrollerName == null || MainMenu.ActionName == null)
+                    {
+                        Link = "javascript:void(0);";
+                        //_ClassName = "treeview active";
+                        foreach (var submenu in Model)
+                        {
+                            if (MainMenu.Id == submenu.ParentManuId)
+                            {
+                                _ClassName = "treeview";
+                                _MMId = "MM" + MainMenu.Id;
+                                _SMId = "SM" + submenu.Id;
+                                if (submenu.MenuPath == null)
+                                {
+                                    _AddSubMenu += "<li class=\"submenu\" id=\"" + _SMId + "\"><a href=\"/" + submenu.ConstrollerName + "/" + submenu.ActionName + "\" onclick=\"setactivemenu('" + _MMId + "','" + _SMId + "');\"><i class=\"" + submenu.MenuIcon + "\"></i> " + submenu.MenuDes + "</a></li>\n\n";
+                                }
+                                else
+                                {
+                                    _AddSubMenu += "<li class=\"submenu\" id=\"" + _SMId + "\"><a href=\"" + Link + "\" onclick=\"return " + submenu.MenuPath + "\" ><i class=\"" + submenu.MenuIcon + "\"></i> " + submenu.MenuDes + "</a></li>\n\n";
+                                }
+
+                            }
+                        }
+                    }
+                    <li id="@_MMId" class="mainmenu @_ClassName">
+                        <a href="@Link" id="a@_MMId" onclick="setactivemenu('@_MMId','@DashboardLink');" class="@_LinkClass" onmouseover="@_SetActive" onmouseout="@_RemoveActive">
+                            <i class="@MainMenu.MenuIcon"></i> <span>@MainMenu.MenuDes</span>
+                            @if (_ClassName == "treeview")
+                            {
+                                <i class="fa fa-angle-left pull-right"></i>
+                            }
+                        </a>
+                        @if (_ClassName != "")
+                        {
+                            <ul class="treeview-menu">
+                                @Html.Raw(_AddSubMenu)
+                            </ul>
+                        }
+                    </li>
+                }
+            }
+        </ul>
+
+        <!-- /.search form -->
+        <!-- sidebar menu: : style can be found in sidebar.less -->
+        @*<ul class="sidebar-menu">
+            <li class="header">MENUS</li>
+            <li class="treeview" id="1" onclick="LiActive();">
+                <a href="#">
+                    <i class="fa fa-edit"></i> <span>Setup</span> <i class="fa fa-angle-left pull-right"></i>
+                </a>
+                <ul class="treeview-menu">
+                    <li id="Setup1"><a href="#" onclick="return editSessionMasterID('1')"><i class="fa fa-circle-o text-red"></i> Camp</a></li>
+                    <li id="Setup2"><a href="#" onclick="return editSessionMasterID('2')"><i class="fa fa-circle-o text-yellow"></i> Ward</a></li>
+                    <li id="Setup3"><a href="#" onclick="return editSessionMasterID('3')"><i class="fa fa-circle-o text-aqua"></i> Zone</a></li>
+                    <li id="Setup4"><a href="#" onclick="return editSessionMasterID('4')"><i class="fa fa-circle-o text-maroon"></i> Meter Size</a></li>
+                    <li id="Setup5"><a href="#" onclick="return editSessionMasterID('5')"><i class="fa fa-circle-o text-blue"></i> Meter Type</a></li>
+                    <li id="Setup6"><a href="#" onclick="return editSessionMasterID('6')"><i class="fa fa-circle-o text-green"></i> Meter Status</a></li>
+                    <li id="Setup7"><a href="#" onclick="return editSessionMasterID('7')"><i class="fa fa-circle-o text-red"></i> Supply Type</a></li>
+                    <li id="Setup8"><a href="#" onclick="return editSessionMasterID('8')"><i class="fa fa-circle-o text-yellow"></i> Supply Category</a></li>
+                    <li id="Setup9"><a href="#" onclick="return editSessionMasterID('9')"><i class="fa fa-circle-o text-aqua"></i> DMA</a></li>
+                    <li id="Setup10"><a href="#" onclick="return editSessionMasterID('10')"><i class="fa fa-circle-o text-maroon"></i> Bank</a></li>
+                    <li id="Setup11"><a href="#" onclick="return editSessionMasterID('11')"><i class="fa fa-circle-o text-blue"></i> Collection Center</a></li>
+                    <li id="Setup12"><a href="#" onclick="return editSessionMasterID('12')"><i class="fa fa-circle-o text-green"></i> Payment Type</a></li>
+                    <li id="Setup13"><a href="#" onclick="return editSessionMasterID('13')"><i class="fa fa-circle-o text-red"></i> Construction Type</a></li>
+                    <li id="Setup14"><a href="#" onclick="return editSessionMasterID('14')"><i class="fa fa-circle-o text-yellow"></i> Reason Type</a></li>
+                    <li id="Setup15"><a href="#" onclick="return editSessionMasterID('15')"><i class="fa fa-circle-o text-aqua"></i> User Type</a></li>
+                    <li id="Setup16"><a href="#" onclick="return editSessionMasterID('16')"><i class="fa fa-circle-o text-maroon"></i> User Role</a></li>
+                    <li id="Setup17"><a href="/BoardRent/Index"><i class="fa fa-circle-o text-blue"></i> Board Rent</a></li>
+                    <li id="Setup18"><a href="/Reason/Index"><i class="fa fa-circle-o text-green"></i> Reason</a></li>
+                </ul>
+            </li>*@
+        @*<li class="treeview">
+                <a href="#">
+                    <i class="fa fa-files-o"></i>
+                    <span>Layout Options</span>
+                    <span class="label label-primary pull-right">4</span>
+                </a>
+                <ul class="treeview-menu">
+                    <li><a href="pages/layout/top-nav.html"><i class="fa fa-circle-o"></i> Top Navigation</a></li>
+                    <li><a href="pages/layout/boxed.html"><i class="fa fa-circle-o"></i> Boxed</a></li>
+                    <li><a href="pages/layout/fixed.html"><i class="fa fa-circle-o"></i> Fixed</a></li>
+                    <li><a href="pages/layout/collapsed-sidebar.html"><i class="fa fa-circle-o"></i> Collapsed Sidebar</a></li>
+                </ul>
+            </li>*@
+        @*@Html.ActionLink("User Master", "Index", "User")*@
+        @*<li id="2" onclick="LiActive();" class="">
+                <a href="/User/Index">
+                    <i class="fa fa-users"></i> <span>Users</span>
+                </a>
+            </li>
+            <li id="3" onclick="LiActive();" class="">
+                <a href="/Consumer/Index">
+                    <i class="fa fa-th"></i> <span>Consumer Master</span>
+                </a>
+            </li>
+            <li id="4" onclick="LiActive();" class="">
+                <a href="/MeterMinCharge/Index">
+                    <i class="fa fa-tachometer"></i> <span>Meter Charge</span>
+                </a>
+            </li>
+            <li id="5" onclick="LiActive();" class="">
+                <a href="/ConsumerRate/Index">
+                    <i class="fa fa-inr"></i> <span>Consume Rate</span>
+                </a>
+            </li>*@
+
+
+        @*<li class="header">LABELS</li>
+            <li><a href="#"><i class="fa fa-circle-o text-red"></i> <span>Important</span></a></li>
+            <li><a href="#"><i class="fa fa-circle-o text-yellow"></i> <span>Warning</span></a></li>
+            <li><a href="#"><i class="fa fa-circle-o text-aqua"></i> <span>Information</span></a></li>*@
+        @*</ul>*@
+
+    </section>
+</aside>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        //
+        //$('ul li').click(function () {
+        //    
+        //    $('ul li').removeClass('active');
+        //    $(this).closest('li').addClass('active');
+        //});
+
+        var MMId = localStorage.getItem('MMId');
+        var SMId = localStorage.getItem('SMId');
+
+        if (MMId != '' && SMId != undefined && SMId != '') {
+            $(".mainmenu").removeClass('active');
+            $(".submenu").removeClass('active');
+
+            $("#" + MMId).addClass('active');
+            if (SMId != '' && SMId != null)
+                $("#" + SMId).addClass('active');
+
+            localStorage.removeItem('MMId');
+            localStorage.removeItem('SMId');
+        }
+    });
+
+    function setactivemenu(MMId, SMId) {
+        
+        localStorage.setItem('MMId', MMId);
+        if (SMId != '/Home/Index')
+            localStorage.setItem('SMId', SMId);
+        else
+            window.location.href = SMId;
+    }
+</script>

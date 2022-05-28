@@ -1,0 +1,173 @@
+﻿@using FHubPanel.Models;
+@model List<sp_EnquiryList_SelectWhere_Result>
+
+<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+    <i class="fa fa-envelope-o"></i>
+    @if (@Model.Count > 0)
+    {
+        <span class="label label-info">@Model.Count</span>
+    }
+</a>
+<ul class="dropdown-menu">
+    <li class="header">You have @Model.Count enquiry</li>
+    <li>
+        <!-- inner menu: contains the actual data -->
+        <ul class="menu">
+            @for (int i = 0; i < @Model.Count; i++)
+            {
+                <li>
+                    <a href="javascript:void(0);" onclick="FunReply(@Model[i].Id, '/Home/Index');">
+                        <h5>
+                            <i class="fa fa-envelope text-aqua"></i> 
+                            <b>@Model[i].CompanyName</b>
+                        </h5>
+                        <p>
+                            @*<button id="btnCancel" class="btn btn-xs btn-danger btn-flat pull-right" onclick="CancelRemark(@Model[i].Id, '/Home/Index');"><i class="fa fa-close"></i></button>*@
+                            @Model[i].Remark
+                            <small class="pull-right"><i class="fa fa-clock-o"></i>@Model[i].EnquiryDate </small>
+                        </p>
+                        <div class="pull-right">
+                            
+                        </div>
+                    </a>
+                </li>
+            }
+        </ul>
+    </li>
+    <li class="footer"><a href="/Enquiry/Index">View all</a></li>
+</ul>
+
+
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        @*if ('@TempData["Success"]' != null && '@TempData["Success"]' != '') {
+            toastr["success"]('@TempData["Success"]');
+        }*@
+    })
+
+    function FunReply(Id, RedirectUrl) {
+        
+        if (Id != null && Id != 0)
+            $.ajax({
+                type: 'get',
+                dataType: 'json',
+                cache: false,
+                url: '@Url.Action("GetEnquiryDetail", "Base")',
+                data: { EnquiryId: Id },
+                beforeSend: function () {
+
+                },
+                success: function (response) {
+                    if (response.Result) {
+                        if (response.Data != null) {
+                            var _Data = response.Data;
+                            $("#EnquiryId").val(Id);
+                            $("#RedirectUrl").val(RedirectUrl);
+                            $("#lblAUName").html(_Data.AUName);
+                            $("#lblCompanyName").html(_Data.CompanyName);
+                            $("#lblProdCode").html(_Data.ProdCode);
+                            $("#lblProdName").html(_Data.ProdName);
+                            $("#lblCatCode").html(_Data.CatCode);
+                            $("#lblCatName").html(_Data.CatName);
+                            $("#Message").val(_Data.Remark);
+                            if (_Data.ProdImg != null)
+                                $("#enquiryimg").prop('src', _Data.ThumbnailImgPath);
+                            else
+                                $("#enquiryimg").prop('src', '/Content/dist/img/noimageavailable.png');
+                            $("#divEnquiryReply").modal();
+                        }
+                    }
+                    else
+                        toastr["warning"]('Server error. Record not found!');
+                },
+                error: function (ex, st, th) {
+                    toastr["error"](th);
+                }
+
+            });
+    }
+
+    function Reply() {
+        var _RepMsg = $("#RepMessage");
+        if (_RepMsg.val() == '' || _RepMsg == undefined) {
+            toastr["warning"]('You can not send reply blank!')
+            _RepMsg.focus();
+            return false;
+        }
+
+        
+        $.ajax({
+            type: 'get',
+            dataType: 'json',
+            cache: false,
+            url: '@Url.Action("Send", "Enquiry")',
+            data: { EnqId: $("#EnquiryId").val(), RepMessage: $("#RepMessage").val() },
+            beforeSend: function () {
+                
+            },
+            success: function (response) {
+                
+                if (response.Result) {
+                    var _RedUrl = $("#RedirectUrl").val();
+                    window.location.href = _RedUrl;
+
+                    $("#divEnquiryReplay").modal('hide');
+                }
+                else
+                    toastr["warning"]('Reply fail to send!');
+            },
+            error: function (ex, st, th) {
+                
+                toastr["error"](th);
+            }
+
+        });
+    }
+
+    function CancelRemark(_Id, RedUrl) {
+        if (_Id != undefined && _Id != '') {
+            bootbox.confirm({
+                size: 'small',
+                message: "Are you sure cancel reply message?",
+                buttons: {
+                    'confirm': {
+                        label: 'Yes',
+                        className: 'btn-danger'
+                    },
+                    'cancel': {
+                        label: 'No',
+                        className: 'btn-default'
+                    }
+
+                },
+                callback: function (result) {
+                    if (result) {
+                        $.ajax({
+                            type: 'get',
+                            dataType: 'json',
+                            cache: false,
+                            url: '@Url.Action("CancelReply", "Enquiry")',
+                            data: { EnqId: _Id },
+                            beforeSend: function () {
+
+                            },
+                            success: function (response) {
+                                if (response.Result)
+                                    window.location.href = RedUrl;
+                                else
+                                    toastr["error"](response.Message);
+                            },
+                            error: function (ex, st, th) {
+                                toastr["error"](th);
+                            }
+                        })
+                    }
+                }
+            })
+        }
+        else
+            toastr["warning"]('No Cancel message.');
+    }
+</script>

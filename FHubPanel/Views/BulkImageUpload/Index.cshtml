@@ -1,0 +1,219 @@
+﻿@using FHubPanel.Models;
+@model List<VendorSliderModel>
+
+
+
+<div class="content-wrapper" style="min-height: 946px;">
+
+    <section class="content manageGrid">
+
+        @*<div class="row">
+            <div class=" col-md-12">
+                <div class="callout callout-warning">
+                    <h4>I am a warning callout!</h4>
+                    <p>This is a yellow callout.</p>
+                </div>
+            </div>
+        </div>*@
+
+        <div class="row">
+            <div class=" col-md-12">
+                <div class="box box-primary">
+                    <div class="box-header">
+                        <div class="box-header with-border" style="cursor: move;">
+                            <i class="fa fa-dashboard"></i>
+                            <h3 class="box-title"><b>@ViewBag.MasterType</b></h3>
+                            @*<div class="box-tools pull-right">
+                                    <button id="btnCreateNew" name="btnCreateNew" class="btn btn-block btn-primary btn-flat" onclick="window.location.href = '/VendorSlider/Manage'; "> Create New</button>
+                                </div>*@
+                        </div>
+
+                        <div class="box-body">
+
+                            <div class="row">
+
+                                <div class="col-md-12">
+                                    @if (ViewBag.ImgType == "Products")
+                                    {
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Select Your File Name Pattern</label>
+                                                @Html.DropDownList("FileNamePattern", new List<SelectListItem>
+                                       {
+                                           new SelectListItem { Text = "Product", Value = "P"},
+                                           new SelectListItem { Text = "Catalogue + Product", Value = "CP"},
+                                           new SelectListItem { Text = "Product + Catalogue", Value = "PC"}
+                                       }, new { @class = "form-control" })
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <label>Select Separater</label>
+                                                @Html.DropDownList("Separater", new List<SelectListItem>
+                                       {
+                                           new SelectListItem { Text = "None", Value = "None"},
+                                           new SelectListItem { Text = "- (Dash)", Value = "-"},
+                                           new SelectListItem { Text = "_ (UnderScore)", Value = "_"}
+                                       }, new { @class = "form-control" })
+                                            </div>
+                                        </div>
+                                    }
+                                    <div class="col-md-2 pull-right">
+                                        <div class="form-group">
+                                            <br />
+                                            <input type="button" name="ProdImgUpload" value="Upload" id="ImgUpload" class="btn btn-flat bg-blue-gradient" style="margin-top: 4px !important;" />
+                                            <input type="button" name="ProdImgClear" value="Clear" id="ImgClear" class="btn btn-flat bg-red-gradient" style="margin-top: 4px !important;" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            @using (Ajax.BeginForm("Save", "BulkImageUpload", new AjaxOptions { HttpMethod = "POST", OnBegin = "UploadBegin", OnComplete = "UploadComplete", OnFailure = "UploadFail", OnSuccess = "UploadSuccess" }, new { @class = "dropzone", id = "dropzoneJsForm", enctype = "multipart/form-data" }))
+                            {
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        @Html.Hidden("ImageUploadType")
+                                        @Html.Hidden("FNPattern")
+                                        @Html.Hidden("FNSeparater")
+                                        <div class="fallback">
+                                            <input name="file" type="file" multiple />
+                                            @*<input type="submit" name="ProdImgUpload" value="Upload" id="ImgUpload" class="btn btn-flat btn-file" style="margin-top: 4px !important;" />*@
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+
+                            <div class="" id="ErrorList" style="margin-top: 25px !important;">
+                                @Html.Partial("DisplayErrorListPartial", new List<ImageUplodError>())
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        @*<div class="box-body" id="container">
+
+            </div>*@
+
+        @*<div class="col-lg-12 text-center">
+                <div id="progress" style="display:none">
+                    <img src="~/Content/dist/img/ajax-loader.gif" width="50" height="50" />
+                </div>
+            </div>*@
+
+    </section>
+</div>
+
+<script type="text/javascript">
+    var pageSize = 6;
+    var pageIndex = 0;
+    var Scroll = 0;
+    var i = 0;
+    var scroll_flag = 1;
+    jQuery(document).ready(function () {
+
+        if ('@TempData["Success"]' != '')
+            toastr["success"]('@TempData["Success"]');
+        else if ('@TempData["Error"]' != '')
+            toastr["error"]('@TempData["Error"]');
+
+        $("#ImageUploadType").val('@ViewBag.ImgType');
+
+        Dropzone.options.dropzoneJsForm = {
+
+            //prevents Dropzone from uploading dropped files immediately
+            autoProcessQueue: false,
+            maxFilesize: 1,
+            parallelUploads: 100,
+            init: function () {
+                var submitButton = document.querySelector("#ImgUpload");
+                var myDropzone = this; //closure
+
+                submitButton.addEventListener("click", function () {
+                    
+                    if ($("#ImageUploadType").val() == "Products") {
+                        $("#FNPattern").val($("#FileNamePattern").val());
+                        $("#FNSeparater").val($("#Separater").val());
+                    }
+                    //tell Dropzone to process all queued files
+                    myDropzone.processQueue();
+                });
+
+                document.querySelector("#ImgClear").addEventListener('click', function () {
+                    
+                    myDropzone.removeAllFiles();
+                });
+
+                this.on("success", function (file, Response) {
+                    //console.log("success");
+                    //console.log(file);
+                    //console.log(resp);
+                    $("#ErrorList").html("");
+                    $("#ErrorList").html(Response);
+                });
+
+                this.on("queuecomplete", function (file, Response) {
+                    
+                    $.ajax({
+                        type: 'get',
+                        dataType: 'json',
+                        cache: true,
+                        url: '@Url.Action("ClearErrorList", "BulkImageUpload")',
+                        data: {},
+                        beforeSend: function () {
+                            
+                        },
+                        success: function (response) {
+                            
+                            if (response > 0)
+                                toastr["success"](response + ' Products Image successfully uploaded.');
+                        },
+                        error: function (ex, th, st) {
+                            toastr["error"](th);
+                        }
+
+
+                    })
+                    //console.log("queuecomplete");
+                    //console.log(file);
+                    //console.log(Response);
+                    //$("#ErrorList").html("");
+                    //$("#ErrorList").html(Response);
+                });
+            }
+        };
+
+        //var myDropzone = new Dropzone(document.body, { // Make the whole body a dropzone
+        //    //url: "/target-url", // Set the url
+        //    parallelUploads: 20,
+        //    autoQueue: false, // Make sure the files aren't queued until manually added
+        //    clickable: ".fileinput-button" // Define the element that should be used as click trigger to select files.
+        //});
+    });
+
+    function UploadBegin() {
+        // Before server side call
+        //console.log($("#FileNamePattern").val());
+        $("#FNPattern").val($("#FileNamePattern").val());
+        $("#FNSeparater").val($("#Separater").val());
+    }
+
+    function UploadComplete() {
+        // after complete call
+    }
+
+    function UploadFail() {
+        // if server operation fail
+    }
+
+    function UploadSuccess(Response) {
+        // if operation success fully execute
+        $("#ErrorList").html("");
+        $("#ErrorList").html(Response);
+    }
+</script>

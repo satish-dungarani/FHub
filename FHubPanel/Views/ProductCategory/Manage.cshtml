@@ -1,0 +1,186 @@
+﻿@model FHubPanel.Models.ProductCategoryModel
+
+@{
+    //ViewBag.Title = "Manage";
+}
+
+
+<div class="content-wrapper" style="min-height: 946px;">
+    @*<section class="content-header">
+            <h1>
+                <b>@ViewBag.MasterType</b>
+                <small></small>
+            </h1>
+            <ol class="breadcrumb">
+                <li><a href="/Home/Index"><i class="fa fa-dashboard"></i>Home</a></li>
+                <li><a href="/Setup/Index">Setup</a></li>
+                <li class="active">Manage</li>
+            </ol>
+        </section>*@
+
+
+    <section class="content">
+        @using (Html.BeginForm("Save", "ProductCategory", FormMethod.Post, new { id = "myform", @class = "", enctype = "multipart/form-data" }))
+        {
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="box box-primary">
+                        <div class="box-body">
+
+                            <div class="col-md-12">
+                                <div class="box-header with-border box-info">
+                                    <i class="@ViewBag.Icon"></i>
+                                    <h3 class="box-title"><b>@ViewBag.MasterType</b> </h3>
+                                </div>
+                                @Html.HiddenFor(Model => Model.PCId)
+                                @Html.HiddenFor(Model => Model.ProdCategoryImg)
+                                @Html.HiddenFor(Model => Model.InsUser)
+                                @Html.HiddenFor(Model => Model.InsTerminal)
+                                @Html.HiddenFor(Model => Model.InsDate)
+
+                                <div class="col-lg-12">
+                                    <div class="col-md-3">
+                                        <div class="row" style="margin-top:10px !important">
+                                            <img id="imgLogo" src="@Html.DisplayFor(Model => Model.ImgFullPath)" class="center-block" style="max-width:50%" />
+                                            <div class="form-group">
+                                                @*<label>Logo</label>*@
+                                                @*~/Content/dist/img/default-50x50.gif*@
+
+                                                <input type="file" name="fileLogo" id="fleLogo" class="center-block" value="" style="margin-top: 10px;" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <div class="row" style="margin-top:10px !important">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label>Category Name <span style="color:red">*</span></label>
+                                                    @Html.TextBoxFor(Model => Model.ProdCategoryName, new { @class = "form-control", @maxlength = 100 })
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label>Category Description</label>
+                                                    @Html.TextAreaFor(Model => Model.ProdCategoryDesc, new { @class = "form-control", @maxlength = 200 })
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label>Category List</label>
+                                                    @Html.DropDownList("RefPCId", new SelectList((IEnumerable<SelectListItem>)ViewData["CategoryList"], "Value", "Text"), "Primary Category", new { @class = "form-control" })
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <div class="form-group">
+                                                    <label>Order</label>
+                                                    @Html.TextBoxFor(Model => Model.Ord, new { @class = "form-control" })
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="box-footer">
+                            <input id="btnSubmit" type="submit" value="Submit" class="btn btn-primary btn-flat" onclick="return Validation();" />
+                            @*<button class="btn btn-primary" onclick="@("window.location.href='" + @Url.Action("index", "setup") + "'");">Cancel</button>*@
+                            @*@Html.ActionLink("cancel", "index", new { @class = "btn btn-primary" })*@
+                            <button id="btnCancel" name="btnCancle" class="btn bg-orange margin btn-flat" onclick="window.location.href = '/ProductCategory/Index'; return false;">Cancel</button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        }
+    </section>
+</div>
+
+<script type="text/javascript">
+    jQuery(document).ready(function () {
+
+        if ('@TempData["Warning"]' != '') {
+            toastr["warning"]('@TempData["Warning"]');
+        }
+        else if ('@TempData["Error"]' != '') {
+            toastr["error"]('@TempData["Error"]');
+        }
+
+        $("#fleLogo").change(function () {
+
+            imgDisplay(this);
+        });
+    });
+
+    function imgDisplay(input) {
+
+        if (input.files && input.files[0]) {
+            if ((input.files[0].size / 1024) <= 1024) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $("#imgLogo").attr('src', e.target.result);
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+            else {
+                $("#fleLogo").val('');
+                toastr["warning"]('Image size must be lessthan 1 MB.');
+            }
+        }
+    }
+
+    function Validation() {
+
+
+
+        var _PCName = $("#ProdCategoryName");
+
+        if (_PCName.val() == '' || _PCName == undefined) {
+            _PCName.focus();
+            toastr["warning"]('Name can not left blank!');
+            return false;
+        }
+
+        if ($("#PCId").val() == 0) {
+            var _flg = "true";
+
+            $.ajax({
+                type: "POST",
+                async: false,
+                dataType: 'json',
+                //contentType: "application/json; charset=utf-8",
+                url: '@Url.Action("isValueExists", "ProductCategory")',
+                data: { pProductCategoryName: _PCName.val() },
+                dataType: "json",
+                beforeSend: function () {
+
+                    $("#ajaxLoader").show();
+                },
+                success: function (data) {
+
+
+                    if (data) {
+                        toastr["warning"]('Duplicate Value!');
+                        _flg = "false";
+                    }
+                    $("#ajaxLoader").hide();
+                },
+                error: function (result, st, er) {
+
+                    toastr["error"](result);
+                    $("#ajaxLoader").hide();
+                },
+            });
+            if (_flg == "true") {
+
+                return true;
+            }
+            else {
+
+                return false;
+            }
+        }
+    }
+
+</script>

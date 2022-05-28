@@ -1,0 +1,344 @@
+﻿@using FHubPanel.Models;
+@model CatalogModel
+
+<div class="content-wrapper" style="min-height: 946px;">
+
+    <section class="content manageGrid">
+
+        <div class="box box-primary">
+            <div class="box-header">
+                <div class="box-header with-border" style="cursor: move;">
+                    <i class="@ViewBag.Icon"></i>
+                    <h3 class="box-title"><b>@ViewBag.MasterType</b></h3>
+                    <div class="box-tools pull-right">
+
+                    </div>
+                </div>
+            </div>
+            <div class="box-body">
+                @using (Ajax.BeginForm("Save", "ProductMerge", null, new AjaxOptions { HttpMethod = "POST", OnBegin = "FunBegin", OnSuccess = "FunSuccess", OnFailure = "FunFailure" }, new { @class = "", id = "frmproductmerge" }))
+                {
+                    <div class="row">
+                        <div class="col-md-12 box-header with-border">
+
+                            <div class="col-md-3">
+                                <label>Store List</label>
+                                @Html.DropDownList("RefVendorId", new SelectList((IEnumerable<SelectListItem>)ViewData["VendorList"], "Value", "Text"), "---Select Store----", new { @class = "form-control select2" })
+                            </div>
+                            <div class="col-md-3">
+                                <label>Catalogue List</label>
+                                <div class="" id="divCatalogueList">
+                                    @Html.Partial("CatalogueListPartial")
+                                </div>
+                            </div>
+                            <div class="col-md-3 pull-right">
+                                <label class=""> </label>
+                                <button type="button" class="btn btn-info btn-flat pull-right" id="btnInfo" name="btnInfo" style="margin-top: 20px;" onclick="GiveGuidlineInfo();">Guideline</button>
+                            </div>
+                            
+                            @*<div class="col-md-2">
+                                    <input type="button" name="btn" value=" " />
+                                </div>*@
+                        </div>
+
+                        <div class="col-md-12 box-header with-border">
+                            <div class="box-header with-border">
+                                <h3 class="box-title">Catalogue Detail</h3>
+                                <br />
+                            </div>
+                            <div class="" id="divCatalogueDet" style=" margin-top: 20px !important;">
+                                @Html.Partial("CatalogueDetailPartial", new CatalogModel())
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <input type="submit" name="btnMerge" id="btnMerge" value="Merge Catalogue" class="btn btn-primary btn-flat pull-right" style="margin-top: 10px;" onclick="return Validate();" />
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+
+        @* Connect Store Guid line *@
+        <div id="divConnectStoreGuidLine" class="modal extended-modal fade no-display" tabindex="-1" data-width="800" data-height="400" style="z-index: 2000 !important">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header bg-light-blue">
+
+                        <button type="button" class="close" id="btnClose" data-dismiss="modal" aria-hidden="true">
+                            &times;
+
+                        </button>
+                        <h4 class="modal-title">Connect Store Guideline</h4>
+                    </div>
+
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                              
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button id="dialogButtonYes" name="dialogButtonYes" class="btn btn-primary btn-flat dialogButton" type="button">Ok</button>
+                    </div>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+        </div>
+
+    </section>
+</div>
+
+<script type="text/javascript">
+    jQuery(document).ready(function () {
+
+        if ('@TempData["Success"]' != '')
+            toastr["success"]('@TempData["Success"]');
+        else if ('@TempData["Error"]' != '')
+            toastr["error"]('@TempData["Error"]');
+
+        $("#divConnectStoreGuidLine").slimscroll({
+            height: '500px'
+        });
+
+        $("#RefVendorId").val('');
+        $("#RefVendorId").select2();
+
+        $("#RefVendorId").on('change', function () {
+            
+            $.ajax({
+                type: 'get',
+                dataType: 'html',
+                cache: false,
+                url: '@Url.Action("GetCatalogues","ProductMerge")',
+                data: { VendorId: $("#RefVendorId").val() == "" ? 0 : $("#RefVendorId").val() },
+                beforeSend: function () {
+
+                },
+                success: function (response) {
+                    //
+                    if (response != null) {
+                        $("#divCatalogueList").empty();
+                        $("#divCatalogueList").html(response);
+                        GetValues();
+                    }
+                    else {
+                        toastr["warning"]('Server error. Please try again latter!')
+                    }
+                },
+                error: function (ex, st, th) {
+                    toastr["error"](th);
+                }
+            })
+            //}
+        });
+
+        //$("#RefCatId").on('change', function () {
+
+        //});
+
+    });
+
+    function CatalogueDuplicationCheck(Data, FieldName) {
+        //
+
+        if (Data.val() == '' || Data.val() == null) {
+            toastr["warning"](FieldName + ' can not left blank!');
+            Data.focus();
+            return false;
+        }
+
+        var _RetVal = false;
+        $.ajax({
+            type: 'get',
+            dataType: 'json',
+            cache: false,
+            async: false,
+            url: '@Url.Action("CheckCatalogueDuplication", "ProductMerge")',
+            data: { _Val: Data.val(), _Field: FieldName },
+            beforeSend: function () {
+
+            },
+            success: function (response) {
+                if (!response.Result) {
+                    toastr["warning"](response.Message);
+                    Data.focus();
+                    _RetVal = false;
+                }
+                else
+                    _RetVal = true;
+            },
+            error: function (ex, st, th) {
+                toastr["error"](th);
+                _RetVal = false;
+            }
+        })
+
+        return _RetVal;
+    }
+
+    function DuplicationCheck(Data, FieldName) {
+        //
+
+        if (Data.val() == '' || Data.val() == null) {
+            toastr["warning"](FieldName + ' can not left blank!');
+            Data.focus();
+            return false;
+        }
+
+        if (FieldName == 'Product Code') {
+            //    for (var i = 0; i < $(".ProdName").length; i++) {
+            //        if (Data.attr('id') != 'ProductList_' + i + '__ProdName') {
+            //            if (Data.val().toUpperCase() == $("#ProductList_" + i + "__ProdName").val().toUpperCase()) {
+            //                toastr["warning"]('Product Name exists in current list!');
+            //                Data.focus();
+            //                return false;
+            //            }
+            //        }
+            //    }
+            //}
+            //else {
+            for (var i = 0; i < $(".ProdCode").length; i++) {
+
+                if (Data.attr('id') != 'ProductList_' + i + '__ProdCode') {
+                    if (Data.val().toUpperCase() == $("#ProductList_" + i + "__ProdCode").val().toUpperCase()) {
+                        toastr["warning"]('Product Code exists in current list.');
+                        Data.focus();
+                        return false;
+                    }
+                }
+            }
+
+            var _RetVal = false;
+            $.ajax({
+                type: 'get',
+                dataType: 'json',
+                cache: false,
+                async: false,
+                url: '@Url.Action("CheckDuplication", "ProductMerge")',
+                data: { _Val: Data.val(), _Field: FieldName },
+                beforeSend: function () {
+
+                },
+                success: function (response) {
+                    //
+                    if (!response.Result) {
+                        toastr["warning"](response.Message);
+                        Data.focus();
+                        _RetVal = false;
+                    }
+                    else
+                        _RetVal = true;
+                },
+                error: function (ex, st, th) {
+                    toastr["error"](th);
+                    _RetVal = false;
+                }
+            });
+        }
+
+        return _RetVal;
+    }
+
+    function Validate() {
+        //
+        $("#ajaxLoader").show();
+        if (!CatalogueDuplicationCheck($("#CatCode"), 'Catalogue Code')) {
+            $("#ajaxLoader").hide();
+            return false;
+        }
+
+        if (!CatalogueDuplicationCheck($("#CatName"), 'Catalogue Name')) {
+            $("#ajaxLoader").hide();
+            return false;
+        }
+
+        if ($(".ProdName").length > 0) {
+            for (var i = 0; i < $(".ProdName").length; i++) {
+                //if (!DuplicationCheck($("#ProductList_" + i + "__ProdName"), 'Product Name')) {
+                //    $("#ajaxLoader").hide();
+                //    return false;
+                //}
+
+                if (!DuplicationCheck($("#ProductList_" + i + "__ProdCode"), 'Product Code')) {
+                    $("#ajaxLoader").hide();
+                    return false;
+                }
+
+            }
+        }
+        else {
+            if ($("#RefCatId").val() != '') {
+                $("#ajaxLoader").hide();
+                toastr["warning"]('No Product available of Catalogue.!');
+                return false;
+            }
+            $("#ajaxLoader").hide();
+            return true;
+
+        }
+        $("#ajaxLoader").hide();
+        return true;
+    }
+
+    function GetValues() {
+        $.ajax({
+            type: 'get',
+            dataType: 'html',
+            cache: false,
+            url: '@Url.Action("CatalogueDetailPartial", "ProductMerge")',
+            data: { CatId: $("#RefCatId").val() == "" ? 0 : $("#RefCatId").val() },
+            beforeSend: function () {
+
+            },
+            success: function (response) {
+                //
+                if (response != null) {
+                    $("#divCatalogueDet").empty();
+                    $("#divCatalogueDet").html(response);
+                    $('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
+                        checkboxClass: 'icheckbox_minimal-blue',
+                        radioClass: 'iradio_minimal-blue'
+                    });
+
+                }
+                else {
+                    toastr["warning"]('Server error. Please try again latter!')
+                }
+            },
+            error: function (ex, st, th) {
+                toastr["error"](th);
+            }
+        });
+    }
+
+    function FunBegin() {
+        $("#ajaxLoader").show();
+    }
+
+    function FunSuccess(response) {
+        $("#ajaxLoader").hide();
+        if (response.Result) {
+            toastr["success"](response.Message);
+            window.location.href = '/Catalog/Index';
+        }
+        else {
+            toastr["warning"](response.Message);
+        }
+    }
+
+    function FunFailure(ex, st, th) {
+        $("#ajaxLoader").hide();
+        toastr["error"](th);
+    }
+
+    function GiveGuidlineInfo() {
+        $("#divConnectStoreGuidLine").modal();
+    }
+
+
+</script>

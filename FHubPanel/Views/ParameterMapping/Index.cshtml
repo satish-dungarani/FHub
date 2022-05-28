@@ -1,0 +1,198 @@
+﻿@using FHubPanel.Models;
+@*@model List<sp_ProductMas_SelectWhere_Result>*@
+
+<div class="content-wrapper" style="min-height: 946px;">
+
+    <section class="content manageGrid">
+
+        <div class="box box-primary">
+            <div class="box-header">
+                <div class="box-header with-border" style="cursor: move;">
+                    <i class="@ViewBag.Icon"></i>
+                    <h3 class="box-title"><b>@ViewBag.MasterType</b></h3>
+                    <div class="box-tools pull-right">
+
+                    </div>
+                </div>
+            </div>
+            <div class="box-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        
+                        <div class="col-md-3">
+                            <label>Store List</label>
+                            @Html.DropDownList("RefVendorId", new SelectList((IEnumerable<SelectListItem>)ViewData["VendorList"], "Value", "Text"), "----Select Store----", new { @class = "form-control select2" })
+                        </div>
+                        <div class="col-md-3">
+                            <label>Catalogue List</label>
+                            <div class="" id="divCatalogueList">
+                                @Html.Partial("CatalogueListPartial")
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <label>Master List</label>
+                            @Html.DropDownList("RefMasterId", new SelectList((IEnumerable<SelectListItem>)ViewData["MasterList"], "Value", "Text"), new { @class = "form-control" })
+                        </div>
+                        @*<div class="col-md-2">
+                                <input type="button" name="btn" value=" " />
+                            </div>*@
+                    </div>
+                    @*@using (Ajax.BeginForm("Save", "ParameterMapping", new AjaxOptions { HttpMethod = "POST", OnBegin = "FunBegin", OnSuccess = "FunSuccess", OnFailure = "FunFailure" }))
+                        {*@
+                    <div class="col-md-12" style=" margin-top: 20px;">
+                        <div class="" id="divMasterList">
+                            @Html.Partial("MasterValueListPartial", new List<sp_ParameterMapping_Select_Result>())
+                        </div>
+                    </div>
+                    @*}*@
+                </div>
+
+
+            </div>
+        </div>
+    </section>
+</div>
+
+<script type="text/javascript">
+    jQuery(document).ready(function () {
+
+        if ('@TempData["Success"]' != '')
+            toastr["success"]('@TempData["Success"]');
+        else if ('@TempData["Error"]' != '')
+            toastr["error"]('@TempData["Error"]');
+
+        $("#RefVendorId").val('');
+        $("#RefVendorId").select2();
+
+        $("#RefMasterId").on('change', function () {
+            
+            if ($("#RefVendorId").val() != '' && $("#RefVendorId").val() != null)
+                GetValues();
+        });
+
+        $("#RefVendorId").on('change', function () {
+            
+            //if ($(this).val() == '' || $(this) == undefined) {
+            //    $(this).val('0')
+            //}
+            $.ajax({
+                type: 'get',
+                dataType: 'html',
+                cache: false,
+                url: '@Url.Action("GetCatalogueList", "ParameterMapping")',
+                data: { VendorId: $("#RefVendorId").val() == "" ? 0 : $("#RefVendorId").val() },
+                beforeSend: function () {
+
+                },
+                success: function (response) {
+                    
+                    if (response != null) {
+                        $("#divCatalogueList").empty();
+                        $("#divCatalogueList").html(response);
+                        GetValues();
+                    }
+                    else {
+                        toastr["warning"]('Server error. Please try again latter!')
+                    }
+                },
+                error: function (ex, st, th) {
+                    toastr["error"](th);
+                }
+            })
+            //}
+        });
+
+
+
+    });
+
+    function GetValues() {
+        
+        $.ajax({
+            type: 'get',
+            dataType: 'html',
+            cache: false,
+            url: '@Url.Action("MasterValueListPartial", "ParameterMapping")',
+            data: { MasterId: $("#RefMasterId").val(), VendorId: $("#RefVendorId").val() == "" ? 0 : $("#RefVendorId").val(), CatId: $("#RefCatId").val()},
+            beforeSend: function () {
+
+            },
+            success: function (response) {
+                
+                if (response != null) {
+                    $("#divMasterList").empty();
+                    $("#divMasterList").html(response);
+                }
+                else {
+                    toastr["warning"]('Server error. Please try again latter!');
+                }
+            },
+            error: function (ex, st, th) {
+                toastr["error"](th);
+            }
+        });
+    }
+
+    function SaveParameter(_StoreValId, _VendorValId, _Row, _Status) {
+        
+        if (_StoreValId != '' && _StoreValId != null && _StoreValId != 0) {
+            var _SVId = 0;
+            if ($("#RefMasterValue" + _Row).val() != '')
+                _SVId = $("#RefMasterValue" + _Row).val();
+            $.ajax({
+                type: 'get',
+                dataType: 'html',
+                cache: false,
+                url: '@Url.Action("Save", "ParameterMapping")',
+                data: { RefMasterId: $("#RefMasterId").val(), VendorId: $("#RefVendorId").val(), StoreValId: _StoreValId, VendorValId: _VendorValId, CatId: $("#RefCatId").val(), SelectedValId: _SVId, MapStatus: _Status },
+                beforeSend: function () {
+                    
+                },
+                success: function (response) {
+                    
+                    if (response != null) {
+                        $("#divMasterList").empty();
+                        $("#divMasterList").html(response);
+                    }
+                    else {
+                        toastr["warning"]('Server error. Please try again latter!');
+                    }
+                },
+                error: function (ex, st, th) {
+                    
+                    toastr["error"](th);
+                }
+            });
+        }
+    }
+
+    function RemoveParameter(_PMId) {
+        if (_PMId != '' && _PMId != null && _PMId != 0) {
+            $.ajax({
+                type: 'get',
+                dataType: 'html',
+                cache: false,
+                url: '@Url.Action("Remove", "ParameterMapping")',
+                data: { MasterId: $("#RefMasterId").val(), VendorId: $("#RefVendorId").val(), CatId: $("#RefCatId").val(), PMId: _PMId },
+                beforeSend: function () {
+                    
+                },
+                success: function (response) {
+                    
+                    if (response != null) {
+                        $("#divMasterList").empty();
+                        $("#divMasterList").html(response);
+                    }
+                    else {
+                        toastr["warning"]('Server error. Please try again latter!');
+                    }
+                },
+                error: function (ex, st, th) {
+                    
+                    toastr["error"](th);
+                }
+            });
+        }
+    }
+
+</script>

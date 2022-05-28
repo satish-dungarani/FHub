@@ -1,0 +1,69 @@
+body {
+    background:#46586e url(../images/seamless.png);
+    font-family:'Open Sans', sans-serif;
+    color:#fff;
+    font-size:16px;
+    text-align:center;
+}
+h1 {
+    font-size:36px;
+}
+.toolbar {
+    text-align:center;
+}
+.btn {
+    display:inline-block;
+    font-weight:bold;
+    font-size:14px;
+    text-transform:uppercase;
+    text-decoration:none;
+    color:#fff;
+    padding:10px 15px;
+    margin:5px;
+    min-width:100px;
+    background-color:#766dcc;
+    border-bottom:2px solid #625baa;
+    border-radius:3px;
+    cursor:pointer;
+}
+.btn:hover {
+    background-color:#8178d0;
+}
+.btn.btn-green {
+    background-color:#6dcc84;
+    border-bottom:2px solid #5baa6e;
+}
+.btn.btn-green:hover {
+    background-color:#65bc7a;
+}
+#container-01,
+#container-02 {
+    margin:20px auto;
+    max-width:800px;
+}
+.pinto {
+    box-sizing: border-box;
+}
+.pinto {
+    margin-bottom:15px;
+    color:#333;
+    text-align:left;
+    border-radius:5px;
+    overflow:hidden;
+}
+.pinto img {
+    display:block;
+    width:100%;
+}
+.pinto .info {
+    padding:10px 15px;
+    background-color:#fff;
+}
+.pinto .info h2 {
+    margin:0;
+    font-size:18px;
+}
+.pinto .info p {
+    margin:10px 0 0;
+    font-size:14px;
+}

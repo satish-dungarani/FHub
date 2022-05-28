@@ -1,0 +1,8 @@
+﻿
+@Html.DropDownList("RefContactList", new SelectList((IEnumerable<SelectListItem>)ViewData["ContactList"], "Value", "Text"), new { @class = "form-control select2", multiple = "multiple" })
+
+<script>
+    $(document).ready(function () {
+        $(".select2").select2();
+    });
+</script>

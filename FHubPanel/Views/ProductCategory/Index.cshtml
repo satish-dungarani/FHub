@@ -1,0 +1,457 @@
+﻿@model List<FHubPanel.Models.ProductCategoryModel>
+
+<div class="content-wrapper" style="min-height: 946px;">
+    <!-- Content Header (Page header) -->
+    @*<section class="content-header">
+            <h1>
+
+                <small></small>
+            </h1>
+            <ol class="breadcrumb">
+                <li><a href="#"><i class="fa fa-dashboard"></i>Home</a></li>
+                <li><a href="#">Setup</a></li>
+                <li class="active">Masters</li>
+            </ol>
+        </section>*@
+
+
+
+    <section class="content manageGrid">
+
+        @*<div class="box box-primary">
+                <div class="box-header ui-sortable-handle" style="cursor: move;">
+                    <i class="fa fa-dashboard"></i>
+                    <h3 class="box-title"><b>@ViewBag.MasterType</b></h3>
+                    <div class="box-tools pull-right">
+                        <button id="btnCreateNew" name="btnCreateNew" class="btn btn-block btn-primary btn-flat" onclick="window.location.href = '/Setup/Manage'; "> Create New</button>
+                    </div>
+                </div>
+                <div class="box-footer clearfix no-border">
+                </div>
+            </div>*@
+
+        @*<div class="callout callout-info">
+                <div class="box-header ui-sortable-handle" style="cursor: move;">
+                    <i class="fa fa-dashboard"></i>
+                    <h3 class="box-title"><b>@ViewBag.MasterType</b></h3>
+                    <div class="box-tools pull-right">
+                        <button id="btnCreateNew" name="btnCreateNew" class="btn bg-navy" onclick="window.location.href = '/Setup/Manage'; "> Create New</button>
+                    </div>
+                </div>
+            </div>*@
+
+        @*<div class="row"> <div class="col-md-12"></div></div>*@
+        @*@Html.HiddenFor(model => Model.RefVendorId)*@
+        <div class="box box-primary">
+            <div class="box-header">
+                <div class="box-header with-border" style="cursor: move;">
+                    <i class="@ViewBag.Icon"></i>
+                    <h3 class="box-title"><b>@ViewBag.MasterType</b></h3>
+                    <div class="box-tools pull-right">
+                        <div class="col-md-5 pull-right" >
+                            <div class="form-group">
+                                <button id="btnCreateNew" name="btnCreateNew" class="btn btn-block btn-primary btn-flat" onclick="window.location.href = '/ProductCategory/Manage'; "> Create New</button>
+                            </div>
+                        </div>
+                        <div class="col-md-7 pull-right " >
+                            <div class="form-group">
+                                @*<label>Search :</label>*@
+                                <input type="text" name="txtSearch" id="txtSearch" value="" class="form-control" placeholder="Search..." />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="box-body" id="categorycontainer">
+
+
+            @*<div class="row">*@
+
+
+
+            @*<table class="table" id="tblMaster">
+                    <thead>
+                        <tr>
+                            <th style="display:none"></th>
+                            <th style="display:none"></th>
+                            <th style="display:none"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                </table>*@
+            @*</div>*@
+        </div>
+        <div class="col-lg-12 text-center">
+            <div id="progress" style="display:none;">
+                <img src="~/Content/dist/img/ajax-loader.gif" width="50" height="50" />
+            </div>
+        </div>
+
+
+    </section>
+</div>
+
+<script type="text/javascript">
+    var pageSize = 5;
+    var pageIndex = 0;
+    jQuery(document).ready(function () {
+
+        if ('@TempData["Success"]' != '')
+            toastr["success"]('@TempData["Success"]');
+        if ('@TempData["Error"]' != '')
+            toastr["error"]('@TempData["Error"]');
+
+      
+
+        GetData();
+        $(window).scroll(function () {
+            if ($(window).scrollTop() ==
+               $(document).height() - $(window).height()) {
+                GetData();
+            }
+        });
+        //var timeout;
+        $("#txtSearch").on("input", function () {
+            // do stuff;
+            delay(function () {
+                pageIndex = 0;
+                $("#categorycontainer").empty();
+                //var _Search = " <div class='col-md-12'>"
+                //_Search += "<div class='col-md-3 pull-right'>"
+                //_Search += "<div class='form-group'>"
+                //_Search += "<label>Search :</label>"
+                //_Search += "<input type='text' name='txtSearch' id='txtSearch' value='' class='form-control' />"
+                //_Search += "</div>"
+                //_Search += "</div>"
+                //_Search += "</div>"
+                //$("#categorycontainer").add(_Search);
+                GetData();
+            }, 1000);
+        });
+        var delay = (function () {
+            var timer = 0;
+            return function (callback, ms) {
+                clearTimeout(timer);
+                timer = setTimeout(callback, ms);
+            };
+        })();
+
+        
+
+            
+        //var wall = new Freewall("#freewall");
+        //wall.reset({
+        //    selector: '.cell',
+        //    animate: true,
+        //    cellW: 200,
+        //    cellH: 200,
+        //    onResize: function () {
+        //        wall.refresh();
+        //    }
+        //});
+        //wall.fitWidth();
+        //// for scroll bar appear;
+        //$(window).trigger("resize");
+
+        //fillGrid();
+
+        //
+
+    });
+
+
+    function GetData() {
+        var _txtsearch = $('#txtSearch').val();
+
+        $.ajax({
+            type: 'GET',
+            url: '@Url.Action("AjaxHandler", "ProductCategory")',
+            data: { Search: _txtsearch, "pageindex": pageIndex, "pagesize": pageSize },
+            async: false,
+            dataType: 'json',
+            success: function (response) {
+                //
+                
+                if (response.Result == "OK") {
+                    var data = response.data;
+                    var subdata = response.subdata;
+                    if (data != null && data.length > 0) {
+                        for (var i = 0; i < data.length; i++) {
+                            //var _pcName = data[i].ProdCategoryName != null && data[i].ProdCategoryName != '' ? data[i].ProdCategoryName : '-';
+                            var _psDesc = data[i].ProdCategoryDesc != null && data[i].ProdCategoryDesc != '' ? data[i].ProdCategoryDesc : '-';
+                            var _pcImg = data[i].ProdCategoryImg != null && data[i].ProdCategoryImg != '' ? data[i].ProdCategoryImg : '/Content/dist/img/CategoryNoImage.png';
+                            var _fullPath = data[i].ImgFullPath != null && data[i].ImgFullPath != '' ? data[i].ImgFullPath : '/Content/dist/img/CategoryNoImage.png';
+
+                            var _strdata = "<div class='col-md-12' id=" + data[i].PCId + " >";
+                            _strdata += "<div class='box' style='min-height: 200px;'>";
+                            _strdata += "<div class='box-body'>";
+                            _strdata += "<div class='col-md-12'>";
+                            _strdata += "<div class='col-md-4 center-block' >";
+                            _strdata += "<div class=\"box-header with-border\" style=\"cursor: move;\">";
+                            _strdata += "<h3 class=\"box-title\"><b>" + data[i].ProdCategoryName + "</b></h3>";
+                            _strdata += "<div class=\"box-tools pull-right\">";
+                            //_strdata += " <div class='col-md-4 ' style=\"position: absolute;bottom: 15px !important; width: 100% !important;\">";
+                            _strdata += "<i class='fa fa-trash-o pull-right' style='font-size: 18px; cursor:pointer;position: absolute;top: 8px;' data-original-title='Delete' title='Delete' onclick=\"Delete(" + data[i].PCId + ")\"></i>";
+                            //_strdata += "</div>";
+                            _strdata += "</div>";
+                            _strdata += "</div>";
+                            _strdata += "<a href='javascript:void(0)' onclick='editSession(" + data[i].PCId + ");'>";
+                            //_strdata += "<div class=\"box box-widget widget-user-2\">";
+                            //_strdata += "<div class=\"widget-user-header bg-yellow\">";
+                            //_strdata += "<h3 class=\"widget-user-username\">"  + data[i].ProdCategoryName +"</h3>";
+                            ////_strdata += "<h5 class=\"widget-user-desc\">Lead Developer</h5>";
+                            //_strdata += "</div>";
+                            //_strdata += "</div>";
+                            _strdata += "<img src=" + _fullPath.split(' ').join('%20') + " style='max-width:100%;max-height:100%' alt='Entity Image' />";
+                            //_strdata += "<br/><strong class='center-block'>" "</strong><br />";
+                            //_strdata += "<span>" + data[i].ServiceTypeName + "</span><br /><br />";
+                            //_strdata += "<span>" + _psDesc + "</span><br />";
+                            //_strdata += "<span>" + _city + "-" + _pincode + "</span><br />";
+                            //_strdata += "<span>" + _state + "-" + _country + "</span><br /><br />";
+                            //_strdata += "<span><strong>" + _contactperson1 + "</strong> - " + _mobile1 + "</span><br />";
+                            //_strdata += "<span>" + _emaailId + "</span>";
+                            _strdata += "</a>";
+                            _strdata += "</div>";
+                            //_strdata += "<div class='slimScrollDiv' id='scrollsubcat' style='position: relative; overflow: hidden;max-height:450px;'>";
+                            _strdata += "<div class='col-md-8' id='scrollsubcat' style='position: relative; overflow: auto;max-height:450px;'>";
+                            //_strdata += "<div class='' id='freewall' >";
+                            for (var j = 0; j < subdata.length; j++) {
+                                if (data[i].PCId == subdata[j].RefPCId) {
+                                    _psDesc = subdata[j].ProdCategoryDesc != null && subdata[j].ProdCategoryDesc != '' ? subdata[j].ProdCategoryDesc : '-';
+                                    _fullPath = subdata[j].ThumbnailImgPath != null && subdata[j].ThumbnailImgPath != '' ? subdata[j].ThumbnailImgPath : '/Content/dist/img/CategoryNoImage.png';
+                                    _strdata += "<div class='col-md-3 cell' id=" + subdata[j].PCId + " >";
+                                    _strdata += "<a href='javascript:void(0)' onclick='editSession(" + subdata[j].PCId + ");'>";
+                                    _strdata += "<div class='col-md-12 center-block' style='text-align: center;' >";
+                                    _strdata += "<img class='img-responsive pad' src='" + _fullPath.split(' ').join('%20') + "' style='max-width:100%;max-height:100%' alt='Entity Image' />";
+                                    _strdata += "<strong >" + subdata[j].ProdCategoryName + "</strong><br />";
+                                    //_strdata += "<span>" + data[i].ServiceTypeName + "</span><br /><br />";
+                                    //_strdata += "<span>" + _psDesc + "</span><br />";
+                                    //_strdata += "<span>" + _city + "-" + _pincode + "</span><br />";
+                                    //_strdata += "<span>" + _state + "-" + _country + "</span><br /><br />";
+                                    //_strdata += "<span><strong>" + _contactperson1 + "</strong> - " + _mobile1 + "</span><br />";
+                                    //_strdata += "<span>" + _emaailId + "</span>";
+                                    _strdata += "</div>";
+                                    _strdata += "</a>"
+                                    _strdata += " <div class='col-md-12 ' style=\"position: absolute;bottom: 0px !important; width: 100% !important;\">";
+                                    _strdata += "<i class='fa fa-trash-o pull-right' style='font-size: 18px; cursor:pointer;' data-original-title='Delete' title='Delete' onclick=\"Delete(" + subdata[j].PCId + ")\"></i>";
+                                    _strdata += "</div>";
+                                    _strdata += "</div>";
+                                }
+                            }
+                            //_strdata += "</div>";
+                            _strdata += "</div>";
+                            //_strdata += "</div>";
+                            //_strdata += "<div class='col-md-9'>";
+                            //_strdata += "<span>Rating</span>";
+                            //_strdata += "</div>";
+
+                            _strdata += "</div></div>";
+                            //_strdata += "<div class=\"col-md-12 pull-right\">";
+
+                            //_strdata += "</div>";
+                            _strdata += "</div></div>";
+                            $("#categorycontainer").append(_strdata);
+                        }
+                        pageIndex++;
+                        
+                    }
+                    $("#scrollsubcat").slimscroll({
+                        height: "450px"
+                    });
+                }
+                else {
+                    toastr["error"](response.msg);
+                }
+            },
+            beforeSend: function () {
+                $("#progress").show();
+            },
+            complete: function () {
+                $("#progress").hide();
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                toastr["error"](errorThrown);
+            }
+        });
+
+
+    }
+
+    function editSession(_ID) {
+
+
+        
+        if (_ID != undefined && _ID != '') {
+            $.ajax({
+                type: 'post',
+                dataType: 'json',
+                cache: false,
+                url: '@Url.Action("EditSession", "ProductCategory")',
+                data: { Id: _ID },
+                beforeSend: function () {
+                    //
+                    $("#ajaxLoader").show();
+                },
+                success: function (response, textStatus, jqXHR) {
+                    
+                    if (response.Result) {
+                        window.location.href = '@Url.Action("Manage", "ProductCategory")';
+                    }
+                    else {
+                        toastr["warning"](response._Message)
+                    }
+                    $("#ajaxLoader").hide();
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    
+                    toastr["error"](errorThrown);
+                    $("#ajaxLoader").hide();
+                }
+            });
+        }
+        else
+            toastr["error"]('No such record found!');
+    }
+
+    function Delete(_ID) {
+
+        //
+
+        if (_ID != undefined && _ID != '') {
+            bootbox.confirm({
+                size: 'small',
+                message: "Are you sure delete Product Category?",
+                buttons: {
+
+                    'cancel': {
+                        label: 'Cancel',
+                        className: 'btn-default'
+                    },
+                    'confirm': {
+                        label: 'Delete',
+                        className: 'btn-danger'
+                    }
+
+                },
+                callback: function (result) {
+                    if (result) {
+                        $.ajax({
+                            type: 'post',
+                            dataType: 'json',
+                            cache: false,
+                            url: '@Url.Action("delete", "ProductCategory")',
+                            data: { Id: _ID },
+                            beforeSend: function () {
+                                $("#ajaxLoader").show();
+                            },
+                            success: function (response, textStatus, jqXHR) {
+                                if (response._result == true) {
+                                    $("#" + _ID).remove();
+                                    toastr["success"](response._Message);
+                                    //fillGrid();
+                                }
+                                else {
+                                    toastr["warning"](response._Message);
+                                }
+                                $("#ajaxLoader").hide();
+                            },
+                            error: function (jqXHR, textStatus, errorThrown) {
+
+                                //displayError(errorThrown);
+                                toastr["error"](response._Message);
+                                $("#ajaxLoader").hide();
+                            }
+                        });
+                    }
+                }
+            })
+        }
+        else
+            toastr["warning"]('No Edit Discount Master.');
+    }
+
+
+    function fillGrid() {
+        
+        var visiblemode = "";
+        //if ($("#IsSystemGenerated").val() == "True")
+        //    visiblemode = "hidden";
+        //else
+        //    visiblemode = "visible";
+
+        //jQuery('#tblMaster').dataTable().fnDestroy();
+        //var oTable = jQuery('#tblMaster').dataTable({
+        //    "bLengthChange": false,
+        //    pageLength: 1
+        //});
+
+        @*jQuery('#tblMaster').dataTable().fnDestroy();
+        var oTable = jQuery('#tblMaster').dataTable({
+            "bServerSide": true,
+            "sAjaxSource": '@Url.Action("AjaxHandler", "ProductCategory")',
+            "bProcessing": false,
+            "responsive": true,
+            "sPaginationType": 'full_numbers',
+            "oLanguage": {
+                "sLengthMenu": "Show _MENU_ Rows",
+                "sSearch": "Search :",
+                "oPaginate": {
+                    "sPrevious": "",
+                    "sNext": ""
+                }
+            },
+            "aaSorting": [[0, 'asc']],
+            "aoColumns": [
+
+                          { "sName": "ProductCategoryName" },
+                          { "sName": "ProductCategoryDesc" },
+
+                          //{
+                          //    "sName": "IsActive",
+                          //    "sClass": "text-center",
+                          //    "sWidth": "10px",
+                          //    "bSearchable": false,
+                          //    "bSortable": false,
+                          //    "mRender": function (data, type, oObj) {
+                          //        if (oObj[5] == 'True')
+                          //            return "<i id='row" + oObj[6] + "' class='ui-tooltip fa fa-check' style='font-size: 18px; cursor:pointer;visibility:" + visiblemode + "' onclick=\"updateStatus(" + oObj[6] + ",'" + oObj[5] + "')\"><div style='display:none'>" + oObj[5] + "</div></i>";
+                          //        else
+                          //            return "<i id='row" + oObj[6] + "' class='ui-tooltip fa fa-remove' style='font-size: 18px; cursor:pointer;visibility:" + visiblemode + "' onclick=\"updateStatus(" + oObj[6] + ",'" + oObj[5] + "')\"><div style='display:none'>" + oObj[5] + "</div></i>";
+                          //    }
+                          //},
+
+                          {
+                              "sName": "ID",
+                              "sClass": "text-center",
+                              "sWidth": "10px",
+                              "bSearchable": false,
+                              "bSortable": false,
+                              "mRender": function (data, type, oObj) {
+                                  return "<i class='ui-tooltip fa fa-pencil' id='edit' style='font-size: 18px; cursor:pointer;visibility:" + visiblemode + "' onclick=\"editSession('" + oObj[2] + "')\" ></i>";
+                              }
+                          },
+                          {
+                              "sName": "ID",
+                              "sClass": "text-center",
+                              "sWidth": "10px",
+                              "bSearchable": false,
+                              "bSortable": false,
+                              "mRender": function (data, type, oObj) {
+                                  return "<i class='ui-tooltip fa fa-trash-o' style='font-size: 18px; cursor:pointer; visibility:" + visiblemode + "' data-original-title='Delete' onclick=\"Delete('" + oObj[2] + "')\"></i>";
+
+                              }
+                          }
+            ]
+        })*@
+        //$('#tblMaster_wrapper .dataTables_filter input').addClass("form-control input-sm").attr("placeholder", "Search");
+        //// modify table search input
+        //$('#tblMaster_wrapper .dataTables_length select').addClass("m-wrap small");
+        // modify table per page dropdown
+        //$('#tblMaster_wrapper .dataTables_length select').select2();
+    }
+
+</script>

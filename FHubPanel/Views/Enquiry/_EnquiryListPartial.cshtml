@@ -1,0 +1,112 @@
+﻿@using FHubPanel.Models;
+@model List<sp_EnquiryList_SelectWhere_Result>
+
+<table class="table table-bordered table-responsive tblEnquiry">
+    <thead>
+        <tr>
+            <td>
+                Remark Date
+            </td>
+            <td>
+                Enquiry For
+            </td>
+            <td>
+                Product Code<br />
+                Catalogue Code
+            </td>
+            <td>
+                Company Name<br />
+                Contact Person
+            </td>
+            <td>
+                Remark
+            </td>
+            
+            @if (@ViewBag.Type == "Replied")
+            {
+                <td>
+                    Reply Message
+                </td>
+                <td>
+                    Reply Date
+                </td>
+            }
+            @if (@ViewBag.Type == "Canceled")
+            {
+                <td>
+                    Read DateTime
+                </td>
+            }
+            @if (@ViewBag.Type != "Replied")
+            {
+                <td></td>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @for (int i = 0; i < @Model.Count; i++)
+        {
+            <tr>
+                <td>
+                    @Model[i].EnquiryDate
+                </td>
+                <td>
+                    @if(@Model[i].ProdCode != null)
+                    {
+                        <p>Product</p>
+                    }
+                    else
+                    {
+                        <p>Catalogue</p>
+                    }
+                </td>
+                <td>
+                    @Model[i].ProdCode<br />
+                    @Model[i].CatCode
+                </td>
+                <td>
+                    @Model[i].CompanyName<br />
+                    @Model[i].AUName
+                </td>
+                <td>
+                    @Model[i].Remark
+                </td>
+                
+                @if (@ViewBag.Type == "Replied")
+                {
+                    <td>
+                        @Model[i].RepRemark
+                    </td>
+                    <td>
+                        @Model[i].EnquiryRepDate
+                    </td>
+                }
+                @if (@ViewBag.Type == "Canceled")
+                {
+                    <td>
+                        @Model[i].ReadDateTime
+                    </td>
+                }
+                @if (@ViewBag.Type != "Replied")
+                {
+                    <td>
+                        @if (@ViewBag.Type == "Canceled" || @ViewBag.Type == "Pending")
+                        {
+                            <input type="button" name="btnReply" id="btnReply" value="Reply" class="btn btn-xs btn-primary btn-flat" onclick="FunReply(@Model[i].Id, '/Enquiry/Index');" />
+                        }
+                        @if (@ViewBag.Type == "Pending")
+                        {
+                            <input type="button" name="btnCancel" id="btnCancel" value="Cancel" class="btn btn-xs btn-danger btn-flat" onclick="CancelRemark(@Model[i].Id, '/Enquiry/Index');" />
+                        }
+                    </td>
+                }
+            </tr>
+        }
+    </tbody>
+</table>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+    })
+</script>
